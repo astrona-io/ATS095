@@ -1,0 +1,95 @@
+# An S3-compatible server (versitygw, posix backend) and a client pod with the
+# AWS command-line tool. Both use the single root key pair flux-s3 /
+# flux-s3-secret. Lab-only credentials. Data lives on an emptyDir.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: versitygw
+  namespace: s3
+  labels:
+    app: versitygw
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: versitygw
+  template:
+    metadata:
+      labels:
+        app: versitygw
+    spec:
+      containers:
+        - name: versitygw
+          image: versity/versitygw:v1.9.0
+          args: ["--port", ":9000", "posix", "/data"]
+          env:
+            - name: ROOT_ACCESS_KEY
+              value: flux-s3
+            - name: ROOT_SECRET_KEY
+              value: flux-s3-secret
+          ports:
+            - name: s3
+              containerPort: 9000
+          readinessProbe:
+            tcpSocket:
+              port: s3
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: s3
+  namespace: s3
+  labels:
+    app: versitygw
+spec:
+  selector:
+    app: versitygw
+  ports:
+    - name: s3
+      port: 9000
+      targetPort: s3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-client
+  namespace: s3
+  labels:
+    app: s3-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s3-client
+  template:
+    metadata:
+      labels:
+        app: s3-client
+    spec:
+      containers:
+        - name: aws
+          image: amazon/aws-cli:2.38.4
+          command: ["sh", "-c", "aws configure set default.s3.addressing_style path && while true; do sleep 30; done"]
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: flux-s3
+            - name: AWS_SECRET_ACCESS_KEY
+              value: flux-s3-secret
+            - name: AWS_DEFAULT_REGION
+              value: us-east-1
+            - name: AWS_ENDPOINT_URL
+              value: http://s3.s3.svc.cluster.local:9000

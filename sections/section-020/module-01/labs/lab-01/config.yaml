@@ -1,0 +1,51 @@
+# Follow The Newest 1.x Release From A Registry
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea with gitops/fleet, an OCI registry, and the CoreDNS rewrites"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-020-01-setup"
+      description: "Pushes four releases of the podinfo manifests and points an OCIRepository at the fixed tag 1.0.0"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-oci-source"
+      description: "Confirms the OCIRepository podinfo follows a semver range, is not pinned to a digest, and is Ready on 1.3.0"
+      type: "file"
+      source: "validation/validate-oci-source.sh"
+    - name: "validate-release-pushed"
+      description: "Confirms the registry holds podinfo-manifests:1.3.0 and still holds 2.0.0"
+      type: "file"
+      source: "validation/validate-release-pushed.sh"
+    - name: "validate-podinfo-applied"
+      description: "Confirms the Flux Kustomization podinfo applies the OCI revision and podinfo runs the 2 replicas of release 1.3.0"
+      type: "file"
+      source: "validation/validate-podinfo-applied.sh"
+
+teardown:
+  keepCluster: false

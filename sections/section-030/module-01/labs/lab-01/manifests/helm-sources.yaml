@@ -1,0 +1,21 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: oci://ghcr.io/stefanprodan/charts
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 10m
+  chart: podinfo
+  version: "6.x"
+  sourceRef:
+    kind: HelmRepository
+    name: podinfo

@@ -1,0 +1,51 @@
+# Repair An OCI Delivery
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, an OCI registry and the CoreDNS rewrite"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-capstone-020-setup"
+      description: "Pushes three releases and applies an OCIRepository and Flux Kustomization with several faults"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-oci-source"
+      description: "Confirms the OCIRepository podinfo has a URL without a tag, allows HTTP, follows a semver range and is Ready on 1.1.0"
+      type: "file"
+      source: "validation/validate-oci-source.sh"
+    - name: "validate-sync"
+      description: "Confirms the Flux Kustomization podinfo reads the OCIRepository, is Ready, and podinfo runs the 3 replicas of release 1.1.0"
+      type: "file"
+      source: "validation/validate-sync.sh"
+    - name: "validate-objects-kept"
+      description: "Confirms the OCIRepository and the Flux Kustomization were fixed in place"
+      type: "file"
+      source: "validation/validate-objects-kept.sh"
+
+teardown:
+  keepCluster: false

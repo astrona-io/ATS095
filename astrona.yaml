@@ -1,0 +1,334 @@
+# Course manifest for ATS095 - Source Controller & Repository Management (FluxCD).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS095
+  title: "FluxCD: Source Controller & Repository Management"
+  maturity: draft
+  description: >
+    Training material covering the Source Controller & Repository Management
+    domain of the FluxCD training path: Git references, ignore rules and
+    includes, HTTPS credentials and SSH deploy keys for GitRepository; Flux
+    OCI artifacts, flux push artifact and OCIRepository tags, semver ranges
+    and digests; HelmRepository and HelmChart objects for HTTP and OCI chart
+    repositories; Bucket sources on S3-compatible storage; reconciliation
+    triggers; and the artifacts source-controller stores and garbage-collects.
+    Each module pairs a layered reader with an ungraded hands-on playground
+    and a graded practice lab. Each section closes with an integration
+    capstone.
+    Written for Flux v2.9.6.
+
+  certification:
+    name: FluxCD
+    code: FLUX
+    provider: Astrona
+    domain: Source Controller & Repository Management
+    weight: 20
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "GitRepository In Depth"
+    description: >
+      Choose exactly which commit source-controller fetches with branches,
+      tags, semver ranges, full references and commits; shape the artifact
+      with ignore rules and includes; and give Flux read access with HTTPS
+      credentials or a read-only SSH deploy key.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Control What source-controller Fetches From Git"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Choosing A Git Reference"
+        path: sections/section-010/module-01/course-01-choosing-a-git-reference.md
+      - type: reading
+        title: "Shaping The Artifact With ignore And include"
+        path: sections/section-010/module-01/course-02-shaping-the-artifact.md
+      - type: reading
+        title: "HTTPS Credentials And SSH Deploy Keys"
+        path: sections/section-010/module-01/course-03-https-and-ssh-authentication.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Move The GitRepository To An SSH Deploy Key Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: authentication
+        task_kind: migration
+        tags: [gitrepository, ssh-auth, deploy-key, known-hosts, https-auth, flux-get]
+        learning_goals:
+          - Create an SSH Secret for Flux and register its public key as a read-only deploy key
+          - Move a GitRepository from HTTPS credentials to SSH without breaking the sync
+          - Prove the move with a Ready source on an ssh URL and no password Secret left
+        resources:
+          - name: "GitRepository API: SSH authentication"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "flux create secret git"
+            url: https://fluxcd.io/flux/cmd/flux_create_secret_git/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Pin A Release Line And Trim The Artifact Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: git-sources
+        task_kind: troubleshooting
+        tags: [gitrepository, git-ref, semver, sourceignore, artifact-revision, kustomization]
+        learning_goals:
+          - Find why a GitRepository follows a broken release from its revision and the Flux Kustomization's events
+          - Restrict the source to a semver range and leave the documentation folder out of the artifact
+          - Prove the fix with a revision on the newest 1.x tag and the workload that tag describes
+        resources:
+          - name: "GitRepository API: reference and ignore"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+
+  - id: module-020
+    title: "OCIRepository And Flux OCI Artifacts"
+    description: >
+      Pack Kubernetes manifests into an OCI artifact with flux push artifact,
+      store it in a container registry, and let an OCIRepository follow a
+      tag, a semver range or a digest, with a Flux Kustomization applying the
+      result.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Deliver Manifests As OCI Artifacts"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Packing Manifests Into An OCI Artifact"
+        path: sections/section-020/module-01/course-01-flux-oci-artifacts.md
+      - type: reading
+        title: "OCIRepository: Tags, Semver Ranges And Digests"
+        path: sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Follow The Newest 1.x Release From A Registry Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: oci-sources
+        task_kind: build
+        tags: [ocirepository, semver, flux-push-artifact, oci-registry, insecure-registry, artifact-revision]
+        learning_goals:
+          - Change an OCIRepository from a fixed tag to a semver range that skips pre-releases and the next major version
+          - Push a new release of the manifests with flux push artifact
+          - Prove that Flux picks the newest 1.x release and applies it
+        resources:
+          - name: "OCIRepository API"
+            url: https://fluxcd.io/flux/components/source/ocirepositories/
+          - name: "flux push artifact"
+            url: https://fluxcd.io/flux/cmd/flux_push_artifact/
+          - name: "OCI artifacts cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/oci-artifacts/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair An OCI Delivery Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: oci-sources
+        task_kind: troubleshooting
+        tags: [ocirepository, insecure-registry, semver, kustomization, flux-events, digest]
+        learning_goals:
+          - Find why an OCIRepository cannot fetch and why the Flux Kustomization applies nothing
+          - Fix the source address, the transport setting, the reference and the source kind
+          - Prove the fix with a Ready source on the newest 1.x release and the workload it describes
+        resources:
+          - name: "OCIRepository API"
+            url: https://fluxcd.io/flux/components/source/ocirepositories/
+          - name: "Kustomization API: source reference"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+
+  - id: module-030
+    title: "HelmRepository And HelmChart"
+    description: >
+      Point source-controller at an HTTP Helm repository and an OCI chart
+      registry, and make a HelmChart resolve a chart version from a range,
+      either directly or as the HelmChart that helm-controller creates for a
+      HelmRelease.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Fetch Helm Charts With source-controller"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "HTTP And OCI Helm Repositories"
+        path: sections/section-030/module-01/course-01-helm-repositories.md
+      - type: reading
+        title: "HelmChart Objects And Chart Versions"
+        path: sections/section-030/module-01/course-02-helmchart-objects.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Make A Helm Chart Resolve Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: helm-sources
+        task_kind: troubleshooting
+        tags: [helmrepository, helmchart, helm-index, helm-oci, flux-get]
+        learning_goals:
+          - Read why a HelmChart cannot fetch its chart from the HelmRepository it names
+          - Fix the HelmRepository type so its index is downloaded
+          - Prove the fix with a Ready HelmChart on a 6.x chart version
+        resources:
+          - name: "HelmRepository API"
+            url: https://fluxcd.io/flux/components/source/helmrepositories/
+          - name: "HelmChart API"
+            url: https://fluxcd.io/flux/components/source/helmcharts/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Make A HelmRelease's Chart Resolve Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: helm-sources
+        task_kind: troubleshooting
+        tags: [helmrelease, helmchart, helmrepository, semver, flux-events, artifact-revision]
+        learning_goals:
+          - Follow a failing HelmRelease back to its HelmChart and HelmRepository
+          - Fix the repository address, the source reference and the version range
+          - Prove the fix with a Ready HelmRelease and a running podinfo from a 6.x chart
+        resources:
+          - name: "HelmChart API"
+            url: https://fluxcd.io/flux/components/source/helmcharts/
+          - name: "HelmRelease API"
+            url: https://fluxcd.io/flux/components/helm/helmreleases/
+          - name: "HelmRepository API"
+            url: https://fluxcd.io/flux/components/source/helmrepositories/
+
+  - id: module-040
+    title: "Bucket Sources, Triggers And Artifacts"
+    description: >
+      Sync manifests from an S3-compatible bucket with a Bucket source, make
+      source-controller fetch now instead of at the next interval, and read
+      the artifacts it stores: revisions, digests, URLs and garbage
+      collection.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Sync From A Bucket And Control When Flux Fetches"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Bucket Sources On S3-Compatible Storage"
+        path: sections/section-040/module-01/course-01-bucket-sources.md
+      - type: reading
+        title: "Reconciliation Triggers, Artifacts And Garbage Collection"
+        path: sections/section-040/module-01/course-02-triggers-and-artifacts.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Deliver From A Bucket And Trigger A Reconcile Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: bucket-sources
+        task_kind: build
+        tags: [bucket, s3, access-keys, reconcile-trigger, interval, kustomization]
+        learning_goals:
+          - Create a Bucket source with a Secret for an S3-compatible server over HTTP
+          - Apply the bucket's manifests with a Flux Kustomization
+          - Upload a change and make Flux apply it at once without shortening the interval
+        resources:
+          - name: "Bucket API"
+            url: https://fluxcd.io/flux/components/source/buckets/
+          - name: "flux reconcile source bucket"
+            url: https://fluxcd.io/flux/cmd/flux_reconcile_source_bucket/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Bucket Source Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: artifacts
+        task_kind: troubleshooting
+        tags: [bucket, access-keys, artifact, artifact-revision, kustomization, flux-events]
+        learning_goals:
+          - Find why a Bucket source produces no artifact and why the Flux Kustomization applies nothing
+          - Fix the transport setting, the Secret keys, the bucket name and the path without recreating the objects
+          - Prove the fix with a Ready Bucket, a Ready Flux Kustomization and the workload the bucket describes
+        resources:
+          - name: "Bucket API"
+            url: https://fluxcd.io/flux/components/source/buckets/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/

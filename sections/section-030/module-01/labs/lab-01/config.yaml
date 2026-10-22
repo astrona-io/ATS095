@@ -1,0 +1,51 @@
+# Make A Helm Chart Resolve
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-030-01-setup"
+      description: "Applies a HelmRepository whose type does not match its address, and a HelmChart that uses it"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-chart-ready"
+      description: "Confirms the HelmChart podinfo is Ready on a 6.x chart version from the HelmRepository podinfo"
+      type: "file"
+      source: "validation/validate-chart-ready.sh"
+    - name: "validate-repository-consistent"
+      description: "Confirms the HelmRepository type matches its address: default with https://, or oci with oci://"
+      type: "file"
+      source: "validation/validate-repository-consistent.sh"
+    - name: "validate-objects-kept"
+      description: "Confirms the HelmRepository and the HelmChart were fixed in place"
+      type: "file"
+      source: "validation/validate-objects-kept.sh"
+
+teardown:
+  keepCluster: false

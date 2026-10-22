@@ -1,0 +1,24 @@
+# Fetch Helm Charts With source-controller (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-playground-030-01"
+  docs:
+    guide: "docs/overview.md"
+
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI 2.9.6 and the Flux controllers."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The namespace podinfo."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,5 @@
+# The namespace the podinfo chart installs into.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: podinfo

@@ -1,0 +1,55 @@
+# Move The GitRepository To An SSH Deploy Key
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea with SSH on port 2222, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-010-01-setup"
+      description: "Connects Flux to gitops/fleet over HTTP with the password Secret fleet-auth"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-source-ssh"
+      description: "Confirms the GitRepository fleet reads gitops/fleet over SSH with the Secret fleet-ssh and is Ready on main"
+      type: "file"
+      source: "validation/validate-source-ssh.sh"
+    - name: "validate-ssh-secret"
+      description: "Confirms fleet-ssh holds an SSH identity and known_hosts, and the password Secret fleet-auth is gone"
+      type: "file"
+      source: "validation/validate-ssh-secret.sh"
+    - name: "validate-deploy-key"
+      description: "Confirms the public key of fleet-ssh is a read-only deploy key of gitops/fleet"
+      type: "file"
+      source: "validation/validate-deploy-key.sh"
+    - name: "validate-sync"
+      description: "Confirms the Flux Kustomization podinfo applies the SSH revision and podinfo runs 2 ready replicas"
+      type: "file"
+      source: "validation/validate-sync.sh"
+
+teardown:
+  keepCluster: false
