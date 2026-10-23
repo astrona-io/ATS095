@@ -9,7 +9,6 @@ metadata:
     question: "question.md"
     examQuestion: "question.md"
     prerequisites: "prerequisites.md"
-
 bootstrap:
   init:
     - name: "install-services-and-flux"
@@ -20,7 +19,6 @@ bootstrap:
       description: "Applies a HelmRepository with a wrong address and a HelmRelease with a wrong source and range"
       type: "file"
       source: "bootstrap/02-seed-state.sh"
-
 testing:
   init:
     - name: "wait-for-flux"
@@ -31,7 +29,6 @@ testing:
       description: "The remediation a correct learner performs; used by `astrona test`"
       type: "file"
       source: "solution/apply.sh"
-
 validation:
   scripts:
     - name: "validate-repository"
@@ -50,6 +47,8 @@ validation:
       description: "Confirms the HelmRepository and the HelmRelease were fixed in place"
       type: "file"
       source: "validation/validate-objects-kept.sh"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages: []

@@ -7,7 +7,6 @@ metadata:
   name: "ats-095-playground-040-01"
   docs:
     guide: "docs/overview.md"
-
 bootstrap:
   init:
     - name: "prepare"
@@ -19,6 +18,11 @@ bootstrap:
       description: "The S3-compatible server versitygw (namespace s3, Service s3 on port 9000) and the s3-client pod."
       type: "file"
       source: "manifests/lab-start.yaml"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - amazon/aws-cli:2.38.4
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - versity/versitygw:v1.9.0

@@ -9,7 +9,6 @@ metadata:
     question: "question.md"
     examQuestion: "question.md"
     prerequisites: "prerequisites.md"
-
 bootstrap:
   init:
     - name: "install-services-and-flux"
@@ -20,7 +19,6 @@ bootstrap:
       description: "Pushes four releases of the podinfo manifests and points an OCIRepository at the fixed tag 1.0.0"
       type: "file"
       source: "bootstrap/02-seed-state.sh"
-
 testing:
   init:
     - name: "wait-for-flux"
@@ -31,7 +29,6 @@ testing:
       description: "The remediation a correct learner performs; used by `astrona test`"
       type: "file"
       source: "solution/apply.sh"
-
 validation:
   scripts:
     - name: "validate-oci-source"
@@ -46,6 +43,12 @@ validation:
       description: "Confirms the Flux Kustomization podinfo applies the OCI revision and podinfo runs the 2 replicas of release 1.3.0"
       type: "file"
       source: "validation/validate-podinfo-applied.sh"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13
+      - registry:3.1.2
