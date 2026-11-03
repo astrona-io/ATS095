@@ -28,6 +28,23 @@ The playground holds Gitea, an in-cluster Git server, with the repository `gitop
 3. HTTPS Credentials And SSH Deploy Keys, followed by the lab **Move The GitRepository To An SSH Deploy Key**
 4. Summary
 
+### 2. Secure Git Connections And Git Providers
+
+The playground is the same Gitea server and `gitops/fleet` repository as the first module. It uses no TLS and no proxy, so you create the Secrets for those and read back their keys, and you work the SSH host key checks for real.
+
+1. TLS Certificates For HTTPS Git Servers
+2. HTTP Proxies And Timeouts
+3. Tokens, Bearer Authentication And Git Providers
+4. SSH Host Keys And known_hosts, followed by the lab **Repair A Git SSH Connection**
+5. Summary
+
+What you will also learn in this module:
+
+- The Secret keys `ca.crt`, `tls.crt` and `tls.key` for private CAs and mutual TLS.
+- How `proxySecretRef` and `spec.timeout` shape the connection of one source.
+- Which Secret keys and `spec.provider` value each sign-in method needs: basic, bearer token, GitHub App, cloud identity.
+- How to write a `known_hosts` entry for a port other than 22 and how to repair a host key mismatch.
+
 ## Section capstone: Pin A Release Line And Trim The Artifact
 
 The capstone is one graded scenario that combines the reference and the artifact parts of the module. The `GitRepository` `fleet` follows every release from `1.0.0` upwards, and the newest release, `v2.0.0`, uses an image that does not exist. You restrict the source to the 1.x releases and keep the documentation out of the artifact, without changing anything in Git. Work it after the module lab.

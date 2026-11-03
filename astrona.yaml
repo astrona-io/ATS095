@@ -102,8 +102,73 @@ modules:
           - name: "flux create secret git"
             url: https://fluxcd.io/flux/cmd/flux_create_secret_git/
       - type: reading
+        title: "GitRepository Status, Conditions And Events"
+        path: sections/section-010/module-01/course-04-gitrepository-status-conditions-and-events.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Find Why A GitRepository Is Not Ready Lab"
+        path: sections/section-010/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: troubleshooting
+        task_kind: troubleshooting
+        tags: [gitrepository, status-conditions, fetchfailed, events, flux-get, secretref]
+        learning_goals:
+          - Read the conditions and events of a GitRepository to find why it cannot fetch
+          - Fix a wrong Secret reference and a missing branch without creating new objects
+          - Prove the fix with a Ready source on main and a podinfo Deployment from the same revision
+        resources:
+          - name: "GitRepository API: status"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "flux events"
+            url: https://fluxcd.io/flux/cmd/flux_events/
+      - type: reading
+        title: "Managing Git Sources With The Flux CLI"
+        path: sections/section-010/module-01/course-05-managing-git-sources-with-the-flux-cli.md
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-06-summary.md
+
+      - type: reading
+        title: "Secure Git Connections And Git Providers"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "TLS Certificates For HTTPS Git Servers"
+        path: sections/section-010/module-02/course-01-tls-certificates-for-https-git-servers.md
+      - type: reading
+        title: "HTTP Proxies And Timeouts"
+        path: sections/section-010/module-02/course-02-http-proxies-and-timeouts.md
+      - type: reading
+        title: "Tokens, Bearer Authentication And Git Providers"
+        path: sections/section-010/module-02/course-03-tokens-bearer-authentication-and-git-providers.md
+      - type: reading
+        title: "SSH Host Keys And known_hosts"
+        path: sections/section-010/module-02/course-04-ssh-host-keys-and-known-hosts.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Git SSH Connection Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: authentication
+        task_kind: troubleshooting
+        tags: [gitrepository, ssh-auth, known-hosts, host-key, conditions, flux-get]
+        learning_goals:
+          - Read the conditions of a GitRepository to find an address without a port and a wrong host key
+          - Replace known_hosts in the SSH Secret with the real host key of the server without changing the key pair
+          - Prove the fix with a Ready source on main and a podinfo that runs from the same revision
+        resources:
+          - name: "GitRepository API: SSH authentication"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "flux create secret git"
+            url: https://fluxcd.io/flux/cmd/flux_create_secret_git/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-05-summary.md
 
       - type: reading
         title: Question

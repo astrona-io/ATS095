@@ -6,7 +6,7 @@ A `GitRepository` is the Flux object that tells source-controller which Git repo
 
 Keep one sentence in mind: **the revision in `flux get sources git` is the answer to "what exactly did Flux fetch?"** Every change you make in this module shows up there first.
 
-The module has three parts. **Choosing A Git Reference** compares the five ways to pick a commit and moves `fleet` from a branch to a semver range of release tags. **Shaping The Artifact With ignore And include** opens an artifact, shows what the default rules leave out, and adds files from a second repository. **HTTPS Credentials And SSH Deploy Keys** looks at the two kinds of Git credentials and moves `fleet` to a read-only SSH key. A graded lab follows the third part.
+The module has five parts. **Choosing A Git Reference** compares the five ways to pick a commit and moves `fleet` from a branch to a semver range of release tags. **Shaping The Artifact With ignore And include** opens an artifact, shows what the default rules leave out, and adds files from a second repository. **HTTPS Credentials And SSH Deploy Keys** looks at the two kinds of Git credentials and moves `fleet` to a read-only SSH key. A graded lab follows it. **GitRepository Status, Conditions And Events** reads the conditions, the artifact and the events of a source, and matches common failure messages to their causes. A second graded lab follows it, where you find and fix a source that cannot fetch. **Managing Git Sources With The Flux CLI** creates, exports, reconciles, suspends and resumes a source from the command line, and explains `spec.interval`, `spec.timeout` and `spec.suspend`.
 
 ## Learning objectives
 
@@ -19,6 +19,9 @@ After this module you can:
 - Leave files out with `.sourceignore` or `spec.ignore`, and add files from a second repository with `spec.include`.
 - Create a Secret for HTTPS basic authentication and one for SSH, and say which keys each holds.
 - Register an SSH public key as a read-only deploy key and move a `GitRepository` to it.
+- Read the conditions, `status.artifact`, `observedGeneration` and events of a `GitRepository`, and match a failure message to its cause.
+- Create, export, reconcile, suspend and resume a `GitRepository` with the `flux` tool, and set `spec.interval` and `spec.timeout`.
+- Follow a Deployment back to its source and revision with `flux trace`.
 
 ## Before you start
 

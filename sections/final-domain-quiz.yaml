@@ -286,3 +286,49 @@ questions:
         explanation: "Not correct. It sets an annotation only."
     correct_option: b
     explanation: "Correct. This avoids polling with a short interval."
+
+  - id: ats095-final-a2-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know where TLS trust goes"
+    source_readings:
+      - sections/section-010/module-02/course-01-tls-certificates-for-https-git-servers.md
+    prompt: "Which key of the `GitRepository` Secret trusts a private CA for an HTTPS Git server?"
+    options:
+      - id: a
+        text: "`tls.key`"
+        explanation: "Not correct. That key is the private key of a client certificate."
+      - id: b
+        text: "`password`"
+        explanation: "Not correct. That key is for basic authentication."
+      - id: c
+        text: "`ca.crt`"
+        explanation: "Correct. `ca.crt` holds the CA certificate."
+      - id: d
+        text: "`address`"
+        explanation: "Not correct. That key is for the proxy Secret."
+    correct_option: c
+    explanation: "Correct. `ca.crt` holds the CA certificate."
+
+  - id: ats095-final-a2-q02
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Spot the wrong port"
+    source_readings:
+      - sections/section-010/module-02/course-04-ssh-host-keys-and-known-hosts.md
+    prompt: "`fleet` uses `ssh://git@host/gitops/fleet.git` but the SSH server listens on port 2222. What does the fetch do?"
+    options:
+      - id: a
+        text: "It tries port 22 and fails to connect."
+        explanation: "Correct. Without a port in the URL, SSH uses 22."
+      - id: b
+        text: "It finds port 2222 on its own."
+        explanation: "Not correct. Flux uses port 22 unless the URL names another."
+      - id: c
+        text: "It falls back to HTTP."
+        explanation: "Not correct. There is no fallback."
+      - id: d
+        text: "It ignores the Secret and succeeds."
+        explanation: "Not correct. The connection never reaches the server."
+    correct_option: a
+    explanation: "Correct. Without a port in the URL, SSH uses 22."

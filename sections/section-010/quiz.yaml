@@ -243,3 +243,233 @@ questions:
         explanation: "Not correct. That is the host key of the server, which Flux checks."
     correct_option: b
     explanation: "Correct. Only the public key goes to the Git server."
+
+  - id: ats095-010-a2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the TLS Secret keys"
+    source_readings:
+      - sections/section-010/module-02/course-01-tls-certificates-for-https-git-servers.md
+    prompt: "Which Secret key holds the certificate authority that signed a private Git server's certificate?"
+    options:
+      - id: a
+        text: "`tls.crt`"
+        explanation: "Not correct. That key holds the client certificate."
+      - id: b
+        text: "`ca.crt`"
+        explanation: "Correct. `ca.crt` holds the CA certificate source-controller trusts for the HTTPS connection."
+      - id: c
+        text: "`known_hosts`"
+        explanation: "Not correct. That key is for SSH host keys."
+      - id: d
+        text: "`identity`"
+        explanation: "Not correct. That key is the SSH private key."
+    correct_option: b
+    explanation: "Correct. `ca.crt` holds the CA certificate source-controller trusts for the HTTPS connection."
+
+  - id: ats095-010-a2-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know when tls.crt is needed"
+    source_readings:
+      - sections/section-010/module-02/course-01-tls-certificates-for-https-git-servers.md
+    prompt: "When does a `GitRepository` Secret need the keys `tls.crt` and `tls.key`?"
+    options:
+      - id: a
+        text: "When the Git server requires a client certificate (mutual TLS)."
+        explanation: "Correct. Both keys together enable mutual TLS, which only some servers require."
+      - id: b
+        text: "Always, for every HTTPS URL."
+        explanation: "Not correct. Most servers need no client certificate."
+      - id: c
+        text: "When the repository is private."
+        explanation: "Not correct. Privacy is handled by credentials, not by a client certificate."
+      - id: d
+        text: "When the branch is not `main`."
+        explanation: "Not correct. The branch has no effect on TLS."
+    correct_option: a
+    explanation: "Correct. Both keys together enable mutual TLS, which only some servers require."
+
+  - id: ats095-010-a2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a certificate failure"
+    source_readings:
+      - sections/section-010/module-02/course-01-tls-certificates-for-https-git-servers.md
+    prompt: "A `GitRepository` reports an unknown certificate authority for its HTTPS URL. What is the usual fix?"
+    options:
+      - id: a
+        text: "Set a field that disables certificate checks."
+        explanation: "Not correct. The `GitRepository` has no such field."
+      - id: b
+        text: "Change the URL to `http://`."
+        explanation: "Not correct. That removes encryption and the server may refuse it."
+      - id: c
+        text: "Put the CA certificate in the key `ca.crt` of the Secret in `spec.secretRef`."
+        explanation: "Correct. The controller does not know the private CA until it is in `ca.crt`."
+      - id: d
+        text: "Raise `spec.timeout`."
+        explanation: "Not correct. A timeout does not affect trust."
+    correct_option: c
+    explanation: "Correct. The controller does not know the private CA until it is in `ca.crt`."
+
+  - id: ats095-010-a2-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the proxy Secret key"
+    source_readings:
+      - sections/section-010/module-02/course-02-http-proxies-and-timeouts.md
+    prompt: "Which key is required in the Secret named by `spec.proxySecretRef`?"
+    options:
+      - id: a
+        text: "`url`"
+        explanation: "Not correct. The key is called `address`."
+      - id: b
+        text: "`proxy`"
+        explanation: "Not correct. The key is called `address`."
+      - id: c
+        text: "`host`"
+        explanation: "Not correct. The key is called `address`."
+      - id: d
+        text: "`address`"
+        explanation: "Correct. The Secret needs `address`; `username` and `password` are optional."
+    correct_option: d
+    explanation: "Correct. The Secret needs `address`; `username` and `password` are optional."
+
+  - id: ats095-010-a2-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the proxy scope"
+    source_readings:
+      - sections/section-010/module-02/course-02-http-proxies-and-timeouts.md
+    prompt: "Which URLs does `proxySecretRef` apply to?"
+    options:
+      - id: a
+        text: "SSH URLs only."
+        explanation: "Not correct. The proxy is for HTTP and HTTPS."
+      - id: b
+        text: "HTTP and HTTPS URLs, not SSH URLs."
+        explanation: "Correct. `proxySecretRef` is for HTTP and HTTPS; SSH connections do not use it."
+      - id: c
+        text: "Every URL, including SSH."
+        explanation: "Not correct. SSH does not use the proxy field."
+      - id: d
+        text: "Only URLs with a port."
+        explanation: "Not correct. The port has no effect on this."
+    correct_option: b
+    explanation: "Correct. `proxySecretRef` is for HTTP and HTTPS; SSH connections do not use it."
+
+  - id: ats095-010-a2-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default fetch timeout"
+    source_readings:
+      - sections/section-010/module-02/course-02-http-proxies-and-timeouts.md
+    prompt: "What is the default value of `spec.timeout` on a `GitRepository`?"
+    options:
+      - id: a
+        text: "`60s`"
+        explanation: "Correct. The default timeout is `60s`."
+      - id: b
+        text: "`10s`"
+        explanation: "Not correct. The default is longer."
+      - id: c
+        text: "`5m`"
+        explanation: "Not correct. The default is shorter."
+      - id: d
+        text: "There is no default; the fetch never times out."
+        explanation: "Not correct. The field has a default of `60s`."
+    correct_option: a
+    explanation: "Correct. The default timeout is `60s`."
+
+  - id: ats095-010-a2-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a token field"
+    source_readings:
+      - sections/section-010/module-02/course-03-tokens-bearer-authentication-and-git-providers.md
+    prompt: "Where does a personal access token for GitHub go in the Secret of a `GitRepository`?"
+    options:
+      - id: a
+        text: "In the key `identity`."
+        explanation: "Not correct. That key is for SSH."
+      - id: b
+        text: "In the key `known_hosts`."
+        explanation: "Not correct. That key is for SSH host keys."
+      - id: c
+        text: "In the key `password`, with any `username`, for basic authentication."
+        explanation: "Correct. Hosted services expect the token where a password goes."
+      - id: d
+        text: "In `ca.crt`."
+        explanation: "Not correct. That key is for certificate authorities."
+    correct_option: c
+    explanation: "Correct. Hosted services expect the token where a password goes."
+
+  - id: ats095-010-a2-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use the GitHub App provider"
+    source_readings:
+      - sections/section-010/module-02/course-03-tokens-bearer-authentication-and-git-providers.md
+    prompt: "Which `spec.provider` value makes a `GitRepository` sign in as a GitHub App?"
+    options:
+      - id: a
+        text: "`generic`"
+        explanation: "Not correct. That is the default and uses the Secret as it is."
+      - id: b
+        text: "`azure`"
+        explanation: "Not correct. That is for Azure DevOps."
+      - id: c
+        text: "`app`"
+        explanation: "Not correct. That is not a valid value."
+      - id: d
+        text: "`github`"
+        explanation: "Correct. `provider: github` with the app keys in the Secret enables GitHub App authentication."
+    correct_option: d
+    explanation: "Correct. `provider: github` with the app keys in the Secret enables GitHub App authentication."
+
+  - id: ats095-010-a2-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Write a known_hosts entry"
+    source_readings:
+      - sections/section-010/module-02/course-04-ssh-host-keys-and-known-hosts.md
+    prompt: "How is the `known_hosts` host written for a Git SSH server `git.example.com` that listens on port 2222?"
+    options:
+      - id: a
+        text: "`[git.example.com]:2222`"
+        explanation: "Correct. A host on a port other than 22 is written with brackets: `[host]:port`."
+      - id: b
+        text: "`git.example.com`"
+        explanation: "Not correct. That entry belongs to port 22."
+      - id: c
+        text: "`git.example.com:2222`"
+        explanation: "Not correct. Without square brackets the port is not understood."
+      - id: d
+        text: "`ssh://git.example.com:2222`"
+        explanation: "Not correct. `known_hosts` takes host names, not URLs."
+    correct_option: a
+    explanation: "Correct. A host on a port other than 22 is written with brackets: `[host]:port`."
+
+  - id: ats095-010-a2-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Handle a changed host key"
+    source_readings:
+      - sections/section-010/module-02/course-04-ssh-host-keys-and-known-hosts.md
+    prompt: "The host key of the Git SSH server changed and `fleet` stopped fetching. What is the correct response?"
+    options:
+      - id: a
+        text: "Delete `known_hosts` so that Flux skips the check."
+        explanation: "Not correct. Flux refuses to connect without a key to check."
+      - id: b
+        text: "Scan the server, check that the new key is genuine, and replace `known_hosts` in the Secret."
+        explanation: "Correct. The host key check stays on; only the stored key is updated after verifying it."
+      - id: c
+        text: "Create a new key pair and a new deploy key."
+        explanation: "Not correct. The client key was not the problem."
+      - id: d
+        text: "Switch to HTTP."
+        explanation: "Not correct. That gives up the security the task wants."
+    correct_option: b
+    explanation: "Correct. The host key check stays on; only the stored key is updated after verifying it."

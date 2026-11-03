@@ -1,0 +1,28 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  # Fault 1: the address has no port, but the Gitea SSH server listens on 2222.
+  url: ssh://git@gitea.localtest.me/gitops/fleet.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-ssh
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./apps/podinfo
+  prune: true
+  wait: true
+  timeout: 2m
+  sourceRef:
+    kind: GitRepository
+    name: fleet
