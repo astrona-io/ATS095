@@ -125,6 +125,10 @@ modules:
             url: https://fluxcd.io/flux/components/source/gitrepositories/
           - name: "Flux troubleshooting cheatsheet"
             url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+      - type: quiz
+        title: "Knowledge Check: GitRepository In Depth"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
     title: "OCIRepository And Flux OCI Artifacts"
@@ -194,6 +198,10 @@ modules:
             url: https://fluxcd.io/flux/components/source/ocirepositories/
           - name: "Kustomization API: source reference"
             url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: quiz
+        title: "Knowledge Check: OCIRepository And Flux OCI Artifacts"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "HelmRepository And HelmChart"
@@ -263,6 +271,10 @@ modules:
             url: https://fluxcd.io/flux/components/helm/helmreleases/
           - name: "HelmRepository API"
             url: https://fluxcd.io/flux/components/source/helmrepositories/
+      - type: quiz
+        title: "Knowledge Check: HelmRepository And HelmChart"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "Bucket Sources, Triggers And Artifacts"
@@ -330,3 +342,12 @@ modules:
             url: https://fluxcd.io/flux/components/source/buckets/
           - name: "Flux troubleshooting cheatsheet"
             url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+
+      - type: quiz
+        title: "Knowledge Check: Bucket Sources, Triggers And Artifacts"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

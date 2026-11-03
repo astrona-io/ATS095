@@ -1,0 +1,288 @@
+# Final domain knowledge check across all four sections.
+schema_version: 1
+kind: question_bank
+id: ats095-final
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: source-controller-repository-management
+  title: "Source Controller & Repository Management"
+questions:
+  - id: ats095-final-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which ref field wins"
+    source_readings:
+      - sections/section-010/module-01/course-01-choosing-a-git-reference.md
+    prompt: "A `GitRepository` sets both `ref.tag` and `ref.semver`. Which one does source-controller use?"
+    options:
+      - id: a
+        text: "`tag`, because it is more exact than a range."
+        explanation: "Not correct. `semver` wins over `tag`."
+      - id: b
+        text: "Whichever field is written first in the YAML."
+        explanation: "Not correct. The order of fields in the file does not matter."
+      - id: c
+        text: "`semver`, because it wins over `tag`."
+        explanation: "Correct. The later field in the list branch, tag, semver, name, commit wins."
+      - id: d
+        text: "Neither. The object fails validation."
+        explanation: "Not correct. Setting more than one field is allowed. One of them wins."
+    correct_option: c
+    explanation: "Correct. The later field in the list branch, tag, semver, name, commit wins."
+
+  - id: ats095-final-q02
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict when a .sourceignore takes effect"
+    source_readings:
+      - sections/section-010/module-01/course-02-shaping-the-artifact.md
+    prompt: "`fleet` follows release tags. You push a `.sourceignore` file to `main`. When does it change the artifact?"
+    options:
+      - id: a
+        text: "At the next interval, because source-controller reads `main`."
+        explanation: "Not correct. The source follows tags, not `main`."
+      - id: b
+        text: "At once, because source-controller watches for the file."
+        explanation: "Not correct. It does not watch for files."
+      - id: c
+        text: "Never. Only `spec.ignore` is supported on tag sources."
+        explanation: "Not correct. `.sourceignore` works. It needs a commit that contains it."
+      - id: d
+        text: "Only after a new release tag that contains the file."
+        explanation: "Correct. The file is part of a commit, so it only affects commits that contain it."
+    correct_option: d
+    explanation: "Correct. The file is part of a commit, so it only affects commits that contain it."
+
+  - id: ats095-final-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Register the right SSH key"
+    source_readings:
+      - sections/section-010/module-01/course-03-https-and-ssh-authentication.md
+    prompt: "Which value do you register with Gitea as a read-only deploy key?"
+    options:
+      - id: a
+        text: "The public key from `identity.pub`."
+        explanation: "Correct. Only the public key goes to the Git server."
+      - id: b
+        text: "The private key from `identity`."
+        explanation: "Not correct. The private key never leaves the Secret."
+      - id: c
+        text: "The password from the Secret `fleet-auth`."
+        explanation: "Not correct. A password is not an SSH key."
+      - id: d
+        text: "The contents of `known_hosts`."
+        explanation: "Not correct. That is the host key of the server, which Flux checks."
+    correct_option: a
+    explanation: "Correct. Only the public key goes to the Git server."
+
+  - id: ats095-final-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write the url of an OCIRepository"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "Where does the tag go in an `OCIRepository`?"
+    options:
+      - id: a
+        text: "At the end of `spec.url`, after a colon."
+        explanation: "Not correct. A tag in the `url` is not valid for an `OCIRepository`."
+      - id: b
+        text: "In `spec.ref`, and the `url` has no tag."
+        explanation: "Correct. `oci://\u2026/podinfo-manifests` plus `ref.tag: 1.0.0`."
+      - id: c
+        text: "In the name of the object."
+        explanation: "Not correct. The name does not select a release."
+      - id: d
+        text: "In the `sourceRef` of the Flux `Kustomization`."
+        explanation: "Not correct. The `sourceRef` only names the source."
+    correct_option: b
+    explanation: "Correct. `oci://\u2026/podinfo-manifests` plus `ref.tag: 1.0.0`."
+
+  - id: ats095-final-q05
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Apply the ref precedence"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "An `OCIRepository` has `ref.semver` and `ref.digest`. Which one decides the release?"
+    options:
+      - id: a
+        text: "The range, because it is the newer setting."
+        explanation: "Not correct. Precedence does not depend on age."
+      - id: b
+        text: "The tag, which is always used first."
+        explanation: "Not correct. `tag` has the lowest precedence."
+      - id: c
+        text: "The digest, because it wins over `semver`."
+        explanation: "Correct. Digest wins over semver, and semver wins over tag."
+      - id: d
+        text: "Neither. source-controller reports a conflict."
+        explanation: "Not correct. It uses the digest without an error."
+    correct_option: c
+    explanation: "Correct. Digest wins over semver, and semver wins over tag."
+
+  - id: ats095-final-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Judge reusing a tag"
+    source_readings:
+      - sections/section-020/module-01/course-01-flux-oci-artifacts.md
+    prompt: "Why should a team push a new tag for every release instead of reusing `1.2.0`?"
+    options:
+      - id: a
+        text: "The registry refuses a push to an existing tag."
+        explanation: "Not correct. The registry accepts it."
+      - id: b
+        text: "Reused tags make the artifact larger."
+        explanation: "Not correct. Size is not the issue."
+      - id: c
+        text: "`flux push artifact` fails on a tag it has used before."
+        explanation: "Not correct. The command works. The problem is the changed content."
+      - id: d
+        text: "A moved tag gives clusters that follow it different content under the same name."
+        explanation: "Correct. A digest stays fixed, but a tag is only a name that can be moved."
+    correct_option: d
+    explanation: "Correct. A digest stays fixed, but a tag is only a name that can be moved."
+
+  - id: ats095-final-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the empty status of an OCI repository"
+    source_readings:
+      - sections/section-030/module-01/course-01-helm-repositories.md
+    prompt: "Why does an `oci` `HelmRepository` show an empty `READY` column?"
+    options:
+      - id: a
+        text: "source-controller fetches nothing for it, because a registry has no `index.yaml`."
+        explanation: "Correct. The object only holds the address and the credentials."
+      - id: b
+        text: "The registry address is wrong."
+        explanation: "Not correct. A wrong address would not explain an empty status on a working setup."
+      - id: c
+        text: "The object is still reconciling for the first time."
+        explanation: "Not correct. It stays empty."
+      - id: d
+        text: "The `interval` is too long."
+        explanation: "Not correct. The interval is ignored for this type."
+    correct_option: a
+    explanation: "Correct. The object only holds the address and the credentials."
+
+  - id: ats095-final-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove an OCI repository works"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "How do you find out that an `oci` `HelmRepository` works?"
+    options:
+      - id: a
+        text: "Read the `READY` column of the `HelmRepository`."
+        explanation: "Not correct. It is always empty for this type."
+      - id: b
+        text: "Create a `HelmChart` that uses it and check that the chart is `Ready`."
+        explanation: "Correct. A `Ready` `HelmChart` is the proof."
+      - id: c
+        text: "Wait for the `interval` to pass."
+        explanation: "Not correct. The interval is ignored."
+      - id: d
+        text: "Check the `index.yaml` artifact."
+        explanation: "Not correct. An `oci` repository has no index."
+    correct_option: b
+    explanation: "Correct. A `Ready` `HelmChart` is the proof."
+
+  - id: ats095-final-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the reconcile strategy default"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "For a chart from a `GitRepository`, when does the default `reconcileStrategy: ChartVersion` produce a new chart artifact?"
+    options:
+      - id: a
+        text: "On every new commit."
+        explanation: "Not correct. That is `Revision`."
+      - id: b
+        text: "On every interval."
+        explanation: "Not correct. The interval only checks for changes."
+      - id: c
+        text: "When the version in `Chart.yaml` changes."
+        explanation: "Correct. `Revision` would build a new chart on every new commit."
+      - id: d
+        text: "Only when the `HelmChart` is deleted and created again."
+        explanation: "Not correct. A version change is enough."
+    correct_option: c
+    explanation: "Correct. `Revision` would build a new chart on every new commit."
+
+  - id: ats095-final-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain a bucket revision"
+    source_readings:
+      - sections/section-040/module-01/course-01-bucket-sources.md
+    prompt: "What is the revision of a `Bucket`?"
+    options:
+      - id: a
+        text: "The time of the last upload."
+        explanation: "Not correct. The revision follows the content, not the time."
+      - id: b
+        text: "The version number of the bucket."
+        explanation: "Not correct. A bucket has no version in this sense."
+      - id: c
+        text: "The commit of the repository that filled the bucket."
+        explanation: "Not correct. A bucket has no commits."
+      - id: d
+        text: "The `sha256` of the list of object keys with their ETags."
+        explanation: "Correct. Any content change changes an ETag and so the revision."
+    correct_option: d
+    explanation: "Correct. Any content change changes an ETag and so the revision."
+
+  - id: ats095-final-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trigger a reconciliation"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "Which annotation makes a Flux controller reconcile an object at once?"
+    options:
+      - id: a
+        text: "`reconcile.fluxcd.io/requestedAt` with a new value"
+        explanation: "Correct. `flux reconcile` sets it for you."
+      - id: b
+        text: "`reconcile.fluxcd.io/interval` set to `0`"
+        explanation: "Not correct. No such annotation exists."
+      - id: c
+        text: "`source.toolkit.fluxcd.io/suspend` set to `false`"
+        explanation: "Not correct. That is not a reconcile request."
+      - id: d
+        text: "`reconcile.fluxcd.io/requestedAt` with the same value as before"
+        explanation: "Not correct. The controller only reacts to a new value."
+    correct_option: a
+    explanation: "Correct. `flux reconcile` sets it for you."
+
+  - id: ats095-final-q12
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know what a Receiver does"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "What does a `Receiver` do when a webhook event arrives?"
+    options:
+      - id: a
+        text: "It uploads the changed files to the bucket."
+        explanation: "Not correct. It does not change content."
+      - id: b
+        text: "It sets the reconcile request annotation, so the source fetches at once."
+        explanation: "Correct. This avoids polling with a short interval."
+      - id: c
+        text: "It changes the `interval` of the source to `1s`."
+        explanation: "Not correct. Intervals stay as they are."
+      - id: d
+        text: "It restarts source-controller."
+        explanation: "Not correct. It sets an annotation only."
+    correct_option: b
+    explanation: "Correct. This avoids polling with a short interval."

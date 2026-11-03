@@ -1,0 +1,245 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats095-030
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "HelmRepository And HelmChart"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats095-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe an HTTP HelmRepository"
+    source_readings:
+      - sections/section-030/module-01/course-01-helm-repositories.md
+    prompt: "What does source-controller store for a `HelmRepository` of the default type?"
+    options:
+      - id: a
+        text: "Every chart package in the repository."
+        explanation: "Not correct. Chart packages are fetched later by a `HelmChart`."
+      - id: b
+        text: "Nothing. It only records the address."
+        explanation: "Not correct. That describes the `oci` type."
+      - id: c
+        text: "A copy of the `index.yaml` of the repository, as an artifact."
+        explanation: "Correct. The index lists every chart and version."
+      - id: d
+        text: "A list of the installed Helm releases."
+        explanation: "Not correct. Installed releases are managed by helm-controller."
+    correct_option: c
+    explanation: "Correct. The index lists every chart and version."
+
+  - id: ats095-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the interval of a HelmRepository"
+    source_readings:
+      - sections/section-030/module-01/course-01-helm-repositories.md
+    prompt: "What does `interval: 10m` do on an HTTP `HelmRepository`?"
+    options:
+      - id: a
+        text: "It installs the newest chart every 10 minutes."
+        explanation: "Not correct. Installing is the job of a `HelmRelease`."
+      - id: b
+        text: "It limits how long a chart download may take."
+        explanation: "Not correct. That is a timeout, not an interval."
+      - id: c
+        text: "It has no effect on any `HelmRepository`."
+        explanation: "Not correct. It is ignored only for `type: oci`."
+      - id: d
+        text: "source-controller downloads the `index.yaml` again every 10 minutes."
+        explanation: "Correct. Without the field, the interval is `1m`."
+    correct_option: d
+    explanation: "Correct. Without the field, the interval is `1m`."
+
+  - id: ats095-030-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match type and address"
+    source_readings:
+      - sections/section-030/module-01/course-01-helm-repositories.md
+    prompt: "Which `spec.type` does a `HelmRepository` with the address `oci://ghcr.io/stefanprodan/charts` need?"
+    options:
+      - id: a
+        text: "`oci`"
+        explanation: "Correct. The type and the address must match."
+      - id: b
+        text: "`default`"
+        explanation: "Not correct. The default type needs an `http://` or `https://` address."
+      - id: c
+        text: "`registry`"
+        explanation: "Not correct. That is not a valid type."
+      - id: d
+        text: "No type. It is detected from the address."
+        explanation: "Not correct. A mismatch gives a source that never works."
+    correct_option: a
+    explanation: "Correct. The type and the address must match."
+
+  - id: ats095-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the empty status of an OCI repository"
+    source_readings:
+      - sections/section-030/module-01/course-01-helm-repositories.md
+    prompt: "Why does an `oci` `HelmRepository` show an empty `READY` column?"
+    options:
+      - id: a
+        text: "The registry address is wrong."
+        explanation: "Not correct. A wrong address would not explain an empty status on a working setup."
+      - id: b
+        text: "source-controller fetches nothing for it, because a registry has no `index.yaml`."
+        explanation: "Correct. The object only holds the address and the credentials."
+      - id: c
+        text: "The object is still reconciling for the first time."
+        explanation: "Not correct. It stays empty."
+      - id: d
+        text: "The `interval` is too long."
+        explanation: "Not correct. The interval is ignored for this type."
+    correct_option: b
+    explanation: "Correct. The object only holds the address and the credentials."
+
+  - id: ats095-030-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prove an OCI repository works"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "How do you find out that an `oci` `HelmRepository` works?"
+    options:
+      - id: a
+        text: "Read the `READY` column of the `HelmRepository`."
+        explanation: "Not correct. It is always empty for this type."
+      - id: b
+        text: "Wait for the `interval` to pass."
+        explanation: "Not correct. The interval is ignored."
+      - id: c
+        text: "Create a `HelmChart` that uses it and check that the chart is `Ready`."
+        explanation: "Correct. A `Ready` `HelmChart` is the proof."
+      - id: d
+        text: "Check the `index.yaml` artifact."
+        explanation: "Not correct. An `oci` repository has no index."
+    correct_option: c
+    explanation: "Correct. A `Ready` `HelmChart` is the proof."
+
+  - id: ats095-030-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default chart version"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "What does a `HelmChart` fetch when its `version` field is left out?"
+    options:
+      - id: a
+        text: "The oldest version in the repository."
+        explanation: "Not correct. The highest match is chosen."
+      - id: b
+        text: "The version in the `Chart.yaml` of the cluster."
+        explanation: "Not correct. There is no such chart in the cluster."
+      - id: c
+        text: "Nothing. The field is required."
+        explanation: "Not correct. The field is optional."
+      - id: d
+        text: "The newest version, because the default is `*`."
+        explanation: "Correct. The default range matches every version."
+    correct_option: d
+    explanation: "Correct. The default range matches every version."
+
+  - id: ats095-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Narrow a version range"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "You patch a `HelmChart` from `version: \"6.x\"` to `version: \"6.14.x\"`. What happens at the next reconciliation?"
+    options:
+      - id: a
+        text: "The revision becomes the highest 6.14 chart version."
+        explanation: "Correct. The range decides the version and the `HelmChart` reports it."
+      - id: b
+        text: "The revision stays on the highest 6.x version."
+        explanation: "Not correct. The narrower range excludes newer minor lines."
+      - id: c
+        text: "The `HelmChart` becomes not ready until you delete it."
+        explanation: "Not correct. A matching version exists, so it resolves."
+      - id: d
+        text: "The index is downloaded from the registry again."
+        explanation: "Not correct. The range is matched against the stored index."
+    correct_option: a
+    explanation: "Correct. The range decides the version and the `HelmChart` reports it."
+
+  - id: ats095-030-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain how an OCI chart is resolved"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "How does source-controller pick the version of a chart in an OCI `HelmRepository`?"
+    options:
+      - id: a
+        text: "It reads an `index.yaml` from the registry."
+        explanation: "Not correct. Registries have no index for this."
+      - id: b
+        text: "It asks the registry for the tags of the chart and picks the highest that matches."
+        explanation: "Correct. No index is involved."
+      - id: c
+        text: "It always uses the tag `latest`."
+        explanation: "Not correct. The `version` range decides."
+      - id: d
+        text: "It asks helm-controller to choose."
+        explanation: "Not correct. source-controller resolves the version."
+    correct_option: b
+    explanation: "Correct. No index is involved."
+
+  - id: ats095-030-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the reconcile strategy default"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "For a chart from a `GitRepository`, when does the default `reconcileStrategy: ChartVersion` produce a new chart artifact?"
+    options:
+      - id: a
+        text: "On every new commit."
+        explanation: "Not correct. That is `Revision`."
+      - id: b
+        text: "On every interval."
+        explanation: "Not correct. The interval only checks for changes."
+      - id: c
+        text: "When the version in `Chart.yaml` changes."
+        explanation: "Correct. `Revision` would build a new chart on every new commit."
+      - id: d
+        text: "Only when the `HelmChart` is deleted and created again."
+        explanation: "Not correct. A version change is enough."
+    correct_option: c
+    explanation: "Correct. `Revision` would build a new chart on every new commit."
+
+  - id: ats095-030-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Fix the right object"
+    source_readings:
+      - sections/section-030/module-01/course-02-helmchart-objects.md
+    prompt: "A `HelmRelease` created a `HelmChart` that cannot resolve. Where do you change the chart name or version?"
+    options:
+      - id: a
+        text: "In the `HelmChart` that helm-controller created."
+        explanation: "Not correct. Your edit is overwritten."
+      - id: b
+        text: "In the `index.yaml` of the `HelmRepository`."
+        explanation: "Not correct. The index belongs to the chart repository."
+      - id: c
+        text: "In the `interval` of the `HelmRepository`."
+        explanation: "Not correct. The interval does not change which chart is chosen."
+      - id: d
+        text: "In `spec.chart.spec` of the `HelmRelease`."
+        explanation: "Correct. helm-controller rewrites the `HelmChart` from the `HelmRelease`."
+    correct_option: d
+    explanation: "Correct. helm-controller rewrites the `HelmChart` from the `HelmRelease`."

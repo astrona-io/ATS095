@@ -1,0 +1,245 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats095-010
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "GitRepository In Depth"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats095-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the revision of a GitRepository"
+    source_readings:
+      - sections/section-010/module-01/course-01-choosing-a-git-reference.md
+    prompt: "What does the revision of a `GitRepository`, such as `main@sha1:<commit>`, tell you?"
+    options:
+      - id: a
+        text: "The reference source-controller resolved and the commit it fetched."
+        explanation: "Correct. The part before the `@` is the reference and the part after it is the commit."
+      - id: b
+        text: "The time of the last fetch and the name of the user who pushed."
+        explanation: "Not correct. The revision holds no time and no user name."
+      - id: c
+        text: "The name of the Flux `Kustomization` that uses the source."
+        explanation: "Not correct. The revision describes the fetched content, not its consumers."
+      - id: d
+        text: "A hash of the files that remain after the ignore rules."
+        explanation: "Not correct. The revision names the commit, not the contents of the artifact."
+    correct_option: a
+    explanation: "Correct. The part before the `@` is the reference and the part after it is the commit."
+
+  - id: ats095-010-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which ref field wins"
+    source_readings:
+      - sections/section-010/module-01/course-01-choosing-a-git-reference.md
+    prompt: "A `GitRepository` sets both `ref.tag` and `ref.semver`. Which one does source-controller use?"
+    options:
+      - id: a
+        text: "`tag`, because it is more exact than a range."
+        explanation: "Not correct. `semver` wins over `tag`."
+      - id: b
+        text: "`semver`, because it wins over `tag`."
+        explanation: "Correct. The later field in the list branch, tag, semver, name, commit wins."
+      - id: c
+        text: "Whichever field is written first in the YAML."
+        explanation: "Not correct. The order of fields in the file does not matter."
+      - id: d
+        text: "Neither. The object fails validation."
+        explanation: "Not correct. Setting more than one field is allowed. One of them wins."
+    correct_option: b
+    explanation: "Correct. The later field in the list branch, tag, semver, name, commit wins."
+
+  - id: ats095-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain the default reference"
+    source_readings:
+      - sections/section-010/module-01/course-01-choosing-a-git-reference.md
+    prompt: "A `GitRepository` has no `spec.ref` and the repository only has the branch `main`. What happens?"
+    options:
+      - id: a
+        text: "source-controller follows `main` because it is the only branch."
+        explanation: "Not correct. It does not look for a branch. It uses `master`."
+      - id: b
+        text: "source-controller fetches the newest tag."
+        explanation: "Not correct. Tags are only used when `tag` or `semver` is set."
+      - id: c
+        text: "source-controller follows the branch `master`, so the source never becomes ready."
+        explanation: "Correct. Without `ref`, the default branch name is `master`."
+      - id: d
+        text: "source-controller fetches the newest commit of any branch."
+        explanation: "Not correct. It follows one branch, and the default is `master`."
+    correct_option: c
+    explanation: "Correct. Without `ref`, the default branch name is `master`."
+
+  - id: ats095-010-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a semver range for a release line"
+    source_readings:
+      - sections/section-010/module-01/course-01-choosing-a-git-reference.md
+    prompt: "The repository has the tags `v1.0.0`, `v1.1.0` and `v2.0.0`. Which commit does `ref.semver: \">=1.0.0 <2.0.0\"` fetch?"
+    options:
+      - id: a
+        text: "The commit of `v2.0.0`, the newest tag."
+        explanation: "Not correct. The upper bound `<2.0.0` excludes it."
+      - id: b
+        text: "The commit of `v1.0.0`, the first match."
+        explanation: "Not correct. source-controller fetches the highest match, not the first."
+      - id: c
+        text: "The head of the branch `main`."
+        explanation: "Not correct. A `semver` range reads tags, not branches."
+      - id: d
+        text: "The commit of `v1.1.0`, the highest tag inside the range."
+        explanation: "Correct. `v2.0.0` is outside the upper bound, and the highest match is used."
+    correct_option: d
+    explanation: "Correct. `v2.0.0` is outside the upper bound, and the highest match is used."
+
+  - id: ats095-010-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain why SSH needs known_hosts"
+    source_readings:
+      - sections/section-010/module-01/course-03-https-and-ssh-authentication.md
+    prompt: "What is the `known_hosts` key in an SSH Secret for Flux used for?"
+    options:
+      - id: a
+        text: "It lets source-controller check that it talks to the real Git server."
+        explanation: "Correct. source-controller refuses a host whose key is not listed."
+      - id: b
+        text: "It lists the users who may push to the repository."
+        explanation: "Not correct. Users and push rights are managed on the Git server."
+      - id: c
+        text: "It holds the private key for signing in."
+        explanation: "Not correct. The private key is in `identity`."
+      - id: d
+        text: "It holds the public key you register with the Git server."
+        explanation: "Not correct. That key is `identity.pub`."
+    correct_option: a
+    explanation: "Correct. source-controller refuses a host whose key is not listed."
+
+  - id: ats095-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what the default ignore rules leave out"
+    source_readings:
+      - sections/section-010/module-01/course-02-shaping-the-artifact.md
+    prompt: "The commit holds `docs/diagram.png`, but the artifact does not. Why?"
+    options:
+      - id: a
+        text: "The `docs` folder is always excluded from artifacts."
+        explanation: "Not correct. Only the ignore rules decide. `docs/architecture.md` is in the artifact."
+      - id: b
+        text: "The default ignore rules leave out image files such as `.png`."
+        explanation: "Correct. The built-in list excludes images, videos, archives and CI files."
+      - id: c
+        text: "Binary files are too large for an artifact."
+        explanation: "Not correct. Size is not the reason. The ignore rules exclude the extension."
+      - id: d
+        text: "A `.sourceignore` file in the commit excludes it."
+        explanation: "Not correct. The playground commit has no `.sourceignore`."
+    correct_option: b
+    explanation: "Correct. The built-in list excludes images, videos, archives and CI files."
+
+  - id: ats095-010-q07
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Tell spec.ignore from .sourceignore"
+    source_readings:
+      - sections/section-010/module-01/course-02-shaping-the-artifact.md
+    prompt: "How does `spec.ignore` differ from a `.sourceignore` file?"
+    options:
+      - id: a
+        text: "`spec.ignore` adds to the defaults, and `.sourceignore` replaces them."
+        explanation: "Not correct. It is the other way round."
+      - id: b
+        text: "Both replace the defaults, but only `.sourceignore` is read from folders."
+        explanation: "Not correct. Only `spec.ignore` replaces the defaults."
+      - id: c
+        text: "`spec.ignore` replaces the default rules, and `.sourceignore` adds to them."
+        explanation: "Correct. Repeat any default rule you still need when you set `spec.ignore`."
+      - id: d
+        text: "Both add to the defaults and only differ in file format."
+        explanation: "Not correct. They differ in whether the defaults stay."
+    correct_option: c
+    explanation: "Correct. Repeat any default rule you still need when you set `spec.ignore`."
+
+  - id: ats095-010-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict when a .sourceignore takes effect"
+    source_readings:
+      - sections/section-010/module-01/course-02-shaping-the-artifact.md
+    prompt: "`fleet` follows release tags. You push a `.sourceignore` file to `main`. When does it change the artifact?"
+    options:
+      - id: a
+        text: "At the next interval, because source-controller reads `main`."
+        explanation: "Not correct. The source follows tags, not `main`."
+      - id: b
+        text: "At once, because source-controller watches for the file."
+        explanation: "Not correct. It does not watch for files."
+      - id: c
+        text: "Never. Only `spec.ignore` is supported on tag sources."
+        explanation: "Not correct. `.sourceignore` works. It needs a commit that contains it."
+      - id: d
+        text: "Only after a new release tag that contains the file."
+        explanation: "Correct. The file is part of a commit, so it only affects commits that contain it."
+    correct_option: d
+    explanation: "Correct. The file is part of a commit, so it only affects commits that contain it."
+
+  - id: ats095-010-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use spec.include"
+    source_readings:
+      - sections/section-010/module-01/course-02-shaping-the-artifact.md
+    prompt: "What does `spec.include` do in a `GitRepository`?"
+    options:
+      - id: a
+        text: "It copies the artifact of another `GitRepository` into this artifact."
+        explanation: "Correct. `fromPath` picks a folder and `toPath` sets where it lands."
+      - id: b
+        text: "It clones the submodules of the repository."
+        explanation: "Not correct. That is `spec.recurseSubmodules`."
+      - id: c
+        text: "It adds files from any URL you write in the field."
+        explanation: "Not correct. It names a Flux `GitRepository`, not a URL."
+      - id: d
+        text: "It re-adds files that the ignore rules removed."
+        explanation: "Not correct. Ignore rules and includes are separate settings."
+    correct_option: a
+    explanation: "Correct. `fromPath` picks a folder and `toPath` sets where it lands."
+
+  - id: ats095-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Register the right SSH key"
+    source_readings:
+      - sections/section-010/module-01/course-03-https-and-ssh-authentication.md
+    prompt: "Which value do you register with Gitea as a read-only deploy key?"
+    options:
+      - id: a
+        text: "The private key from `identity`."
+        explanation: "Not correct. The private key never leaves the Secret."
+      - id: b
+        text: "The public key from `identity.pub`."
+        explanation: "Correct. Only the public key goes to the Git server."
+      - id: c
+        text: "The password from the Secret `fleet-auth`."
+        explanation: "Not correct. A password is not an SSH key."
+      - id: d
+        text: "The contents of `known_hosts`."
+        explanation: "Not correct. That is the host key of the server, which Flux checks."
+    correct_option: b
+    explanation: "Correct. Only the public key goes to the Git server."

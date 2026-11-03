@@ -1,0 +1,245 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats095-040
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-040
+  title: "Bucket Sources, Triggers And Artifacts"
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+  - id: ats095-040-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Create the Secret for a Bucket"
+    source_readings:
+      - sections/section-040/module-01/course-01-bucket-sources.md
+    prompt: "Which keys must the Secret for a `Bucket` with the `generic` provider contain?"
+    options:
+      - id: a
+        text: "`username` and `password`"
+        explanation: "Not correct. Those keys are for Git and Helm credentials."
+      - id: b
+        text: "`access_key` and `secret_key`"
+        explanation: "Not correct. The names are exact and have no underscores."
+      - id: c
+        text: "`identity` and `known_hosts`"
+        explanation: "Not correct. Those keys are for SSH."
+      - id: d
+        text: "`accesskey` and `secretkey`"
+        explanation: "Correct. Other names such as `access_key` are ignored."
+    correct_option: d
+    explanation: "Correct. Other names such as `access_key` are ignored."
+
+  - id: ats095-040-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write the endpoint of a Bucket"
+    source_readings:
+      - sections/section-040/module-01/course-01-bucket-sources.md
+    prompt: "How do you point a `generic` `Bucket` at a plain-HTTP S3 server?"
+    options:
+      - id: a
+        text: "Give the host and port in `endpoint` and set `insecure: true`."
+        explanation: "Correct. `endpoint` has no scheme."
+      - id: b
+        text: "Write `http://` at the start of `endpoint`."
+        explanation: "Not correct. The scheme does not choose HTTP."
+      - id: c
+        text: "Set `provider: http`."
+        explanation: "Not correct. The providers are generic, aws, gcp and azure."
+      - id: d
+        text: "Put the address in `bucketName`."
+        explanation: "Not correct. `bucketName` is only the name of the bucket."
+    correct_option: a
+    explanation: "Correct. `endpoint` has no scheme."
+
+  - id: ats095-040-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain a bucket revision"
+    source_readings:
+      - sections/section-040/module-01/course-01-bucket-sources.md
+    prompt: "What is the revision of a `Bucket`?"
+    options:
+      - id: a
+        text: "The time of the last upload."
+        explanation: "Not correct. The revision follows the content, not the time."
+      - id: b
+        text: "The `sha256` of the list of object keys with their ETags."
+        explanation: "Correct. Any content change changes an ETag and so the revision."
+      - id: c
+        text: "The version number of the bucket."
+        explanation: "Not correct. A bucket has no version in this sense."
+      - id: d
+        text: "The commit of the repository that filled the bucket."
+        explanation: "Not correct. A bucket has no commits."
+    correct_option: b
+    explanation: "Correct. Any content change changes an ETag and so the revision."
+
+  - id: ats095-040-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict an identical upload"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "You upload an unchanged `deployment.yaml` again and reconcile the `Bucket`. What happens to the revision?"
+    options:
+      - id: a
+        text: "It changes, because the upload time is new."
+        explanation: "Not correct. Time is not part of the revision."
+      - id: b
+        text: "It changes only if `interval` has passed."
+        explanation: "Not correct. The content decides, not the interval."
+      - id: c
+        text: "It stays the same, because the ETags did not change."
+        explanation: "Correct. Source-controller keeps the artifact it has."
+      - id: d
+        text: "The `Bucket` becomes not ready."
+        explanation: "Not correct. An identical upload is harmless."
+    correct_option: c
+    explanation: "Correct. Source-controller keeps the artifact it has."
+
+  - id: ats095-040-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain polling delay"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "The `Bucket` has `interval: 30m`. You upload a change. Why does the cluster not change at once?"
+    options:
+      - id: a
+        text: "The upload is cached for 30 minutes by the S3 server."
+        explanation: "Not correct. The delay is in source-controller's schedule."
+      - id: b
+        text: "kustomize-controller ignores buckets."
+        explanation: "Not correct. It applies a `Bucket` artifact like a Git artifact."
+      - id: c
+        text: "The Secret must be recreated after each upload."
+        explanation: "Not correct. The Secret is not involved."
+      - id: d
+        text: "source-controller does not watch the bucket and only checks it once per interval."
+        explanation: "Correct. The next check can be 30 minutes away."
+    correct_option: d
+    explanation: "Correct. The next check can be 30 minutes away."
+
+  - id: ats095-040-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trigger a reconciliation"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "Which annotation makes a Flux controller reconcile an object at once?"
+    options:
+      - id: a
+        text: "`reconcile.fluxcd.io/requestedAt` with a new value"
+        explanation: "Correct. `flux reconcile` sets it for you."
+      - id: b
+        text: "`reconcile.fluxcd.io/interval` set to `0`"
+        explanation: "Not correct. No such annotation exists."
+      - id: c
+        text: "`source.toolkit.fluxcd.io/suspend` set to `false`"
+        explanation: "Not correct. That is not a reconcile request."
+      - id: d
+        text: "`reconcile.fluxcd.io/requestedAt` with the same value as before"
+        explanation: "Not correct. The controller only reacts to a new value."
+    correct_option: a
+    explanation: "Correct. `flux reconcile` sets it for you."
+
+  - id: ats095-040-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use --with-source"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "What does `flux reconcile kustomization podinfo` do without `--with-source`?"
+    options:
+      - id: a
+        text: "It fetches the bucket and then applies it."
+        explanation: "Not correct. That is what `--with-source` adds."
+      - id: b
+        text: "It applies the artifact the source already has, without fetching a new one."
+        explanation: "Correct. Add `--with-source` or reconcile the source first."
+      - id: c
+        text: "It shortens the interval of the `Bucket`."
+        explanation: "Not correct. Intervals are not changed."
+      - id: d
+        text: "It deletes the stored artifact."
+        explanation: "Not correct. Artifacts are removed by garbage collection."
+    correct_option: b
+    explanation: "Correct. Add `--with-source` or reconcile the source first."
+
+  - id: ats095-040-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know what a Receiver does"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "What does a `Receiver` do when a webhook event arrives?"
+    options:
+      - id: a
+        text: "It uploads the changed files to the bucket."
+        explanation: "Not correct. It does not change content."
+      - id: b
+        text: "It changes the `interval` of the source to `1s`."
+        explanation: "Not correct. Intervals stay as they are."
+      - id: c
+        text: "It sets the reconcile request annotation, so the source fetches at once."
+        explanation: "Correct. This avoids polling with a short interval."
+      - id: d
+        text: "It restarts source-controller."
+        explanation: "Not correct. It sets an annotation only."
+    correct_option: c
+    explanation: "Correct. This avoids polling with a short interval."
+
+  - id: ats095-040-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Read the artifact status"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "In `status.artifact`, what is the `digest` field?"
+    options:
+      - id: a
+        text: "The hash of the object list."
+        explanation: "Not correct. That is the `revision` of a `Bucket`."
+      - id: b
+        text: "The address where the file is served."
+        explanation: "Not correct. That is `url`."
+      - id: c
+        text: "The time the artifact was stored."
+        explanation: "Not correct. That is `lastUpdateTime`."
+      - id: d
+        text: "The hash of the stored `tar.gz` file."
+        explanation: "Correct. The `revision` is the source's own version."
+    correct_option: d
+    explanation: "Correct. The `revision` is the source's own version."
+
+  - id: ats095-040-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know the artifact retention default"
+    source_readings:
+      - sections/section-040/module-01/course-02-triggers-and-artifacts.md
+    prompt: "What does the default `--artifact-retention-records=2` of source-controller mean?"
+    options:
+      - id: a
+        text: "It keeps the two newest artifacts of each object and collects older ones."
+        explanation: "Correct. Old ones are deleted after `--artifact-retention-ttl`."
+      - id: b
+        text: "It keeps two artifacts in total for all objects."
+        explanation: "Not correct. The limit is per object."
+      - id: c
+        text: "It retries a failed fetch two times."
+        explanation: "Not correct. It does not control retries."
+      - id: d
+        text: "It allows two sources per namespace."
+        explanation: "Not correct. It does not limit objects."
+    correct_option: a
+    explanation: "Correct. Old ones are deleted after `--artifact-retention-ttl`."

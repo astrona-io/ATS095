@@ -1,0 +1,245 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats095-020
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "OCIRepository And Flux OCI Artifacts"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats095-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Record the source of an OCI release"
+    source_readings:
+      - sections/section-020/module-01/course-01-flux-oci-artifacts.md
+    prompt: "What do `--source` and `--revision` do in `flux push artifact`?"
+    options:
+      - id: a
+        text: "They choose which registry receives the artifact."
+        explanation: "Not correct. The registry is in the `oci://` address."
+      - id: b
+        text: "They store the Git URL and commit as annotations on the artifact."
+        explanation: "Correct. The annotations link a release back to its commit."
+      - id: c
+        text: "They make Flux fetch from Git instead of the registry."
+        explanation: "Not correct. They only add annotations."
+      - id: d
+        text: "They sign the artifact with the commit hash."
+        explanation: "Not correct. Signing is a separate step."
+    correct_option: b
+    explanation: "Correct. The annotations link a release back to its commit."
+
+  - id: ats095-020-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain a digest"
+    source_readings:
+      - sections/section-020/module-01/course-01-flux-oci-artifacts.md
+    prompt: "What is the digest of an OCI artifact?"
+    options:
+      - id: a
+        text: "The version number written in the tag."
+        explanation: "Not correct. A tag is a movable name. The digest is a hash."
+      - id: b
+        text: "The time the artifact was pushed."
+        explanation: "Not correct. The creation time is an annotation, not the digest."
+      - id: c
+        text: "The `sha256` hash of its manifest, which names one exact release."
+        explanation: "Correct. The same content always gives the same digest."
+      - id: d
+        text: "The commit hash of the Git repository."
+        explanation: "Not correct. The commit is in the revision annotation."
+    correct_option: c
+    explanation: "Correct. The same content always gives the same digest."
+
+  - id: ats095-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the layer of a Flux artifact"
+    source_readings:
+      - sections/section-020/module-01/course-01-flux-oci-artifacts.md
+    prompt: "What does the layer of a Flux OCI artifact contain?"
+    options:
+      - id: a
+        text: "A container image of the application."
+        explanation: "Not correct. A Flux artifact holds manifests, not an image."
+      - id: b
+        text: "Only the `kustomization.yaml` file."
+        explanation: "Not correct. The whole folder is packed."
+      - id: c
+        text: "The Git history of the repository."
+        explanation: "Not correct. Only the files of the folder are packed."
+      - id: d
+        text: "A compressed tar archive of the pushed folder, with the media type `application/vnd.cncf.flux.content.v1.tar+gzip`."
+        explanation: "Correct. The files of the folder are the single layer."
+    correct_option: d
+    explanation: "Correct. The files of the folder are the single layer."
+
+  - id: ats095-020-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Write the url of an OCIRepository"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "Where does the tag go in an `OCIRepository`?"
+    options:
+      - id: a
+        text: "In `spec.ref`, and the `url` has no tag."
+        explanation: "Correct. `oci://\u2026/podinfo-manifests` plus `ref.tag: 1.0.0`."
+      - id: b
+        text: "At the end of `spec.url`, after a colon."
+        explanation: "Not correct. A tag in the `url` is not valid for an `OCIRepository`."
+      - id: c
+        text: "In the name of the object."
+        explanation: "Not correct. The name does not select a release."
+      - id: d
+        text: "In the `sourceRef` of the Flux `Kustomization`."
+        explanation: "Not correct. The `sourceRef` only names the source."
+    correct_option: a
+    explanation: "Correct. `oci://\u2026/podinfo-manifests` plus `ref.tag: 1.0.0`."
+
+  - id: ats095-020-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Connect to a plain-HTTP registry"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "The lab registry uses plain HTTP. Which `OCIRepository` field allows it?"
+    options:
+      - id: a
+        text: "`type: http`"
+        explanation: "Not correct. An `OCIRepository` has no such field."
+      - id: b
+        text: "`insecure: true`"
+        explanation: "Correct. Without it, source-controller tries HTTPS and fails."
+      - id: c
+        text: "`url: http://registry.localtest.me:5001`"
+        explanation: "Not correct. The address must start with `oci://`."
+      - id: d
+        text: "`verify: none`"
+        explanation: "Not correct. `verify` checks signatures. It does not allow HTTP."
+    correct_option: b
+    explanation: "Correct. Without it, source-controller tries HTTPS and fails."
+
+  - id: ats095-020-q06
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Apply the ref precedence"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "An `OCIRepository` has `ref.semver` and `ref.digest`. Which one decides the release?"
+    options:
+      - id: a
+        text: "The range, because it is the newer setting."
+        explanation: "Not correct. Precedence does not depend on age."
+      - id: b
+        text: "The tag, which is always used first."
+        explanation: "Not correct. `tag` has the lowest precedence."
+      - id: c
+        text: "The digest, because it wins over `semver`."
+        explanation: "Correct. Digest wins over semver, and semver wins over tag."
+      - id: d
+        text: "Neither. source-controller reports a conflict."
+        explanation: "Not correct. It uses the digest without an error."
+    correct_option: c
+    explanation: "Correct. Digest wins over semver, and semver wins over tag."
+
+  - id: ats095-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what a plain range skips"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "The registry holds `1.2.0-rc.1` and `1.1.0`. Which does `>=1.0.0 <2.0.0` fetch?"
+    options:
+      - id: a
+        text: "`1.2.0-rc.1`, because it is the highest version."
+        explanation: "Not correct. Pre-releases do not match a plain range."
+      - id: b
+        text: "Both, merged into one artifact."
+        explanation: "Not correct. One release is fetched."
+      - id: c
+        text: "Neither, because the range needs a `v` prefix."
+        explanation: "Not correct. The prefix is not required here."
+      - id: d
+        text: "`1.1.0`, because a plain range skips pre-releases."
+        explanation: "Correct. Only a range that names a pre-release lets pre-releases in."
+    correct_option: d
+    explanation: "Correct. Only a range that names a pre-release lets pre-releases in."
+
+  - id: ats095-020-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Point a Flux Kustomization at an OCI source"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "Which `sourceRef` and path apply the files of an artifact packed from `apps/podinfo`?"
+    options:
+      - id: a
+        text: "`kind: OCIRepository` and `path: ./`"
+        explanation: "Correct. The files sit at the root of the artifact."
+      - id: b
+        text: "`kind: GitRepository` and `path: ./apps/podinfo`"
+        explanation: "Not correct. The source is an `OCIRepository`, and the folder is already the root."
+      - id: c
+        text: "`kind: OCIRepository` and `path: ./apps/podinfo`"
+        explanation: "Not correct. The artifact root is the packed folder, so that path does not exist."
+      - id: d
+        text: "`kind: HelmRepository` and `path: ./`"
+        explanation: "Not correct. A `HelmRepository` serves charts, not this artifact."
+    correct_option: a
+    explanation: "Correct. The files sit at the root of the artifact."
+
+  - id: ats095-020-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Judge reusing a tag"
+    source_readings:
+      - sections/section-020/module-01/course-01-flux-oci-artifacts.md
+    prompt: "Why should a team push a new tag for every release instead of reusing `1.2.0`?"
+    options:
+      - id: a
+        text: "The registry refuses a push to an existing tag."
+        explanation: "Not correct. The registry accepts it."
+      - id: b
+        text: "A moved tag gives clusters that follow it different content under the same name."
+        explanation: "Correct. A digest stays fixed, but a tag is only a name that can be moved."
+      - id: c
+        text: "Reused tags make the artifact larger."
+        explanation: "Not correct. Size is not the issue."
+      - id: d
+        text: "`flux push artifact` fails on a tag it has used before."
+        explanation: "Not correct. The command works. The problem is the changed content."
+    correct_option: b
+    explanation: "Correct. A digest stays fixed, but a tag is only a name that can be moved."
+
+  - id: ats095-020-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Know what verify does"
+    source_readings:
+      - sections/section-020/module-01/course-02-ocirepository-tags-semver-digests.md
+    prompt: "What does `spec.verify` with `provider: cosign` do?"
+    options:
+      - id: a
+        text: "It signs each artifact that source-controller fetches."
+        explanation: "Not correct. Signing belongs in the pipeline that pushes the release."
+      - id: b
+        text: "It picks the layer to extract by media type."
+        explanation: "Not correct. That is `layerSelector`."
+      - id: c
+        text: "It makes source-controller refuse an unsigned or wrongly signed artifact."
+        explanation: "Correct. The Secret holds the public key used to check the signature."
+      - id: d
+        text: "It checks that the registry uses HTTPS."
+        explanation: "Not correct. Transport is set with `insecure`, not `verify`."
+    correct_option: c
+    explanation: "Correct. The Secret holds the public key used to check the signature."
