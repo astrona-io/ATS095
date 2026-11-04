@@ -15,7 +15,7 @@
 training:
   id: ATS095
   title: "FluxCD: Source Controller & Repository Management"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Source Controller & Repository Management
     domain of the FluxCD training path: Git references, ignore rules and
