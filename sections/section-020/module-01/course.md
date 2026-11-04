@@ -6,7 +6,7 @@ An **OCI artifact** is content stored in a container registry the same way as an
 
 Keep one sentence in mind: **a tag can move, a digest cannot.** The revision Flux reports for an OCI source holds both, so you always know which exact content the cluster runs.
 
-The module has two parts. **Packing Manifests Into An OCI Artifact** pushes a folder from Git to the registry with `flux push artifact` and reads back what was stored. **OCIRepository: Tags, Semver Ranges And Digests** points an `OCIRepository` at those releases, compares the three ways to pick one, and connects a Flux `Kustomization`. A graded lab follows the second part.
+The module has four parts. **Packing Manifests Into An OCI Artifact** pushes a folder from Git to the registry with `flux push artifact` and reads back what was stored. **OCIRepository: Tags, Semver Ranges And Digests** points an `OCIRepository` at those releases, compares the three ways to pick one, and connects a Flux `Kustomization`. **OCIRepository Status, Conditions And Troubleshooting** reads the conditions and events and fixes a source that does not fetch, followed by a graded lab. **Layers, semverFilter And Ignore Rules** shapes which tags and which content a source takes. Graded labs follow the second and the third part.
 
 ## Learning objectives
 
@@ -18,6 +18,8 @@ After this module you can:
 - Read a revision such as `1.1.0@sha256:<digest>`.
 - Allow a registry that uses plain HTTP with `insecure: true`, and say why a real registry should not need it.
 - Connect a Flux `Kustomization` to an `OCIRepository` and prove which release it applied.
+- Read the conditions, events and artifact metadata of an `OCIRepository` and fix a source that does not fetch.
+- Filter tags with `semverFilter` and select a layer with `layerSelector`.
 
 ## Before you start
 

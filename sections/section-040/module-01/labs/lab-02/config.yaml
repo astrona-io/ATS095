@@ -1,0 +1,53 @@
+# Scope A Bucket With A Prefix And Ignore Rules
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-040-01-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, and the S3-compatible server with its client pod"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-040-01-setup"
+      description: "Fills the bucket releases with staging/ and prod/ and creates the Bucket and the Kustomization that fail"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-bucket-scope"
+      description: "Confirms the Bucket reads only the prefix staging/, ignores the draft folder, keeps 30m and is Ready"
+      type: "file"
+      source: "validation/validate-bucket-scope.sh"
+    - name: "validate-staging-applied"
+      description: "Confirms the Flux Kustomization applied the Bucket revision and staging runs 2 ready replicas"
+      type: "file"
+      source: "validation/validate-staging-applied.sh"
+    - name: "validate-prod-untouched"
+      description: "Confirms nothing from the prod folder reached the cluster"
+      type: "file"
+      source: "validation/validate-prod-untouched.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - amazon/aws-cli:2.38.4
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - versity/versitygw:v1.9.0

@@ -473,3 +473,233 @@ questions:
         explanation: "Not correct. That gives up the security the task wants."
     correct_option: b
     explanation: "Correct. The host key check stays on; only the stored key is updated after verifying it."
+
+  - id: ats095-010-m3-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the verify modes"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "Which value of `spec.verify.mode` checks both the commit and the tag?"
+    options:
+      - id: a
+        text: "`HEAD`"
+        explanation: "Not correct. `HEAD` is not the answer here. The modes are `HEAD`, `Tag` and `TagAndHEAD`."
+      - id: b
+        text: "`Tag`"
+        explanation: "Not correct. `Tag` is not the answer here. The modes are `HEAD`, `Tag` and `TagAndHEAD`."
+      - id: c
+        text: "`TagAndHEAD`"
+        explanation: "Correct. The modes are `HEAD`, `Tag` and `TagAndHEAD`."
+      - id: d
+        text: "`Both`"
+        explanation: "Not correct. `Both` is not the answer here. The modes are `HEAD`, `Tag` and `TagAndHEAD`."
+    correct_option: c
+    explanation: "Correct. The modes are `HEAD`, `Tag` and `TagAndHEAD`."
+
+  - id: ats095-010-m3-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the verify result"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "Which condition reports the result of signature verification on a `GitRepository`?"
+    options:
+      - id: a
+        text: "`SourceVerifiedCondition`"
+        explanation: "Correct. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: b
+        text: "`SignatureReady`"
+        explanation: "Not correct. `SignatureReady` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: c
+        text: "`FetchFailed`"
+        explanation: "Not correct. `FetchFailed` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: d
+        text: "`Stalled`"
+        explanation: "Not correct. `Stalled` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+    correct_option: a
+    explanation: "Correct. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+
+  - id: ats095-010-m3-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Key suffixes"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "How does source-controller tell an SSH public key from a PGP public key in the verify Secret?"
+    options:
+      - id: a
+        text: "By the suffix: `.sshpub` for SSH and `.asc` for PGP"
+        explanation: "Correct. Other suffixes are read as a PGP keyring."
+      - id: b
+        text: "By the name of the Secret"
+        explanation: "Not correct. By the name of the Secret is not the answer here. Other suffixes are read as a PGP keyring."
+      - id: c
+        text: "By the size of the key"
+        explanation: "Not correct. By the size of the key is not the answer here. Other suffixes are read as a PGP keyring."
+      - id: d
+        text: "By the label on the Secret"
+        explanation: "Not correct. By the label on the Secret is not the answer here. Other suffixes are read as a PGP keyring."
+    correct_option: a
+    explanation: "Correct. Other suffixes are read as a PGP keyring."
+
+  - id: ats095-010-m3-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Failed verification"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "A commit fails verification. What happens to that revision?"
+    options:
+      - id: a
+        text: "It is stored and applied with a warning"
+        explanation: "Not correct. It is stored and applied with a warning is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+      - id: b
+        text: "It is not stored, and the `GitRepository` is not Ready"
+        explanation: "Correct. No artifact is stored, so no `Kustomization` can apply it."
+      - id: c
+        text: "It is stored but marked unsafe"
+        explanation: "Not correct. It is stored but marked unsafe is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+      - id: d
+        text: "It is applied only after one hour"
+        explanation: "Not correct. It is applied only after one hour is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+    correct_option: b
+    explanation: "Correct. No artifact is stored, so no `Kustomization` can apply it."
+
+  - id: ats095-010-m3-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Submodule default"
+    source_readings:
+      - sections/section-010/module-03/course-02-submodules-and-included-repositories.md
+    prompt: "What is the default of `spec.recurseSubmodules`?"
+    options:
+      - id: a
+        text: "`true`"
+        explanation: "Not correct. `true` is not the answer here. Without it the submodule directory in the artifact is empty."
+      - id: b
+        text: "`false`"
+        explanation: "Correct. Without it the submodule directory in the artifact is empty."
+      - id: c
+        text: "`auto`"
+        explanation: "Not correct. `auto` is not the answer here. Without it the submodule directory in the artifact is empty."
+      - id: d
+        text: "It depends on the provider"
+        explanation: "Not correct. It depends on the provider is not the answer here. Without it the submodule directory in the artifact is empty."
+    correct_option: b
+    explanation: "Correct. Without it the submodule directory in the artifact is empty."
+
+  - id: ats095-010-m3-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Include fields"
+    source_readings:
+      - sections/section-010/module-03/course-02-submodules-and-included-repositories.md
+    prompt: "Which field of an `include` entry sets where the files go in the artifact?"
+    options:
+      - id: a
+        text: "`fromPath`"
+        explanation: "Not correct. `fromPath` is not the answer here. `fromPath` selects files in the included artifact, and `toPath` is the destination."
+      - id: b
+        text: "`toPath`"
+        explanation: "Correct. `fromPath` selects files in the included artifact, and `toPath` is the destination."
+      - id: c
+        text: "`repository.name`"
+        explanation: "Not correct. `repository.name` is not the answer here. `fromPath` selects files in the included artifact, and `toPath` is the destination."
+      - id: d
+        text: "`ref`"
+        explanation: "Not correct. `ref` is not the answer here. `fromPath` selects files in the included artifact, and `toPath` is the destination."
+    correct_option: b
+    explanation: "Correct. `fromPath` selects files in the included artifact, and `toPath` is the destination."
+
+  - id: ats095-010-m3-q07
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Broken include"
+    source_readings:
+      - sections/section-010/module-03/course-02-submodules-and-included-repositories.md
+    prompt: "The `GitRepository` named in `spec.include` is not ready. What does the main `GitRepository` report?"
+    options:
+      - id: a
+        text: "`IncludeUnavailable`"
+        explanation: "Correct. The main repository depends on the artifact of the included one."
+      - id: b
+        text: "`SourceVerifiedCondition` false"
+        explanation: "Not correct. `SourceVerifiedCondition` false is not the answer here. The main repository depends on the artifact of the included one."
+      - id: c
+        text: "Nothing, it ignores the include"
+        explanation: "Not correct. Nothing, it ignores the include is not the answer here. The main repository depends on the artifact of the included one."
+      - id: d
+        text: "`Stalled` with the reason `URLInvalid`"
+        explanation: "Not correct. `Stalled` with the reason `URLInvalid` is not the answer here. The main repository depends on the artifact of the included one."
+    correct_option: a
+    explanation: "Correct. The main repository depends on the artifact of the included one."
+
+  - id: ats095-010-m3-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Wrong directory name"
+    source_readings:
+      - sections/section-010/module-03/course-03-sparse-checkout-and-smaller-artifacts.md
+    prompt: "`sparseCheckout` names a directory that does not exist. Where does the fault show first?"
+    options:
+      - id: a
+        text: "On the `Kustomization` that cannot find its path in the artifact"
+        explanation: "Correct. The `GitRepository` can stay ready while the consumer fails."
+      - id: b
+        text: "On the node"
+        explanation: "Not correct. On the node is not the answer here. The `GitRepository` can stay ready while the consumer fails."
+      - id: c
+        text: "In the Gitea logs only"
+        explanation: "Not correct. In the Gitea logs only is not the answer here. The `GitRepository` can stay ready while the consumer fails."
+      - id: d
+        text: "It never shows"
+        explanation: "Not correct. It never shows is not the answer here. The `GitRepository` can stay ready while the consumer fails."
+    correct_option: a
+    explanation: "Correct. The `GitRepository` can stay ready while the consumer fails."
+
+  - id: ats095-010-m3-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Which field wins"
+    source_readings:
+      - sections/section-010/module-03/course-04-exact-git-references-with-ref-name.md
+    prompt: "A `GitRepository` sets `branch: main` and `name: refs/tags/v1.1.0`. What does it follow?"
+    options:
+      - id: a
+        text: "The branch `main`"
+        explanation: "Not correct. The branch `main` is not the answer here. The order is `branch`, `tag`, `semver`, `name`, `commit`, and a later field wins."
+      - id: b
+        text: "The tag `v1.1.0`"
+        explanation: "Correct. The order is `branch`, `tag`, `semver`, `name`, `commit`, and a later field wins."
+      - id: c
+        text: "Both"
+        explanation: "Not correct. Both is not the answer here. The order is `branch`, `tag`, `semver`, `name`, `commit`, and a later field wins."
+      - id: d
+        text: "Neither"
+        explanation: "Not correct. Neither is not the answer here. The order is `branch`, `tag`, `semver`, `name`, `commit`, and a later field wins."
+    correct_option: b
+    explanation: "Correct. The order is `branch`, `tag`, `semver`, `name`, `commit`, and a later field wins."
+
+  - id: ats095-010-m3-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Missing reference"
+    source_readings:
+      - sections/section-010/module-03/course-04-exact-git-references-with-ref-name.md
+    prompt: "`ref.name` is `refs/heads/release`, which does not exist, and `branch` is `main`. What happens?"
+    options:
+      - id: a
+        text: "The source falls back to `main`"
+        explanation: "Not correct. The source falls back to `main` is not the answer here. Remove `ref.name` to use the branch again."
+      - id: b
+        text: "The source is not ready, because `name` wins and cannot be found"
+        explanation: "Correct. Remove `ref.name` to use the branch again."
+      - id: c
+        text: "The source follows a random branch"
+        explanation: "Not correct. The source follows a random branch is not the answer here. Remove `ref.name` to use the branch again."
+      - id: d
+        text: "The source follows the newest tag"
+        explanation: "Not correct. The source follows the newest tag is not the answer here. Remove `ref.name` to use the branch again."
+    correct_option: b
+    explanation: "Correct. Remove `ref.name` to use the branch again."

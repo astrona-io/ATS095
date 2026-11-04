@@ -1,0 +1,54 @@
+# Repair An OCIRepository That Does Not Fetch
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-020-01-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea with gitops/fleet, an OCI registry, and the CoreDNS rewrites"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-020-01-02-setup"
+      description: "Pushes three releases of the podinfo manifests and creates an OCIRepository with a wrong repository name, no insecure and a tag that does not exist"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-oci-source"
+      description: "Confirms the OCIRepository podinfo has the right url, insecure and tag 1.1.0 and is Ready"
+      type: "file"
+      source: "validation/validate-oci-source.sh"
+    - name: "validate-podinfo-applied"
+      description: "Confirms the Flux Kustomization podinfo applies the OCI revision and podinfo runs the 3 replicas of release 1.1.0"
+      type: "file"
+      source: "validation/validate-podinfo-applied.sh"
+    - name: "validate-objects-kept"
+      description: "Confirms the OCIRepository was fixed in place and still follows a fixed tag"
+      type: "file"
+      source: "validation/validate-objects-kept.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13
+      - registry:3.1.2

@@ -1,0 +1,53 @@
+# Tune source-controller
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-050-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-050-02-setup"
+      description: "Connects Flux to gitops/fleet and sets --concurrent=1 on source-controller"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-flags"
+      description: "Confirms exactly one --concurrent=8, one --artifact-retention-records=4, one --artifact-retention-ttl=5m and the unchanged --storage-path=/data"
+      type: "file"
+      source: "validation/validate-flags.sh"
+    - name: "validate-resources"
+      description: "Confirms the memory request is 256Mi and the memory limit 2Gi on the source-controller container"
+      type: "file"
+      source: "validation/validate-resources.sh"
+    - name: "validate-rollout"
+      description: "Confirms the new source-controller pod is rolled out and available, and that fleet and podinfo are Ready"
+      type: "file"
+      source: "validation/validate-rollout.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

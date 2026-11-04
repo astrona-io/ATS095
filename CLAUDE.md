@@ -220,8 +220,9 @@ section is only true for this one.
   Every explanation should lead to a command they can run, and every fix
   should be proved with a source that is `Ready` on the expected revision and
   a workload that matches it.
-- **The four topics:** Git sources, OCI sources, Helm sources, and bucket
-  sources with reconciliation triggers and artifacts. The README table maps
+- **The five topics:** Git sources, OCI sources, Helm sources, bucket
+  sources with reconciliation triggers and artifacts, and operating
+  source-controller itself (storage, tuning, troubleshooting, tenants). The README table maps
   each section to its topic.
 - **The sections:**
 
@@ -230,7 +231,15 @@ section is only true for this one.
   | 010 | GitRepository In Depth | Git sources and authentication |
   | 020 | OCIRepository And Flux OCI Artifacts | OCI sources |
   | 030 | HelmRepository And HelmChart | Helm sources |
-  | 040 | Bucket Sources, Triggers And Artifacts | Bucket sources, triggers, caching |
+  | 040 | Bucket Sources, Triggers And Artifacts | Bucket sources, triggers, receivers, notifications |
+  | 050 | Operate source-controller | Artifact storage, tuning, troubleshooting, multi-tenant access |
+
+  Modules per section: 010 has three (`01` Git references and artifact
+  size, `02` secure connections and providers, `03` verification, include
+  and fetch less), 020 has three (OCI artifacts, registry authentication
+  and verification, the `flux` artifact commands), 030 has two, 040 has two
+  (buckets, then receivers and notifications) and 050 has four (artifact
+  storage, tuning, troubleshooting, tenants). Each section has one capstone.
 
 - **The version:** everything is written for **Flux v2.9.6** (CLI and
   controllers) on a single-node `kind` cluster (Kubernetes 1.34.1 or later).
@@ -421,7 +430,7 @@ on exit; see `start_port_forward` in the section 010 lab solution.
 
 `astrona.yaml` has a `training:` block (id `ATS095`, domain
 `Source Controller & Repository Management`, weight `20`) and one entry per
-section under `modules:` (`module-010` to `module-040`). Each section's
+section under `modules:` (`module-010` to `module-050`). Each section's
 `content` lists, in order: the section `README.md`, then the module's landing
 page, its parts, and right after the part a lab tests, a `Question` reading
 followed by the `type: lab` entry; the summary comes last, then the section
@@ -487,6 +496,8 @@ actually check.
 
 Test clusters on the maintainer's machine: one at a time. Section 020 adds a
 registry and section 040 an S3 server to Gitea and the Flux controllers.
+Section 050 uses Gitea, the `tester` pod and, in module 01, an
+`artifact-reader` pod in `flux-system`.
 
 ### Where to find trusted sources
 

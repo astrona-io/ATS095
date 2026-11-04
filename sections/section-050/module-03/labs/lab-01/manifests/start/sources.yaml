@@ -1,0 +1,69 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    # Fault 1: the branch release does not exist.
+    branch: release
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./apps/podinfo
+  prune: true
+  wait: true
+  timeout: 2m
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: platform
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/platform.git
+  ref:
+    branch: main
+  secretRef:
+    name: platform-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: platform-settings
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./podinfo-settings
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: platform
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet-tags
+  namespace: flux-system
+spec:
+  interval: 1m
+  # Fault 3: someone suspended this source.
+  suspend: true
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    tag: v1.1.0
+  secretRef:
+    name: fleet-auth

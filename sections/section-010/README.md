@@ -45,6 +45,23 @@ What you will also learn in this module:
 - Which Secret keys and `spec.provider` value each sign-in method needs: basic, bearer token, GitHub App, cloud identity.
 - How to write a `known_hosts` entry for a port other than 22 and how to repair a host key mismatch.
 
+### 3. Verify Commits, Include Repositories And Fetch Less
+
+The playground is the same Gitea server with `gitops/fleet` and `gitops/platform`. You turn on signature verification and read why it fails for unsigned commits, include `gitops/platform` in the artifact, shrink the artifact with a sparse checkout, and follow a full reference with `ref.name`.
+
+1. Verify Commit And Tag Signatures
+2. Submodules And Included Repositories
+3. Sparse Checkout And Smaller Artifacts
+4. Exact Git References With ref.name, followed by the lab **Fetch The Right Directories From The Right Reference**
+5. Summary
+
+What you will also learn in this module:
+
+- The modes `HEAD`, `Tag` and `TagAndHEAD` of `spec.verify`, the Secret keys with the suffixes `.asc` and `.sshpub`, and the condition `SourceVerifiedCondition`.
+- When to use `recurseSubmodules` and when `spec.include` is the better fit.
+- How `sparseCheckout` limits the artifact and how `observedSparseCheckout` shows what built it.
+- Which `ref` field wins, and how to follow a tag or a pull request with `ref.name`.
+
 ## Section capstone: Pin A Release Line And Trim The Artifact
 
 The capstone is one graded scenario that combines the reference and the artifact parts of the module. The `GitRepository` `fleet` follows every release from `1.0.0` upwards, and the newest release, `v2.0.0`, uses an image that does not exist. You restrict the source to the 1.x releases and keep the documentation out of the artifact, without changing anything in Git. Work it after the module lab.

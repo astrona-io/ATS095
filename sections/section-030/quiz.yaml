@@ -243,3 +243,463 @@ questions:
         explanation: "Correct. helm-controller rewrites the `HelmChart` from the `HelmRelease`."
     correct_option: d
     explanation: "Correct. helm-controller rewrites the `HelmChart` from the `HelmRelease`."
+
+  - id: ats095-030-c1-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name a condition of a HelmChart"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "Which condition is `True` when source-controller could not get the chart from the source?"
+    options:
+      - id: a
+        text: "Stalled"
+        explanation: "Not correct. `Stalled` means the controller will not retry until the spec changes. It does not say that a fetch failed."
+      - id: b
+        text: "FetchFailed"
+        explanation: "Correct. `FetchFailed` reports a failed fetch, with a reason such as `AuthenticationFailed`, `URLInvalid`, `IllegalPath` or `Failed`."
+      - id: c
+        text: "ArtifactInStorage"
+        explanation: "Not correct. `ArtifactInStorage` is `True` when an artifact exists in storage. A failed fetch leaves it `False` or unchanged."
+      - id: d
+        text: "SourceVerified"
+        explanation: "Not correct. `SourceVerified` reports the result of signature verification, not the download."
+    correct_option: b
+    explanation: "Correct. `FetchFailed` reports a failed fetch, with a reason such as `AuthenticationFailed`, `URLInvalid`, `IllegalPath` or `Failed`."
+
+  - id: ats095-030-c1-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the cause of a failure"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "Where do you read the full reason a `HelmChart` is not ready?"
+    options:
+      - id: a
+        text: "Only in the interval field"
+        explanation: "Not correct. The interval says how often the chart is checked. It holds no error text."
+      - id: b
+        text: "In the message of the `Ready` condition and in `flux events --for HelmChart/<name>`"
+        explanation: "Correct. The message of the `Ready` condition and the events carry the reason."
+      - id: c
+        text: "In the Deployment of the chart"
+        explanation: "Not correct. The Deployment belongs to the workload. A `HelmChart` failure is reported on the `HelmChart` itself."
+      - id: d
+        text: "In the logs of helm-controller only"
+        explanation: "Not correct. The logs help, but they are not the only place. The condition message and events are shorter and per object."
+    correct_option: b
+    explanation: "Correct. The message of the `Ready` condition and the events carry the reason."
+
+  - id: ats095-030-c1-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what Stalled means"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "What does the condition `Stalled` with the reason `InvalidChartReference` mean?"
+    options:
+      - id: a
+        text: "The reference is invalid, and the controller stops retrying until the spec changes"
+        explanation: "Correct. A `Stalled` object is not requeued until its spec changes."
+      - id: b
+        text: "The chart was fetched but not stored"
+        explanation: "Not correct. A chart that was fetched but not stored would show `ArtifactInStorage` false, not `InvalidChartReference`."
+      - id: c
+        text: "The repository is suspended"
+        explanation: "Not correct. A suspended object shows `spec.suspend: true`. It does not become `Stalled`."
+      - id: d
+        text: "The interval is too short"
+        explanation: "Not correct. An interval has no link to `Stalled`. The reference itself is invalid."
+    correct_option: a
+    explanation: "Correct. A `Stalled` object is not requeued until its spec changes."
+
+  - id: ats095-030-c1-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the artifact revision with valuesFiles"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "A `HelmChart` from a `HelmRepository` sets `valuesFiles`. What does its revision look like?"
+    options:
+      - id: a
+        text: "The chart version only"
+        explanation: "Not correct. The chart version alone is the revision only when no `valuesFiles` or similar build step is set."
+      - id: b
+        text: "The chart version, a plus sign and the generation of the `HelmChart`"
+        explanation: "Correct. For example `6.0.3+1`, where `1` is the generation."
+      - id: c
+        text: "The commit hash of the repository"
+        explanation: "Not correct. A commit hash is the revision of a `GitRepository`, not of a chart from a `HelmRepository`."
+      - id: d
+        text: "A `sha256` digest of the index"
+        explanation: "Not correct. A digest of the index is not the chart revision. The revision is built from the version and the generation."
+    correct_option: b
+    explanation: "Correct. For example `6.0.3+1`, where `1` is the generation."
+
+  - id: ats095-030-c1-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Use reconcile on demand"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "After you fix a field of a `HelmChart`, how do you check the fix without waiting for the interval?"
+    options:
+      - id: a
+        text: "Delete the Deployment"
+        explanation: "Not correct. Deleting the Deployment does not make source-controller fetch again. The `HelmChart` is not changed by it."
+      - id: b
+        text: "Run `flux reconcile source chart <name>`"
+        explanation: "Correct. `flux reconcile source chart` asks source-controller to run now."
+      - id: c
+        text: "Restart the node"
+        explanation: "Not correct. A node restart does not trigger a reconcile of one object and is far too large."
+      - id: d
+        text: "Edit the interval to `0`"
+        explanation: "Not correct. An interval of `0` is not valid and does not request a reconcile."
+    correct_option: b
+    explanation: "Correct. `flux reconcile source chart` asks source-controller to run now."
+
+  - id: ats095-030-c1-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know a CLI limit"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "Which object can the `flux` tool NOT create with a `flux create source` command?"
+    options:
+      - id: a
+        text: "HelmRepository"
+        explanation: "Not correct. `flux create source helm` creates a `HelmRepository`."
+      - id: b
+        text: "GitRepository"
+        explanation: "Not correct. `flux create source git` creates a `GitRepository`."
+      - id: c
+        text: "Bucket"
+        explanation: "Not correct. `flux create source bucket` creates a `Bucket`."
+      - id: d
+        text: "HelmChart"
+        explanation: "Correct. There is no `flux create source chart`. You write a `HelmChart` as YAML."
+    correct_option: d
+    explanation: "Correct. There is no `flux create source chart`. You write a `HelmChart` as YAML."
+
+  - id: ats095-030-c1-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Print YAML without applying"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "What does the `--export` flag of `flux create source helm` do?"
+    options:
+      - id: a
+        text: "Pushes the repository to a registry"
+        explanation: "Not correct. `--export` does not push anything. It prints to standard output."
+      - id: b
+        text: "Prints the YAML and does not change the cluster"
+        explanation: "Correct. `--export` makes the command a generator for files you commit to Git."
+      - id: c
+        text: "Deletes the object after creating it"
+        explanation: "Not correct. `--export` creates nothing, so there is nothing to delete."
+      - id: d
+        text: "Exports the chart to a file system"
+        explanation: "Not correct. The flag exports the YAML of the object, not a chart to a file system."
+    correct_option: b
+    explanation: "Correct. `--export` makes the command a generator for files you commit to Git."
+
+  - id: ats095-030-c1-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Refresh the source first"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "What does `flux reconcile source chart <name> --with-source` do?"
+    options:
+      - id: a
+        text: "Reconciles the source of the chart before the chart"
+        explanation: "Correct. A chart can only resolve versions that are in the index source-controller already stored."
+      - id: b
+        text: "Deletes the source"
+        explanation: "Not correct. The flag only reconciles. It never deletes a source."
+      - id: c
+        text: "Suspends the chart"
+        explanation: "Not correct. The flag does not suspend anything. `flux suspend` does that."
+      - id: d
+        text: "Creates a `HelmRelease`"
+        explanation: "Not correct. `HelmRelease` objects are created with `flux create helmrelease`, not by this flag."
+    correct_option: a
+    explanation: "Correct. A chart can only resolve versions that are in the index source-controller already stored."
+
+  - id: ats095-030-c1-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Suspend a source"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "What happens to a suspended `HelmRepository`?"
+    options:
+      - id: a
+        text: "It is deleted"
+        explanation: "Not correct. Suspending only sets `spec.suspend: true`. The object stays."
+      - id: b
+        text: "It keeps its last artifact and stops fetching"
+        explanation: "Correct. `flux resume` ends the pause and triggers a reconcile."
+      - id: c
+        text: "It fetches every second"
+        explanation: "Not correct. A suspended object is not reconciled, so it does not fetch at all."
+      - id: d
+        text: "It becomes type `oci`"
+        explanation: "Not correct. Suspending does not change `spec.type`."
+    correct_option: b
+    explanation: "Correct. `flux resume` ends the pause and triggers a reconcile."
+
+  - id: ats095-030-c1-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Deleting a repository"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "You delete a `HelmRepository` with `flux delete source helm`. What happens to the `HelmChart` objects that use it?"
+    options:
+      - id: a
+        text: "They are deleted too"
+        explanation: "Not correct. Kubernetes does not delete objects that merely refer to the deleted one by name."
+      - id: b
+        text: "They stay and report that their source is missing"
+        explanation: "Correct. Deleting a `HelmRepository` does not delete the charts that point at it."
+      - id: c
+        text: "They switch to a `GitRepository`"
+        explanation: "Not correct. A `HelmChart` cannot change its source kind by itself."
+      - id: d
+        text: "They install the chart anyway"
+        explanation: "Not correct. Without the source, the chart has nothing to build from, and its artifact is not refreshed."
+    correct_option: b
+    explanation: "Correct. Deleting a `HelmRepository` does not delete the charts that point at it."
+
+  - id: ats095-030-c2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Basic authentication keys"
+    source_readings:
+      - sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+    prompt: "Which keys does a Secret for basic authentication of a `HelmRepository` need?"
+    options:
+      - id: a
+        text: "`user` and `pass`"
+        explanation: "Not correct. `user` and `pass` are not the key names that Flux reads."
+      - id: b
+        text: "`username` and `password`"
+        explanation: "Correct. The keys are `username` and `password`."
+      - id: c
+        text: "`tls.crt` and `tls.key`"
+        explanation: "Not correct. `tls.crt` and `tls.key` are for a client certificate, not for basic authentication."
+      - id: d
+        text: "`identity` and `known_hosts`"
+        explanation: "Not correct. `identity` and `known_hosts` are for SSH access to a `GitRepository`."
+    correct_option: b
+    explanation: "Correct. The keys are `username` and `password`."
+
+  - id: ats095-030-c2-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Secret namespace"
+    source_readings:
+      - sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+    prompt: "In which namespace must the Secret named by `spec.secretRef` be?"
+    options:
+      - id: a
+        text: "`default`"
+        explanation: "Not correct. `default` has no special meaning. The Secret must be next to the object."
+      - id: b
+        text: "`kube-system`"
+        explanation: "Not correct. `kube-system` is not searched. A `secretRef` has no namespace field."
+      - id: c
+        text: "The namespace of the `HelmRepository`"
+        explanation: "Correct. The Secret is looked up in the namespace of the `HelmRepository`."
+      - id: d
+        text: "Any namespace"
+        explanation: "Not correct. The lookup is not global. Only the namespace of the object is searched."
+    correct_option: c
+    explanation: "Correct. The Secret is looked up in the namespace of the `HelmRepository`."
+
+  - id: ats095-030-c2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "passCredentials"
+    source_readings:
+      - sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+    prompt: "What does `spec.passCredentials: true` change?"
+    options:
+      - id: a
+        text: "Credentials are sent to every host the index points at, not only to the host in `url`"
+        explanation: "Correct. By default the credentials go only to the host in `spec.url`."
+      - id: b
+        text: "The Secret becomes optional"
+        explanation: "Not correct. The setting does not change whether the Secret is required."
+      - id: c
+        text: "The repository type changes to `oci`"
+        explanation: "Not correct. The setting does not change the repository type. `spec.type` does that."
+      - id: d
+        text: "Credentials are sent over HTTP"
+        explanation: "Not correct. The setting does not change the protocol. It widens the hosts that get the credentials."
+    correct_option: a
+    explanation: "Correct. By default the credentials go only to the host in `spec.url`."
+
+  - id: ats095-030-c2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Client certificate Secret"
+    source_readings:
+      - sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+    prompt: "Which field and keys carry a client certificate for a `HelmRepository`?"
+    options:
+      - id: a
+        text: "`secretRef` with `certFile` and `keyFile`"
+        explanation: "Not correct. `certFile` and `keyFile` in `secretRef` are the old, deprecated form. The new form is `certSecretRef`."
+      - id: b
+        text: "`certSecretRef` with `tls.crt` and `tls.key`, and optionally `ca.crt`"
+        explanation: "Correct. TLS data in `secretRef` is deprecated in favor of `certSecretRef`."
+      - id: c
+        text: "`caFile` with `identity`"
+        explanation: "Not correct. `caFile` and `identity` are not the keys of a TLS client certificate."
+      - id: d
+        text: "`verify` with `cosign.pub`"
+        explanation: "Not correct. `verify` and `cosign.pub` belong to signature verification, not to a client certificate."
+    correct_option: b
+    explanation: "Correct. TLS data in `secretRef` is deprecated in favor of `certSecretRef`."
+
+  - id: ats095-030-c2-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Registry Secret type"
+    source_readings:
+      - sections/section-030/module-02/course-02-credentials-for-oci-helm-repositories.md
+    prompt: "What type of Secret does `flux create secret oci` create?"
+    options:
+      - id: a
+        text: "`kubernetes.io/dockerconfigjson`"
+        explanation: "Correct. The Docker configuration form is what an OCI registry expects."
+      - id: b
+        text: "`Opaque` with a `token` key"
+        explanation: "Not correct. A token Secret is not what an OCI registry client reads. It reads a Docker configuration."
+      - id: c
+        text: "`kubernetes.io/tls`"
+        explanation: "Not correct. `kubernetes.io/tls` holds a certificate and a key, not registry credentials."
+      - id: d
+        text: "`kubernetes.io/ssh-auth`"
+        explanation: "Not correct. `kubernetes.io/ssh-auth` holds an SSH private key."
+    correct_option: a
+    explanation: "Correct. The Docker configuration form is what an OCI registry expects."
+
+  - id: ats095-030-c2-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "OCI repository status"
+    source_readings:
+      - sections/section-030/module-02/course-02-credentials-for-oci-helm-repositories.md
+    prompt: "Where does a wrong registry password show up for an `oci` `HelmRepository`?"
+    options:
+      - id: a
+        text: "On the `HelmRepository`, as `Ready` false"
+        explanation: "Not correct. An `oci` `HelmRepository` has no status, so it never shows `Ready` false for a login error."
+      - id: b
+        text: "On the `HelmChart` or `HelmRelease` that fetches a chart"
+        explanation: "Correct. An `oci` `HelmRepository` has no status, so the error shows when a chart is requested."
+      - id: c
+        text: "On the node"
+        explanation: "Not correct. A node does not run the fetch. The error is recorded on a Flux object."
+      - id: d
+        text: "Nowhere"
+        explanation: "Not correct. The error is reported, but on the object that requests a chart."
+    correct_option: b
+    explanation: "Correct. An `oci` `HelmRepository` has no status, so the error shows when a chart is requested."
+
+  - id: ats095-030-c2-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "provider values"
+    source_readings:
+      - sections/section-030/module-02/course-02-credentials-for-oci-helm-repositories.md
+    prompt: "Which values does `spec.provider` of a `HelmRepository` accept, and for which type?"
+    options:
+      - id: a
+        text: "`generic`, `aws`, `azure` and `gcp`, for `oci` only"
+        explanation: "Correct. The default value is `generic`."
+      - id: b
+        text: "`git` and `s3`, for the default type"
+        explanation: "Not correct. `git` and `s3` are not providers of a `HelmRepository`."
+      - id: c
+        text: "`cosign` and `notation`, for both types"
+        explanation: "Not correct. `cosign` and `notation` are verification providers of an `OCIRepository` or a `HelmChart`, not the cloud login."
+      - id: d
+        text: "`basic` and `token`, for both types"
+        explanation: "Not correct. `basic` and `token` are not provider values. Basic authentication uses `secretRef`."
+    correct_option: a
+    explanation: "Correct. The default value is `generic`."
+
+  - id: ats095-030-c2-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Git source chart field"
+    source_readings:
+      - sections/section-030/module-02/course-03-charts-from-git-and-bucket-sources.md
+    prompt: "A `HelmChart` reads from a `GitRepository`. What does `spec.chart` hold?"
+    options:
+      - id: a
+        text: "A chart name from an index"
+        explanation: "Not correct. A chart name from an index is what `spec.chart` holds for a `HelmRepository` source."
+      - id: b
+        text: "The path of the chart directory in the repository"
+        explanation: "Correct. For example `./charts/podinfo`."
+      - id: c
+        text: "A Docker image name"
+        explanation: "Not correct. A Docker image name is not a chart path."
+      - id: d
+        text: "A version range"
+        explanation: "Not correct. A version range goes in `spec.version`, not `spec.chart`."
+    correct_option: b
+    explanation: "Correct. For example `./charts/podinfo`."
+
+  - id: ats095-030-c2-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "reconcileStrategy"
+    source_readings:
+      - sections/section-030/module-02/course-03-charts-from-git-and-bucket-sources.md
+    prompt: "Which `reconcileStrategy` builds a new chart artifact on every new source revision?"
+    options:
+      - id: a
+        text: "`ChartVersion`"
+        explanation: "Not correct. `ChartVersion` is the default and rebuilds only when the version in `Chart.yaml` changes."
+      - id: b
+        text: "`Revision`"
+        explanation: "Correct. `ChartVersion` is the default and rebuilds only when the version in `Chart.yaml` changes."
+      - id: c
+        text: "`Always`"
+        explanation: "Not correct. `Always` is not a valid `reconcileStrategy`."
+      - id: d
+        text: "`Latest`"
+        explanation: "Not correct. `Latest` is not a valid `reconcileStrategy`."
+    correct_option: b
+    explanation: "Correct. `ChartVersion` is the default and rebuilds only when the version in `Chart.yaml` changes."
+
+  - id: ats095-030-c2-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "ignoreMissingValuesFiles"
+    source_readings:
+      - sections/section-030/module-02/course-03-charts-from-git-and-bucket-sources.md
+    prompt: "What does `ignoreMissingValuesFiles: true` change?"
+    options:
+      - id: a
+        text: "Missing files in `valuesFiles` are not errors, and `observedValuesFiles` lists the files found"
+        explanation: "Correct. The default is `false`, where a missing file fails the build."
+      - id: b
+        text: "The chart ignores `values.yaml`"
+        explanation: "Not correct. The setting only concerns files listed in `valuesFiles`. The chart still reads its own `values.yaml`."
+      - id: c
+        text: "The chart version is ignored"
+        explanation: "Not correct. The chart version is unrelated to values files."
+      - id: d
+        text: "Verification is skipped"
+        explanation: "Not correct. Verification is set with `spec.verify`, not with this field."
+    correct_option: a
+    explanation: "Correct. The default is `false`, where a missing file fails the build."

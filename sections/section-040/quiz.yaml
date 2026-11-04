@@ -243,3 +243,463 @@ questions:
         explanation: "Not correct. It does not limit objects."
     correct_option: a
     explanation: "Correct. Old ones are deleted after `--artifact-retention-ttl`."
+
+  - id: ats095-040-m1b-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Provider default"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "Which `spec.provider` is the default of a `Bucket`?"
+    options:
+      - id: a
+        text: "`generic`"
+        explanation: "Correct. It fits any S3-compatible server and reads `accesskey` and `secretkey`."
+      - id: b
+        text: "`aws`"
+        explanation: "Not correct. `aws` is not the answer here. It fits any S3-compatible server and reads `accesskey` and `secretkey`."
+      - id: c
+        text: "`s3`"
+        explanation: "Not correct. `s3` is not the answer here. It fits any S3-compatible server and reads `accesskey` and `secretkey`."
+      - id: d
+        text: "`minio`"
+        explanation: "Not correct. `minio` is not the answer here. It fits any S3-compatible server and reads `accesskey` and `secretkey`."
+    correct_option: a
+    explanation: "Correct. It fits any S3-compatible server and reads `accesskey` and `secretkey`."
+
+  - id: ats095-040-m1b-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prefix effect"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "What does `spec.prefix: staging/` do?"
+    options:
+      - id: a
+        text: "Only keys that start with `staging/` are listed and part of the revision"
+        explanation: "Correct. The filter runs on the server while the objects are listed."
+      - id: b
+        text: "It hides staging from the artifact after the download"
+        explanation: "Not correct. It hides staging from the artifact after the download is not the answer here. The filter runs on the server while the objects are listed."
+      - id: c
+        text: "It renames the keys"
+        explanation: "Not correct. It renames the keys is not the answer here. The filter runs on the server while the objects are listed."
+      - id: d
+        text: "It sets the path of the Flux Kustomization"
+        explanation: "Not correct. It sets the path of the Flux Kustomization is not the answer here. The filter runs on the server while the objects are listed."
+    correct_option: a
+    explanation: "Correct. The filter runs on the server while the objects are listed."
+
+  - id: ats095-040-m1b-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prefix and revision"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "A key outside the prefix changes. What happens to the revision of the `Bucket`?"
+    options:
+      - id: a
+        text: "It stays the same"
+        explanation: "Correct. The revision comes only from the keys that were listed."
+      - id: b
+        text: "It changes"
+        explanation: "Not correct. It changes is not the answer here. The revision comes only from the keys that were listed."
+      - id: c
+        text: "The source fails"
+        explanation: "Not correct. The source fails is not the answer here. The revision comes only from the keys that were listed."
+      - id: d
+        text: "The source is suspended"
+        explanation: "Not correct. The source is suspended is not the answer here. The revision comes only from the keys that were listed."
+    correct_option: a
+    explanation: "Correct. The revision comes only from the keys that were listed."
+
+  - id: ats095-040-m1b-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Path after a prefix"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "With `prefix: staging/`, which `path` does the Flux Kustomization use for those files?"
+    options:
+      - id: a
+        text: "`./staging`"
+        explanation: "Correct. The artifact keeps the full key, so the folder stays."
+      - id: b
+        text: "`./`"
+        explanation: "Not correct. `./` is not the answer here. The artifact keeps the full key, so the folder stays."
+      - id: c
+        text: "`./prefix`"
+        explanation: "Not correct. `./prefix` is not the answer here. The artifact keeps the full key, so the folder stays."
+      - id: d
+        text: "`./staging/staging`"
+        explanation: "Not correct. `./staging/staging` is not the answer here. The artifact keeps the full key, so the folder stays."
+    correct_option: a
+    explanation: "Correct. The artifact keeps the full key, so the folder stays."
+
+  - id: ats095-040-m1b-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Ignore syntax"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "Which syntax does `spec.ignore` use?"
+    options:
+      - id: a
+        text: "`.gitignore` patterns"
+        explanation: "Correct. `draft/` and `*.bak` are valid; a regular expression is not."
+      - id: b
+        text: "Regular expressions"
+        explanation: "Not correct. Regular expressions is not the answer here. `draft/` and `*.bak` are valid; a regular expression is not."
+      - id: c
+        text: "Glob without negation"
+        explanation: "Not correct. Glob without negation is not the answer here. `draft/` and `*.bak` are valid; a regular expression is not."
+      - id: d
+        text: "JSON paths"
+        explanation: "Not correct. JSON paths is not the answer here. `draft/` and `*.bak` are valid; a regular expression is not."
+    correct_option: a
+    explanation: "Correct. `draft/` and `*.bak` are valid; a regular expression is not."
+
+  - id: ats095-040-m1b-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Ignore and security"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "Is `spec.ignore` a security boundary for objects in the bucket?"
+    options:
+      - id: a
+        text: "No, ignored keys are still listed and readable with the credentials"
+        explanation: "Correct. Restrict the key on the server for a real boundary."
+      - id: b
+        text: "Yes, they are encrypted"
+        explanation: "Not correct. Yes, they are encrypted is not the answer here. Restrict the key on the server for a real boundary."
+      - id: c
+        text: "Yes, the server hides them"
+        explanation: "Not correct. Yes, the server hides them is not the answer here. Restrict the key on the server for a real boundary."
+      - id: d
+        text: "Only for the generic provider"
+        explanation: "Not correct. Only for the generic provider is not the answer here. Restrict the key on the server for a real boundary."
+    correct_option: a
+    explanation: "Correct. Restrict the key on the server for a real boundary."
+
+  - id: ats095-040-m1b-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Where ignore patterns come from"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "If the bucket root has a `.sourceignore` and `spec.ignore` is set, what applies?"
+    options:
+      - id: a
+        text: "Both, with the patterns of the spec added after the file so they win"
+        explanation: "Correct. The file is read first and the spec patterns are added after it."
+      - id: b
+        text: "Only the file"
+        explanation: "Not correct. Only the file is not the answer here. The file is read first and the spec patterns are added after it."
+      - id: c
+        text: "Only the spec"
+        explanation: "Not correct. Only the spec is not the answer here. The file is read first and the spec patterns are added after it."
+      - id: d
+        text: "Neither"
+        explanation: "Not correct. Neither is not the answer here. The file is read first and the spec patterns are added after it."
+    correct_option: a
+    explanation: "Correct. The file is read first and the spec patterns are added after it."
+
+  - id: ats095-040-m1b-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "FetchFailed"
+    source_readings:
+      - sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+    prompt: "Where do you read why a `Bucket` cannot reach the server?"
+    options:
+      - id: a
+        text: "The message of the `FetchFailed` condition"
+        explanation: "Correct. The server's answer is in the message."
+      - id: b
+        text: "`status.artifact.size`"
+        explanation: "Not correct. `status.artifact.size` is not the answer here. The server's answer is in the message."
+      - id: c
+        text: "The Flux Kustomization events only"
+        explanation: "Not correct. The Flux Kustomization events only is not the answer here. The server's answer is in the message."
+      - id: d
+        text: "The pod log of kustomize-controller"
+        explanation: "Not correct. The pod log of kustomize-controller is not the answer here. The server's answer is in the message."
+    correct_option: a
+    explanation: "Correct. The server's answer is in the message."
+
+  - id: ats095-040-m1b-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Plain HTTP fault"
+    source_readings:
+      - sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+    prompt: "A server answers plain HTTP and the `Bucket` has `insecure: false`. What fails?"
+    options:
+      - id: a
+        text: "The request fails during the TLS handshake"
+        explanation: "Correct. The fix is `insecure: true` for a plain-HTTP lab server."
+      - id: b
+        text: "The Secret is rejected"
+        explanation: "Not correct. The Secret is rejected is not the answer here. The fix is `insecure: true` for a plain-HTTP lab server."
+      - id: c
+        text: "The prefix is ignored"
+        explanation: "Not correct. The prefix is ignored is not the answer here. The fix is `insecure: true` for a plain-HTTP lab server."
+      - id: d
+        text: "The interval is too long"
+        explanation: "Not correct. The interval is too long is not the answer here. The fix is `insecure: true` for a plain-HTTP lab server."
+    correct_option: a
+    explanation: "Correct. The fix is `insecure: true` for a plain-HTTP lab server."
+
+  - id: ats095-040-m1b-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Suspended source"
+    source_readings:
+      - sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+    prompt: "A `Bucket` never updates and shows no error. What do you check first?"
+    options:
+      - id: a
+        text: "Whether `spec.suspend` is true"
+        explanation: "Correct. A suspended source stops without failing."
+      - id: b
+        text: "The size of the artifact"
+        explanation: "Not correct. The size of the artifact is not the answer here. A suspended source stops without failing."
+      - id: c
+        text: "The garbage collection flags"
+        explanation: "Not correct. The garbage collection flags is not the answer here. A suspended source stops without failing."
+      - id: d
+        text: "The CPU of the node"
+        explanation: "Not correct. The CPU of the node is not the answer here. A suspended source stops without failing."
+    correct_option: a
+    explanation: "Correct. A suspended source stops without failing."
+
+  - id: ats095-040-m2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "What a Receiver does"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "What does a call to a Receiver do to a `Bucket` it selects?"
+    options:
+      - id: a
+        text: "Sets the reconcile request annotation, so it fetches now"
+        explanation: "Correct. It adds one request; the schedule stays."
+      - id: b
+        text: "Shortens its interval"
+        explanation: "Not correct. Shortens its interval is not the answer here. It adds one request; the schedule stays."
+      - id: c
+        text: "Deletes its artifact"
+        explanation: "Not correct. Deletes its artifact is not the answer here. It adds one request; the schedule stays."
+      - id: d
+        text: "Suspends it"
+        explanation: "Not correct. Suspends it is not the answer here. It adds one request; the schedule stays."
+    correct_option: a
+    explanation: "Correct. It adds one request; the schedule stays."
+
+  - id: ats095-040-m2-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Token Secret"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "Which key must the Secret of a Receiver have?"
+    options:
+      - id: a
+        text: "`token`"
+        explanation: "Correct. The path is computed from this value."
+      - id: b
+        text: "`secret`"
+        explanation: "Not correct. `secret` is not the answer here. The path is computed from this value."
+      - id: c
+        text: "`password`"
+        explanation: "Not correct. `password` is not the answer here. The path is computed from this value."
+      - id: d
+        text: "`webhook`"
+        explanation: "Not correct. `webhook` is not the answer here. The path is computed from this value."
+    correct_option: a
+    explanation: "Correct. The path is computed from this value."
+
+  - id: ats095-040-m2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Webhook path"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "Where do you read the address to call?"
+    options:
+      - id: a
+        text: "`status.webhookPath` of the Receiver"
+        explanation: "Correct. The path starts with `/hook/` and is a hash."
+      - id: b
+        text: "`spec.address` of the Receiver"
+        explanation: "Not correct. `spec.address` of the Receiver is not the answer here. The path starts with `/hook/` and is a hash."
+      - id: c
+        text: "The annotations of the Secret"
+        explanation: "Not correct. The annotations of the Secret is not the answer here. The path starts with `/hook/` and is a hash."
+      - id: d
+        text: "The Service `webhook-receiver` only"
+        explanation: "Not correct. The Service `webhook-receiver` only is not the answer here. The path starts with `/hook/` and is a hash."
+    correct_option: a
+    explanation: "Correct. The path starts with `/hook/` and is a hash."
+
+  - id: ats095-040-m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Path secrecy"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "For a `generic` Receiver, what protects it from strangers?"
+    options:
+      - id: a
+        text: "Only the secret path"
+        explanation: "Correct. Prefer a signed type when the sender supports it."
+      - id: b
+        text: "A signature of the body"
+        explanation: "Not correct. A signature of the body is not the answer here. Prefer a signed type when the sender supports it."
+      - id: c
+        text: "The source IP"
+        explanation: "Not correct. The source IP is not the answer here. Prefer a signed type when the sender supports it."
+      - id: d
+        text: "Nothing is needed"
+        explanation: "Not correct. Nothing is needed is not the answer here. Prefer a signed type when the sender supports it."
+    correct_option: a
+    explanation: "Correct. Prefer a signed type when the sender supports it."
+
+  - id: ats095-040-m2-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Signed type"
+    source_readings:
+      - sections/section-040/module-02/course-02-receiver-types-tokens-and-exposure.md
+    prompt: "Which Receiver type checks an HMAC in the header `X-Signature`?"
+    options:
+      - id: a
+        text: "`generic-hmac`"
+        explanation: "Correct. The sender signs the body with the token."
+      - id: b
+        text: "`generic`"
+        explanation: "Not correct. `generic` is not the answer here. The sender signs the body with the token."
+      - id: c
+        text: "`gitlab`"
+        explanation: "Not correct. `gitlab` is not the answer here. The sender signs the body with the token."
+      - id: d
+        text: "`dockerhub`"
+        explanation: "Not correct. `dockerhub` is not the answer here. The sender signs the body with the token."
+    correct_option: a
+    explanation: "Correct. The sender signs the body with the token."
+
+  - id: ats095-040-m2-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "GitLab check"
+    source_readings:
+      - sections/section-040/module-02/course-02-receiver-types-tokens-and-exposure.md
+    prompt: "How does a `gitlab` Receiver check the caller?"
+    options:
+      - id: a
+        text: "The header `X-Gitlab-Token` must equal the token"
+        explanation: "Correct. GitHub uses an HMAC; GitLab sends the token itself."
+      - id: b
+        text: "An HMAC in `X-Signature`"
+        explanation: "Not correct. An HMAC in `X-Signature` is not the answer here. GitHub uses an HMAC; GitLab sends the token itself."
+      - id: c
+        text: "The caller's TLS certificate"
+        explanation: "Not correct. The caller's TLS certificate is not the answer here. GitHub uses an HMAC; GitLab sends the token itself."
+      - id: d
+        text: "The commit author"
+        explanation: "Not correct. The commit author is not the answer here. GitHub uses an HMAC; GitLab sends the token itself."
+    correct_option: a
+    explanation: "Correct. GitHub uses an HMAC; GitLab sends the token itself."
+
+  - id: ats095-040-m2-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Token rotation"
+    source_readings:
+      - sections/section-040/module-02/course-02-receiver-types-tokens-and-exposure.md
+    prompt: "What happens to the webhook path when you change the token?"
+    options:
+      - id: a
+        text: "It changes, and the old path stops working"
+        explanation: "Correct. The path is a hash of the token, the name and the namespace."
+      - id: b
+        text: "It stays the same"
+        explanation: "Not correct. It stays the same is not the answer here. The path is a hash of the token, the name and the namespace."
+      - id: c
+        text: "It gets a suffix"
+        explanation: "Not correct. It gets a suffix is not the answer here. The path is a hash of the token, the name and the namespace."
+      - id: d
+        text: "The Receiver is deleted"
+        explanation: "Not correct. The Receiver is deleted is not the answer here. The path is a hash of the token, the name and the namespace."
+    correct_option: a
+    explanation: "Correct. The path is a hash of the token, the name and the namespace."
+
+  - id: ats095-040-m2-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Alert severity"
+    source_readings:
+      - sections/section-040/module-02/course-03-notify-on-source-events-with-provider-and-alert.md
+    prompt: "Which `eventSeverity` sends the event of a new artifact?"
+    options:
+      - id: a
+        text: "`info`"
+        explanation: "Correct. `error` only sends failures."
+      - id: b
+        text: "`error`"
+        explanation: "Not correct. `error` is not the answer here. `error` only sends failures."
+      - id: c
+        text: "`warning`"
+        explanation: "Not correct. `warning` is not the answer here. `error` only sends failures."
+      - id: d
+        text: "`notice`"
+        explanation: "Not correct. `notice` is not the answer here. `error` only sends failures."
+    correct_option: a
+    explanation: "Correct. `error` only sends failures."
+
+  - id: ats095-040-m2-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Provider and Alert"
+    source_readings:
+      - sections/section-040/module-02/course-03-notify-on-source-events-with-provider-and-alert.md
+    prompt: "What does the Alert hold that the Provider does not?"
+    options:
+      - id: a
+        text: "The event sources and the severity"
+        explanation: "Correct. The Provider is the destination; the Alert is the rule."
+      - id: b
+        text: "The address"
+        explanation: "Not correct. The address is not the answer here. The Provider is the destination; the Alert is the rule."
+      - id: c
+        text: "The Secret"
+        explanation: "Not correct. The Secret is not the answer here. The Provider is the destination; the Alert is the rule."
+      - id: d
+        text: "The type"
+        explanation: "Not correct. The type is not the answer here. The Provider is the destination; the Alert is the rule."
+    correct_option: a
+    explanation: "Correct. The Provider is the destination; the Alert is the rule."
+
+  - id: ats095-040-m2-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Silent alert"
+    source_readings:
+      - sections/section-040/module-02/course-04-troubleshooting-receivers-and-alerts.md
+    prompt: "A Receiver is Ready but the target does not reconcile. What do you compare on the target?"
+    options:
+      - id: a
+        text: "`requestedAt` and `lastHandledReconcileAt`"
+        explanation: "Correct. They are equal when the request was handled."
+      - id: b
+        text: "`spec.interval` and `spec.timeout`"
+        explanation: "Not correct. `spec.interval` and `spec.timeout` is not the answer here. They are equal when the request was handled."
+      - id: c
+        text: "The size of the artifact"
+        explanation: "Not correct. The size of the artifact is not the answer here. They are equal when the request was handled."
+      - id: d
+        text: "The Secret name"
+        explanation: "Not correct. The Secret name is not the answer here. They are equal when the request was handled."
+    correct_option: a
+    explanation: "Correct. They are equal when the request was handled."

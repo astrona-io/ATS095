@@ -1,0 +1,53 @@
+# Fix Failing Sources
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-050-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-050-03-setup"
+      description: "Creates gitops/platform, tag v1.1.0, a Secret with a wrong password, and three sources with a missing branch, the wrong Secret and a suspension"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-fleet"
+      description: "Confirms fleet follows branch main, is Ready, and podinfo applies its revision"
+      type: "file"
+      source: "validation/validate-fleet.sh"
+    - name: "validate-platform"
+      description: "Confirms platform-auth holds the correct password, platform is Ready and platform-settings applies its revision"
+      type: "file"
+      source: "validation/validate-platform.sh"
+    - name: "validate-tags"
+      description: "Confirms fleet-tags is resumed, Ready and serves the revision of tag v1.1.0"
+      type: "file"
+      source: "validation/validate-tags.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

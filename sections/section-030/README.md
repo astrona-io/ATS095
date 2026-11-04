@@ -13,10 +13,13 @@ This section works with both kinds of chart repository, the classic HTTP reposit
 - The fields of a `HelmChart`: `chart`, `version`, `sourceRef`, `reconcileStrategy` and `valuesFiles`.
 - How a version range resolves to one chart version, and how that version becomes the revision.
 - How helm-controller creates a `HelmChart` for every `HelmRelease`, and how to find it.
+- How to read the conditions and events of a `HelmChart`, and how to manage Helm sources with the `flux` tool.
+- Credentials for HTTP and OCI Helm repositories: basic authentication, `passCredentials`, client certificates and registry Secrets.
+- Building a chart from a `GitRepository` or a `Bucket`, `reconcileStrategy`, `valuesFiles`, and verifying chart signatures.
 
 ## The learning path
 
-The module has a landing page, two parts, a graded lab right after the part it tests, and a summary. The landing page also starts the module's playground. This section needs outbound internet from the cluster: the podinfo chart comes from `https://stefanprodan.github.io/podinfo` and `oci://ghcr.io/stefanprodan/charts`.
+Each module has a landing page, deep-dive parts, graded labs right after the parts they test, and a summary. The landing page also starts the module's playground. This section needs outbound internet from the cluster: the podinfo chart comes from `https://stefanprodan.github.io/podinfo` and `oci://ghcr.io/stefanprodan/charts`.
 
 ### 1. Fetch Helm Charts With source-controller
 
@@ -24,7 +27,19 @@ The playground holds the Flux controllers and an empty namespace `podinfo`. You 
 
 1. HTTP And OCI Helm Repositories
 2. HelmChart Objects And Chart Versions, followed by the lab **Make A Helm Chart Resolve**
-3. Summary
+3. HelmChart Status, Conditions And Events, followed by the lab **Find Why A HelmChart Is Not Ready**
+4. Managing Helm Sources With The Flux CLI
+5. Summary
+
+### 2. Private Helm Repositories, Chart Sources And Chart Verification
+
+The playground holds the Flux controllers and an empty namespace `podinfo`. You create Secrets, repositories and charts yourself, and build a chart from the public podinfo Git repository.
+
+1. Credentials And TLS For HTTP Helm Repositories
+2. Credentials For OCI Helm Repositories
+3. Charts From Git And Bucket Sources, followed by the lab **Fix A HelmChart That Builds From Git**
+4. Verify Chart Signatures And Choose A Chart Source
+5. Summary
 
 ## Section capstone: Make A HelmRelease's Chart Resolve
 

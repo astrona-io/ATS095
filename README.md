@@ -24,14 +24,16 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | GitRepository In Depth | 1 | 1 + capstone | Git sources and authentication |
-| [020](sections/section-020) | OCIRepository And Flux OCI Artifacts | 1 | 1 + capstone | OCI sources |
-| [030](sections/section-030) | HelmRepository And HelmChart | 1 | 1 + capstone | Helm sources |
-| [040](sections/section-040) | Bucket Sources, Triggers And Artifacts | 1 | 1 + capstone | Bucket sources, triggers, artifacts |
+| [010](sections/section-010) | GitRepository In Depth | 3 | 4 + capstone | Git sources, authentication, verification, include and fetch size |
+| [020](sections/section-020) | OCIRepository And Flux OCI Artifacts | 3 | 4 + capstone | OCI sources, registry authentication, the flux artifact commands |
+| [030](sections/section-030) | HelmRepository And HelmChart | 2 | 3 + capstone | Helm sources |
+| [040](sections/section-040) | Bucket Sources, Triggers And Artifacts | 2 | 3 + capstone | Bucket sources, triggers, receivers, notifications, artifacts |
+| [050](sections/section-050) | Operate source-controller | 4 | 4 + capstone | Artifact storage, tuning, troubleshooting, multi-tenant access |
 
 The order follows the kinds of source, from the one learners know best (Git)
-to the ones that are new. Section 040 also covers what applies to every
-source: reconciliation triggers and the artifacts source-controller stores.
+to the ones that are new. Sections 040 and 050 also cover what applies to every
+source: reconciliation triggers, the artifacts source-controller stores, tuning,
+troubleshooting and tenant access.
 
 ---
 
@@ -39,10 +41,20 @@ source: reconciliation triggers and the artifacts source-controller stores.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Control What source-controller Fetches From Git](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
-| 020-01 | [Deliver Manifests As OCI Artifacts](sections/section-020/module-01/course.md) | 2 | [lab-01](sections/section-020/module-01/labs/lab-01) |
-| 030-01 | [Fetch Helm Charts With source-controller](sections/section-030/module-01/course.md) | 2 | [lab-01](sections/section-030/module-01/labs/lab-01) |
-| 040-01 | [Sync From A Bucket And Control When Flux Fetches](sections/section-040/module-01/course.md) | 2 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 010-01 | [Control What source-controller Fetches From Git](sections/section-010/module-01/course.md) | 5 | [lab-01](sections/section-010/module-01/labs/lab-01), [lab-02](sections/section-010/module-01/labs/lab-02) |
+| 010-02 | [Secure Git Connections And Git Providers](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
+| 010-03 | [Verify Commits, Include Repositories And Fetch Less](sections/section-010/module-03/course.md) | 4 | [lab-01](sections/section-010/module-03/labs/lab-01) |
+| 020-01 | [Deliver Manifests As OCI Artifacts](sections/section-020/module-01/course.md) | 4 | [lab-01](sections/section-020/module-01/labs/lab-01), [lab-02](sections/section-020/module-01/labs/lab-02) |
+| 020-02 | [Authenticate To Registries And Verify OCI Artifacts](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 020-03 | [Work With Flux Artifacts From The Command Line](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
+| 030-01 | [Fetch Helm Charts With source-controller](sections/section-030/module-01/course.md) | 4 | [lab-01](sections/section-030/module-01/labs/lab-01), [lab-02](sections/section-030/module-01/labs/lab-02) |
+| 030-02 | [Private Helm Repositories, Chart Sources And Chart Verification](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
+| 040-01 | [Sync From A Bucket And Control When Flux Fetches](sections/section-040/module-01/course.md) | 4 | [lab-01](sections/section-040/module-01/labs/lab-01), [lab-02](sections/section-040/module-01/labs/lab-02) |
+| 040-02 | [Receivers And Source Notifications](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
+| 050-01 | [How source-controller Stores And Serves Artifacts](sections/section-050/module-01/course.md) | 4 | [lab-01](sections/section-050/module-01/labs/lab-01) |
+| 050-02 | [Tune And Size source-controller](sections/section-050/module-02/course.md) | 4 | [lab-01](sections/section-050/module-02/labs/lab-01) |
+| 050-03 | [Troubleshoot Failing Sources](sections/section-050/module-03/course.md) | 4 | [lab-01](sections/section-050/module-03/labs/lab-01) |
+| 050-04 | [Control Access To Sources In A Multi-Tenant Cluster](sections/section-050/module-04/course.md) | 4 | [lab-01](sections/section-050/module-04/labs/lab-01) |
 
 ---
 
@@ -54,6 +66,7 @@ source: reconciliation triggers and the artifacts source-controller stores.
 | [020](sections/section-020/capstone/labs/lab-01) | Repair An OCI Delivery | a tag in the `url`, no `insecure` for an HTTP registry, no `ref`, a Flux Kustomization that names a `GitRepository` |
 | [030](sections/section-030/capstone/labs/lab-01) | Make A HelmRelease's Chart Resolve | a wrong repository address, a source name that does not exist, a version range with no match |
 | [040](sections/section-040/capstone/labs/lab-01) | Repair A Bucket Source | wrong Secret key names, a wrong bucket name, no `insecure`, a wrong path |
+| [050](sections/section-050/capstone/labs/lab-01) | Operate source-controller | `--concurrent=1`, a branch that does not exist, a suspended source, a blocked cross-namespace reference |
 
 ---
 
@@ -65,6 +78,7 @@ source: reconciliation triggers and the artifacts source-controller stores.
 | 020 | Gitea, an OCI registry (`registry:3.1.2`) | the above, plus `registry.localtest.me:5001` |
 | 030 | none; the podinfo chart comes from the internet | — |
 | 040 | versitygw (S3-compatible) and an `aws` client pod | — (used through `kubectl exec`) |
+| 050 | Gitea and a `tester` pod; an `artifact-reader` pod in `flux-system` in module 01 | `http://gitea.localtest.me:3000` (used through `kubectl exec`) |
 
 The `*.localtest.me` names resolve to `127.0.0.1`, so a port-forward on the
 machine answers them; inside the cluster a CoreDNS `rewrite stop` block sends

@@ -1,0 +1,28 @@
+# Verify Commits, Include Repositories And Fetch Less (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-playground-010-03"
+  docs:
+    guide: "docs/overview.md"
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI 2.9.6 and controllers, start Gitea with SSH, seed gitops/fleet (tags v1.0.0 and v1.1.0, a docs folder) and gitops/platform, and connect Flux to gitops/fleet over HTTP."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea (namespace gitea, Service gitea-http on ports 3000 and 2222) and the tester client."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

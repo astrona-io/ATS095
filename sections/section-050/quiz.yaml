@@ -1,0 +1,936 @@
+# Knowledge check for section 050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats095-050
+course_id: ATS095
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-050
+  title: "Operate source-controller"
+placement:
+  position: after
+  reading: sections/section-050/capstone/labs/lab-01/question.md
+questions:
+
+  - id: ats095-050-m1-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the storage folder"
+    source_readings:
+      - sections/section-050/module-01/course-01-where-artifacts-live.md
+    prompt: "Which flag sets the folder where source-controller writes artifacts?"
+    options:
+      - id: a
+        text: "`--storage-path`"
+        explanation: "Correct. `--storage-path=/data` is the folder, backed by an `emptyDir` volume in the standard installation."
+      - id: b
+        text: "`--artifact-dir`"
+        explanation: "Not correct. There is no flag with that name; the folder is set by `--storage-path`."
+      - id: c
+        text: "`--data-root`"
+        explanation: "Not correct. There is no flag with that name; the folder is set by `--storage-path`."
+      - id: d
+        text: "`--storage-adv-addr`"
+        explanation: "Not correct. `--storage-adv-addr` sets the address written into artifact URLs, not the folder on disk."
+    correct_option: a
+    explanation: "Correct. `--storage-path=/data` is the folder, backed by an `emptyDir` volume in the standard installation."
+
+  - id: ats095-050-m1-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read an artifact URL"
+    source_readings:
+      - sections/section-050/module-01/course-01-where-artifacts-live.md
+    prompt: "In the URL `.../gitrepository/flux-system/fleet/<hash>.tar.gz`, what does `flux-system/fleet` name?"
+    options:
+      - id: a
+        text: "The namespace and the name of the source"
+        explanation: "Correct. The path holds the kind, then the namespace and the name of the source, then the file."
+      - id: b
+        text: "The namespace of the consumer and its Kustomization"
+        explanation: "Not correct. The consumer is not part of the URL; only the source is."
+      - id: c
+        text: "The Git organisation and the repository"
+        explanation: "Not correct. The Git organisation and repository belong to `spec.url`, not to the artifact URL."
+      - id: d
+        text: "The node and the pod"
+        explanation: "Not correct. The artifact URL is a Service path and never contains node or pod names."
+    correct_option: a
+    explanation: "Correct. The path holds the kind, then the namespace and the name of the source, then the file."
+
+  - id: ats095-050-m1-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "What a restart does"
+    source_readings:
+      - sections/section-050/module-01/course-01-where-artifacts-live.md
+    prompt: "What happens to stored artifacts when the source-controller pod is replaced?"
+    options:
+      - id: a
+        text: "They are gone, and source-controller fetches the sources again"
+        explanation: "Correct. The standard storage is an `emptyDir`, which lives as long as the pod."
+      - id: b
+        text: "They are kept in the Git server"
+        explanation: "Not correct. Git holds the sources, not the artifacts that source-controller built from them."
+      - id: c
+        text: "They move to the next pod through a persistent volume"
+        explanation: "Not correct. The standard installation uses no persistent volume."
+      - id: d
+        text: "They are kept, because the status holds them"
+        explanation: "Not correct. The status only records which artifact should exist; the files are on the lost volume."
+    correct_option: a
+    explanation: "Correct. The standard storage is an `emptyDir`, which lives as long as the pod."
+
+  - id: ats095-050-m1-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Digest meaning"
+    source_readings:
+      - sections/section-050/module-01/course-02-reading-an-artifact-by-hand.md
+    prompt: "What is `status.artifact.digest` the hash of?"
+    options:
+      - id: a
+        text: "The `tar.gz` file that the artifact server sends"
+        explanation: "Correct. It is `sha256:` plus the hash of the archive, so `sha256sum` of the downloaded bytes matches it."
+      - id: b
+        text: "The Git commit"
+        explanation: "Not correct. The commit hash is part of `revision`, not of `digest`."
+      - id: c
+        text: "The list of file names in the archive"
+        explanation: "Not correct. The digest covers the bytes of the archive, not only the file names."
+      - id: d
+        text: "The manifest of the Flux Kustomization"
+        explanation: "Not correct. A Kustomization is a consumer and does not take part in the digest."
+    correct_option: a
+    explanation: "Correct. It is `sha256:` plus the hash of the archive, so `sha256sum` of the downloaded bytes matches it."
+
+  - id: ats095-050-m1-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Why a helper pod"
+    source_readings:
+      - sections/section-050/module-01/course-02-reading-an-artifact-by-hand.md
+    prompt: "Why does the lab read the artifact from a pod in `flux-system`?"
+    options:
+      - id: a
+        text: "The Flux network policies block pods of other namespaces"
+        explanation: "Correct. The network policy of `flux-system` lets only pods of the same namespace reach the artifact server."
+      - id: b
+        text: "The artifact needs a login that only that namespace has"
+        explanation: "Not correct. The artifact server has no login; the network is the guard."
+      - id: c
+        text: "The file is stored in that namespace's Secret"
+        explanation: "Not correct. Artifacts are files on the controller's volume, not Secrets."
+      - id: d
+        text: "kubectl cannot run in other namespaces"
+        explanation: "Not correct. kubectl works in every namespace; the block is the network policy."
+    correct_option: a
+    explanation: "Correct. The network policy of `flux-system` lets only pods of the same namespace reach the artifact server."
+
+  - id: ats095-050-m1-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Count files"
+    source_readings:
+      - sections/section-050/module-01/course-02-reading-an-artifact-by-hand.md
+    prompt: "Which lines of `tar -tvzf` are regular files?"
+    options:
+      - id: a
+        text: "Lines that start with `-`"
+        explanation: "Correct. In a long tar listing the first character is the type: `-` for a file and `d` for a directory."
+      - id: b
+        text: "Lines that start with `d`"
+        explanation: "Not correct. `d` marks a directory."
+      - id: c
+        text: "Lines that end with `/`"
+        explanation: "Not correct. A trailing slash marks a directory."
+      - id: d
+        text: "All lines"
+        explanation: "Not correct. Directories are listed too, so counting all lines overcounts files."
+    correct_option: a
+    explanation: "Correct. In a long tar listing the first character is the type: `-` for a file and `d` for a directory."
+
+  - id: ats095-050-m1-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Garbage collection"
+    source_readings:
+      - sections/section-050/module-01/course-03-retention-restarts-and-the-latest-artifact.md
+    prompt: "Which artifact does garbage collection never delete?"
+    options:
+      - id: a
+        text: "The newest artifact of a source"
+        explanation: "Correct. The newest artifact is the one in `status.artifact`, and consumers need it."
+      - id: b
+        text: "The artifact of a suspended source only"
+        explanation: "Not correct. Suspension does not protect older files; only the newest one is protected."
+      - id: c
+        text: "Any artifact younger than a day"
+        explanation: "Not correct. Age is controlled by the TTL flag, which is minutes by default, not a day."
+      - id: d
+        text: "The oldest artifact"
+        explanation: "Not correct. The oldest ones are the first candidates for deletion."
+    correct_option: a
+    explanation: "Correct. The newest artifact is the one in `status.artifact`, and consumers need it."
+
+  - id: ats095-050-m1-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "ArtifactInStorage"
+    source_readings:
+      - sections/section-050/module-01/course-03-retention-restarts-and-the-latest-artifact.md
+    prompt: "Which condition tells you whether the file in `status.artifact` exists on disk?"
+    options:
+      - id: a
+        text: "`ArtifactInStorage`"
+        explanation: "Correct. `ArtifactInStorage` is `True` when the artifact in the status is present in storage."
+      - id: b
+        text: "`Reconciling`"
+        explanation: "Not correct. `Reconciling` says the controller is working on a change."
+      - id: c
+        text: "`Stalled`"
+        explanation: "Not correct. `Stalled` says retrying will not help until the spec changes."
+      - id: d
+        text: "`ArtifactOutdated`"
+        explanation: "Not correct. `ArtifactOutdated` belongs to the Bucket status and says the artifact is behind, not that the file is missing."
+    correct_option: a
+    explanation: "Correct. `ArtifactInStorage` is `True` when the artifact in the status is present in storage."
+
+  - id: ats095-050-m1-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Who reads the artifact"
+    source_readings:
+      - sections/section-050/module-01/course-04-who-reads-the-artifact.md
+    prompt: "Which controller reads the artifact of a source to apply it?"
+    options:
+      - id: a
+        text: "kustomize-controller"
+        explanation: "Correct. kustomize-controller downloads the artifact of the `sourceRef`, builds `spec.path` and applies it."
+      - id: b
+        text: "notification-controller"
+        explanation: "Not correct. notification-controller handles events and webhooks, not artifacts."
+      - id: c
+        text: "image-reflector-controller"
+        explanation: "Not correct. image-reflector-controller scans image repositories for tags."
+      - id: d
+        text: "The Kubernetes scheduler"
+        explanation: "Not correct. The scheduler places pods and knows nothing about Flux artifacts."
+    correct_option: a
+    explanation: "Correct. kustomize-controller downloads the artifact of the `sourceRef`, builds `spec.path` and applies it."
+
+  - id: ats095-050-m1-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Artifact access"
+    source_readings:
+      - sections/section-050/module-01/course-04-who-reads-the-artifact.md
+    prompt: "Why should secrets stay out of Git even in a private repository?"
+    options:
+      - id: a
+        text: "The artifact has no login, so anyone who reaches the file can read the manifests"
+        explanation: "Correct. The artifact server is open to the pods that can reach it, and the artifact holds the manifests as plain files."
+      - id: b
+        text: "Git cannot store secrets"
+        explanation: "Not correct. Git stores any file; the issue is who can read the copy."
+      - id: c
+        text: "Flux refuses to apply Secret objects"
+        explanation: "Not correct. Flux applies Secrets; keeping them out of Git is a safety choice."
+      - id: d
+        text: "The digest would change"
+        explanation: "Not correct. The digest changes with any content change, secret or not."
+    correct_option: a
+    explanation: "Correct. The artifact server is open to the pods that can reach it, and the artifact holds the manifests as plain files."
+
+  - id: ats095-050-m2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Work per source"
+    source_readings:
+      - sections/section-050/module-02/course-01-what-makes-source-controller-busy.md
+    prompt: "What does source-controller do for every source each interval?"
+    options:
+      - id: a
+        text: "Fetch, build an archive, store it and update the status"
+        explanation: "Correct. Fetch, archive, store and status update are the four steps; applying is done by consumers."
+      - id: b
+        text: "Apply the manifests to the cluster"
+        explanation: "Not correct. Applying is the job of kustomize-controller and helm-controller."
+      - id: c
+        text: "Send a mail to the owner"
+        explanation: "Not correct. Flux does not send mail from source-controller."
+      - id: d
+        text: "Create a new namespace"
+        explanation: "Not correct. A source never creates namespaces."
+    correct_option: a
+    explanation: "Correct. Fetch, archive, store and status update are the four steps; applying is done by consumers."
+
+  - id: ats095-050-m2-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Count the work"
+    source_readings:
+      - sections/section-050/module-02/course-01-what-makes-source-controller-busy.md
+    prompt: "Which number should you size source-controller from?"
+    options:
+      - id: a
+        text: "The number and size of the sources"
+        explanation: "Correct. Each source is a recurring unit of work whose cost depends on what it fetches."
+      - id: b
+        text: "The number of Deployments in the cluster"
+        explanation: "Not correct. Deployments are applied by other controllers and are not fetched."
+      - id: c
+        text: "The number of nodes"
+        explanation: "Not correct. Nodes do not drive fetch work."
+      - id: d
+        text: "The number of namespaces"
+        explanation: "Not correct. Namespaces have no cost by themselves."
+    correct_option: a
+    explanation: "Correct. Each source is a recurring unit of work whose cost depends on what it fetches."
+
+  - id: ats095-050-m2-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Concurrency"
+    source_readings:
+      - sections/section-050/module-02/course-02-flags-for-concurrency-retention-and-caches.md
+    prompt: "What does `--concurrent` set?"
+    options:
+      - id: a
+        text: "How many reconciliations run at the same time"
+        explanation: "Correct. It is the number of parallel reconciliations the controller allows."
+      - id: b
+        text: "How many replicas of source-controller run"
+        explanation: "Not correct. Replicas are set on the Deployment, not by a flag."
+      - id: c
+        text: "How many artifacts are kept"
+        explanation: "Not correct. Retention is set by `--artifact-retention-records`."
+      - id: d
+        text: "The reconcile interval"
+        explanation: "Not correct. The interval is `spec.interval` on each source."
+    correct_option: a
+    explanation: "Correct. It is the number of parallel reconciliations the controller allows."
+
+  - id: ats095-050-m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Retention flags"
+    source_readings:
+      - sections/section-050/module-02/course-02-flags-for-concurrency-retention-and-caches.md
+    prompt: "Which flag limits how many artifacts of one source are kept?"
+    options:
+      - id: a
+        text: "`--artifact-retention-records`"
+        explanation: "Correct. The records flag is a count; the TTL flag is an age."
+      - id: b
+        text: "`--artifact-retention-ttl`"
+        explanation: "Not correct. The TTL flag sets how long an older artifact may stay, not how many."
+      - id: c
+        text: "`--storage-path`"
+        explanation: "Not correct. `--storage-path` is the folder."
+      - id: d
+        text: "`--watch-label-selector`"
+        explanation: "Not correct. `--watch-label-selector` limits which objects the controller handles."
+    correct_option: a
+    explanation: "Correct. The records flag is a count; the TTL flag is an age."
+
+  - id: ats095-050-m2-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "One copy of a flag"
+    source_readings:
+      - sections/section-050/module-02/course-02-flags-for-concurrency-retention-and-caches.md
+    prompt: "Why replace `--concurrent=1` instead of adding a second `--concurrent`?"
+    options:
+      - id: a
+        text: "Two copies are ambiguous, and a reader must know which one wins"
+        explanation: "Correct. A flag parser usually takes the last one, but the manifest becomes hard to read and to patch."
+      - id: b
+        text: "Kubernetes refuses a Deployment with two flags"
+        explanation: "Not correct. Kubernetes accepts any list of args."
+      - id: c
+        text: "The second flag is ignored for good"
+        explanation: "Not correct. Behaviour depends on the parser; do not rely on it."
+      - id: d
+        text: "The first flag deletes the second"
+        explanation: "Not correct. Flags do not delete each other."
+    correct_option: a
+    explanation: "Correct. A flag parser usually takes the last one, but the manifest becomes hard to read and to patch."
+
+  - id: ats095-050-m2-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "OOMKilled"
+    source_readings:
+      - sections/section-050/module-02/course-03-resources-limits-and-restarts.md
+    prompt: "Which last state shows that the memory limit was too low?"
+    options:
+      - id: a
+        text: "`terminated` with the reason `OOMKilled`"
+        explanation: "Correct. `OOMKilled` means the kernel killed the container for going over its memory limit."
+      - id: b
+        text: "`waiting` with the reason `ImagePullBackOff`"
+        explanation: "Not correct. `ImagePullBackOff` is an image problem."
+      - id: c
+        text: "`running` with a high restart count of zero"
+        explanation: "Not correct. A restart count of zero means no kill happened."
+      - id: d
+        text: "`terminated` with the reason `Completed`"
+        explanation: "Not correct. `Completed` is a normal exit."
+    correct_option: a
+    explanation: "Correct. `OOMKilled` means the kernel killed the container for going over its memory limit."
+
+  - id: ats095-050-m2-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Request versus limit"
+    source_readings:
+      - sections/section-050/module-02/course-03-resources-limits-and-restarts.md
+    prompt: "What does the memory request do?"
+    options:
+      - id: a
+        text: "The scheduler uses it to place the pod"
+        explanation: "Correct. Requests drive scheduling; the limit is what is enforced."
+      - id: b
+        text: "The kubelet kills the pod when it is exceeded"
+        explanation: "Not correct. The limit is what causes a kill."
+      - id: c
+        text: "It caps the memory the container can use"
+        explanation: "Not correct. The limit is the cap."
+      - id: d
+        text: "It is ignored for Deployments"
+        explanation: "Not correct. Requests apply to Deployments like any pod."
+    correct_option: a
+    explanation: "Correct. Requests drive scheduling; the limit is what is enforced."
+
+  - id: ats095-050-m2-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Cost of a restart"
+    source_readings:
+      - sections/section-050/module-02/course-03-resources-limits-and-restarts.md
+    prompt: "What does rolling source-controller cost on a large cluster?"
+    options:
+      - id: a
+        text: "Every source is fetched again, in parallel up to `--concurrent`"
+        explanation: "Correct. The `emptyDir` is empty in the new pod, so each source is fetched again."
+      - id: b
+        text: "All workloads restart"
+        explanation: "Not correct. Workloads keep running; only the sources are refetched."
+      - id: c
+        text: "All Secrets are rotated"
+        explanation: "Not correct. Secrets are not touched."
+      - id: d
+        text: "Nothing, because artifacts are kept"
+        explanation: "Not correct. The artifacts are on the lost volume."
+    correct_option: a
+    explanation: "Correct. The `emptyDir` is empty in the new pod, so each source is fetched again."
+
+  - id: ats095-050-m2-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Making a change stick"
+    source_readings:
+      - sections/section-050/module-02/course-04-making-changes-stick-and-sharding.md
+    prompt: "Why is a `kubectl edit` of source-controller undone in a bootstrapped cluster?"
+    options:
+      - id: a
+        text: "The Flux Kustomization `flux-system` applies the manifests from Git again"
+        explanation: "Correct. The bootstrap Kustomization re-applies the committed controller manifests, which resets fields you changed by hand."
+      - id: b
+        text: "kubectl edit is not allowed for Deployments"
+        explanation: "Not correct. kubectl edit works on Deployments."
+      - id: c
+        text: "The pod restarts it"
+        explanation: "Not correct. A restart keeps the edited template."
+      - id: d
+        text: "Flux sets it back only after an upgrade"
+        explanation: "Not correct. The reset happens at the next apply of the Kustomization, not only at an upgrade."
+    correct_option: a
+    explanation: "Correct. The bootstrap Kustomization re-applies the committed controller manifests, which resets fields you changed by hand."
+
+  - id: ats095-050-m2-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Where the patch goes"
+    source_readings:
+      - sections/section-050/module-02/course-04-making-changes-stick-and-sharding.md
+    prompt: "Where do you put a tuning patch so that it survives `flux bootstrap`?"
+    options:
+      - id: a
+        text: "In `patches` of the `kustomization.yaml` next to `gotk-components.yaml`"
+        explanation: "Correct. `gotk-components.yaml` is regenerated, while the `patches` entry in `kustomization.yaml` stays."
+      - id: b
+        text: "In `gotk-components.yaml`"
+        explanation: "Not correct. Edits in `gotk-components.yaml` are overwritten by the next bootstrap."
+      - id: c
+        text: "In an annotation on the Deployment"
+        explanation: "Not correct. Annotations do not change args."
+      - id: d
+        text: "In a ConfigMap named source-controller"
+        explanation: "Not correct. A ConfigMap does not configure the controller's flags."
+    correct_option: a
+    explanation: "Correct. `gotk-components.yaml` is regenerated, while the `patches` entry in `kustomization.yaml` stays."
+
+  - id: ats095-050-m3-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "First command"
+    source_readings:
+      - sections/section-050/module-03/course-01-a-method-read-narrow-fix.md
+    prompt: "Which command gives the overview of every source?"
+    options:
+      - id: a
+        text: "`flux get sources all -A`"
+        explanation: "Correct. It lists each source with its Ready status, message, revision and suspended flag."
+      - id: b
+        text: "`flux check`"
+        explanation: "Not correct. `flux check` checks the installation, not each source."
+      - id: c
+        text: "`flux install`"
+        explanation: "Not correct. `flux install` installs the controllers."
+      - id: d
+        text: "`kubectl get nodes`"
+        explanation: "Not correct. Nodes say nothing about a source."
+    correct_option: a
+    explanation: "Correct. It lists each source with its Ready status, message, revision and suspended flag."
+
+  - id: ats095-050-m3-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "observedGeneration"
+    source_readings:
+      - sections/section-050/module-03/course-01-a-method-read-narrow-fix.md
+    prompt: "What does `observedGeneration` lower than `metadata.generation` mean?"
+    options:
+      - id: a
+        text: "The controller has not seen your last change, so the message is old"
+        explanation: "Correct. The status describes an older spec until the controller catches up."
+      - id: b
+        text: "The source is suspended"
+        explanation: "Not correct. Suspension is shown by `spec.suspend`."
+      - id: c
+        text: "The artifact is missing"
+        explanation: "Not correct. A missing artifact shows in `ArtifactInStorage`."
+      - id: d
+        text: "The Secret is wrong"
+        explanation: "Not correct. A wrong Secret shows in the message, not in the generation."
+    correct_option: a
+    explanation: "Correct. The status describes an older spec until the controller catches up."
+
+  - id: ats095-050-m3-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order of reading"
+    source_readings:
+      - sections/section-050/module-03/course-01-a-method-read-narrow-fix.md
+    prompt: "Which order of reading is right?"
+    options:
+      - id: a
+        text: "Overview, condition, events, log"
+        explanation: "Correct. Each step narrows the question and costs more effort than the one before."
+      - id: b
+        text: "Log, Secret, repository, overview"
+        explanation: "Not correct. Starting with the log skips the cheaper, clearer steps."
+      - id: c
+        text: "Delete, recreate, check"
+        explanation: "Not correct. Deleting and recreating hides the cause."
+      - id: d
+        text: "Events, overview, log, condition"
+        explanation: "Not correct. The condition is the starting point after the overview."
+    correct_option: a
+    explanation: "Correct. Each step narrows the question and costs more effort than the one before."
+
+  - id: ats095-050-m3-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "A missing reference"
+    source_readings:
+      - sections/section-050/module-03/course-02-what-the-messages-mean.md
+    prompt: "A Git source says a reference was not found. What is the likely cause?"
+    options:
+      - id: a
+        text: "`spec.ref` names a branch, tag or commit that does not exist"
+        explanation: "Correct. Patch `spec.ref` to a reference that exists."
+      - id: b
+        text: "The password is wrong"
+        explanation: "Not correct. A wrong password gives an authentication message."
+      - id: c
+        text: "The interval is too short"
+        explanation: "Not correct. The interval does not cause a missing reference."
+      - id: d
+        text: "The artifact is full"
+        explanation: "Not correct. The artifact size is unrelated."
+    correct_option: a
+    explanation: "Correct. Patch `spec.ref` to a reference that exists."
+
+  - id: ats095-050-m3-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "OCI 401"
+    source_readings:
+      - sections/section-050/module-03/course-02-what-the-messages-mean.md
+    prompt: "An `OCIRepository` fails with 401. What do you check first?"
+    options:
+      - id: a
+        text: "The credentials: `secretRef`, `serviceAccountName` or `provider`"
+        explanation: "Correct. 401 means the registry wants a sign-in that was not sent or was wrong."
+      - id: b
+        text: "The interval"
+        explanation: "Not correct. The interval does not affect authentication."
+      - id: c
+        text: "The Git branch"
+        explanation: "Not correct. An OCI source has no Git branch."
+      - id: d
+        text: "The Helm chart version"
+        explanation: "Not correct. A chart version is a Helm matter."
+    correct_option: a
+    explanation: "Correct. 401 means the registry wants a sign-in that was not sent or was wrong."
+
+  - id: ats095-050-m3-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Suspended"
+    source_readings:
+      - sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+    prompt: "A suspended source shows `Ready: True`. What does that mean?"
+    options:
+      - id: a
+        text: "It was Ready at its last run and is now skipped"
+        explanation: "Correct. The status is the one from the last run, and nothing is fetched while it is suspended."
+      - id: b
+        text: "It is up to date"
+        explanation: "Not correct. A suspended source does not follow new commits."
+      - id: c
+        text: "It fetches every minute"
+        explanation: "Not correct. It does not fetch at all."
+      - id: d
+        text: "It is stalled"
+        explanation: "Not correct. Stalled is a different condition."
+    correct_option: a
+    explanation: "Correct. The status is the one from the last run, and nothing is fetched while it is suspended."
+
+  - id: ats095-050-m3-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Stalled"
+    source_readings:
+      - sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+    prompt: "What does `Stalled` mean?"
+    options:
+      - id: a
+        text: "The controller will not retry until the spec changes"
+        explanation: "Correct. It is set for faults that retrying cannot fix, such as an invalid field."
+      - id: b
+        text: "The source fetched too slowly"
+        explanation: "Not correct. Slowness is not a condition."
+      - id: c
+        text: "The consumer failed"
+        explanation: "Not correct. A consumer has its own status."
+      - id: d
+        text: "The pod is restarting"
+        explanation: "Not correct. Restarts do not set `Stalled`."
+    correct_option: a
+    explanation: "Correct. It is set for faults that retrying cannot fix, such as an invalid field."
+
+  - id: ats095-050-m3-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare revisions"
+    source_readings:
+      - sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+    prompt: "A source is Ready, but the cluster did not change. What do you compare?"
+    options:
+      - id: a
+        text: "`status.artifact.revision` with the consumer's `status.lastAppliedRevision`"
+        explanation: "Correct. If they differ, the consumer has not applied the newest artifact."
+      - id: b
+        text: "The pod names"
+        explanation: "Not correct. Pod names do not tell the revision."
+      - id: c
+        text: "The node labels"
+        explanation: "Not correct. Node labels are unrelated."
+      - id: d
+        text: "The Gitea logs only"
+        explanation: "Not correct. Gitea logs show the server's side only."
+    correct_option: a
+    explanation: "Correct. If they differ, the consumer has not applied the newest artifact."
+
+  - id: ats095-050-m3-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Safe fix"
+    source_readings:
+      - sections/section-050/module-03/course-04-fixing-safely-and-proving-it.md
+    prompt: "How do you fix a wrong password without breaking the objects that use the source?"
+    options:
+      - id: a
+        text: "Replace the Secret under the same name"
+        explanation: "Correct. Other objects refer to the source and the Secret by name, so keep the names."
+      - id: b
+        text: "Delete the source and create one with a new name"
+        explanation: "Not correct. A new name breaks every reference."
+      - id: c
+        text: "Delete all Kustomizations"
+        explanation: "Not correct. Deleting Kustomizations removes workloads when prune is on."
+      - id: d
+        text: "Restart the cluster"
+        explanation: "Not correct. A restart does not change a Secret."
+    correct_option: a
+    explanation: "Correct. Other objects refer to the source and the Secret by name, so keep the names."
+
+  - id: ats095-050-m3-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Proof of a fix"
+    source_readings:
+      - sections/section-050/module-03/course-04-fixing-safely-and-proving-it.md
+    prompt: "Which result proves a fix reached the cluster?"
+    options:
+      - id: a
+        text: "The Kustomization's applied revision equals the source's artifact revision"
+        explanation: "Correct. Equal revisions show that the consumer applied what the source now serves."
+      - id: b
+        text: "The source is Ready"
+        explanation: "Not correct. Ready only proves the fetch."
+      - id: c
+        text: "The pod is Running"
+        explanation: "Not correct. A running pod can still be an old version."
+      - id: d
+        text: "The command returned no error"
+        explanation: "Not correct. A command without an error can still apply the old revision."
+    correct_option: a
+    explanation: "Correct. Equal revisions show that the consumer applied what the source now serves."
+
+  - id: ats095-050-m4-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "A tenant"
+    source_readings:
+      - sections/section-050/module-04/course-01-tenants-and-namespaces.md
+    prompt: "What is a tenant in Flux?"
+    options:
+      - id: a
+        text: "A namespace, a ServiceAccount and a RoleBinding limited to that namespace"
+        explanation: "Correct. It is a convention, and `flux create tenant` writes the three objects."
+      - id: b
+        text: "A Flux object of kind Tenant"
+        explanation: "Not correct. There is no object of that kind."
+      - id: c
+        text: "A Git repository"
+        explanation: "Not correct. A repository is the tenant's source, not the tenant."
+      - id: d
+        text: "A node pool"
+        explanation: "Not correct. Node pools are infrastructure."
+    correct_option: a
+    explanation: "Correct. It is a convention, and `flux create tenant` writes the three objects."
+
+  - id: ats095-050-m4-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Secret namespace"
+    source_readings:
+      - sections/section-050/module-04/course-01-tenants-and-namespaces.md
+    prompt: "In which namespace must the Secret of a tenant's `GitRepository` be?"
+    options:
+      - id: a
+        text: "The namespace of the `GitRepository`"
+        explanation: "Correct. A `secretRef` always means the same namespace as the object."
+      - id: b
+        text: "`flux-system`"
+        explanation: "Not correct. A source in `team-a` cannot read a Secret in `flux-system`."
+      - id: c
+        text: "`default`"
+        explanation: "Not correct. `default` has no special role."
+      - id: d
+        text: "Any namespace"
+        explanation: "Not correct. The lookup is not global."
+    correct_option: a
+    explanation: "Correct. A `secretRef` always means the same namespace as the object."
+
+  - id: ats095-050-m4-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "The flag"
+    source_readings:
+      - sections/section-050/module-04/course-02-cross-namespace-references-and-the-flag.md
+    prompt: "What does `--no-cross-namespace-refs=true` do?"
+    options:
+      - id: a
+        text: "Makes a reference to an object in another namespace an error"
+        explanation: "Correct. A Kustomization that points at a source in another namespace applies nothing."
+      - id: b
+        text: "Blocks all network traffic between namespaces"
+        explanation: "Not correct. It does not touch network traffic."
+      - id: c
+        text: "Deletes cross-namespace objects"
+        explanation: "Not correct. It does not delete anything."
+      - id: d
+        text: "Hides Secrets from other namespaces"
+        explanation: "Not correct. It does not change RBAC for Secrets."
+    correct_option: a
+    explanation: "Correct. A Kustomization that points at a source in another namespace applies nothing."
+
+  - id: ats095-050-m4-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Which controllers"
+    source_readings:
+      - sections/section-050/module-04/course-02-cross-namespace-references-and-the-flag.md
+    prompt: "Which controller does not have the cross-namespace flag?"
+    options:
+      - id: a
+        text: "source-controller"
+        explanation: "Correct. A source has no field that points at another namespace, so the flag has nothing to check there."
+      - id: b
+        text: "kustomize-controller"
+        explanation: "Not correct. kustomize-controller follows `sourceRef.namespace` and has the flag."
+      - id: c
+        text: "helm-controller"
+        explanation: "Not correct. helm-controller follows chart and values references and has the flag."
+      - id: d
+        text: "notification-controller"
+        explanation: "Not correct. notification-controller follows references of alerts and has the flag."
+    correct_option: a
+    explanation: "Correct. A source has no field that points at another namespace, so the flag has nothing to check there."
+
+  - id: ats095-050-m4-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "The tenant fix"
+    source_readings:
+      - sections/section-050/module-04/course-02-cross-namespace-references-and-the-flag.md
+    prompt: "A tenant's Kustomization is blocked by the flag. What is the right fix?"
+    options:
+      - id: a
+        text: "Give the tenant its own source in its namespace and point at it"
+        explanation: "Correct. The tenant brings its own source and credentials."
+      - id: b
+        text: "Remove the flag"
+        explanation: "Not correct. Removing the flag removes isolation for everyone."
+      - id: c
+        text: "Bind the tenant to `cluster-admin`"
+        explanation: "Not correct. More rights do not lift a reference check."
+      - id: d
+        text: "Copy the Kustomization to `flux-system`"
+        explanation: "Not correct. Moving the object gives it the platform's namespace and rights."
+    correct_option: a
+    explanation: "Correct. The tenant brings its own source and credentials."
+
+  - id: ats095-050-m4-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Impersonation"
+    source_readings:
+      - sections/section-050/module-04/course-03-impersonation-with-serviceaccountname.md
+    prompt: "What does `spec.serviceAccountName` on a Kustomization do?"
+    options:
+      - id: a
+        text: "kustomize-controller applies as that ServiceAccount, so RBAC limits it"
+        explanation: "Correct. Requests go to the API server as the account, and RBAC decides."
+      - id: b
+        text: "It runs the pod of source-controller as that account"
+        explanation: "Not correct. source-controller's identity is not changed."
+      - id: c
+        text: "It gives the account access to Git"
+        explanation: "Not correct. Git access comes from the source's `secretRef`."
+      - id: d
+        text: "It creates the account"
+        explanation: "Not correct. The account must already exist."
+    correct_option: a
+    explanation: "Correct. Requests go to the API server as the account, and RBAC decides."
+
+  - id: ats095-050-m4-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Check the confinement"
+    source_readings:
+      - sections/section-050/module-04/course-03-impersonation-with-serviceaccountname.md
+    prompt: "Which command shows whether the tenant account can create namespaces?"
+    options:
+      - id: a
+        text: "`kubectl auth can-i create namespaces --as=system:serviceaccount:team-a:team-a`"
+        explanation: "Correct. `can-i --as` asks the API server as another identity."
+      - id: b
+        text: "`kubectl get namespaces --as=team-a`"
+        explanation: "Not correct. That lists namespaces and uses a wrong user name."
+      - id: c
+        text: "`flux check --as=team-a`"
+        explanation: "Not correct. `flux check` has no such flag."
+      - id: d
+        text: "`kubectl describe tenant team-a`"
+        explanation: "Not correct. There is no object of kind Tenant."
+    correct_option: a
+    explanation: "Correct. `can-i --as` asks the API server as another identity."
+
+  - id: ats095-050-m4-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Default account"
+    source_readings:
+      - sections/section-050/module-04/course-03-impersonation-with-serviceaccountname.md
+    prompt: "Which flag makes a Kustomization without `serviceAccountName` apply as a default account?"
+    options:
+      - id: a
+        text: "`--default-service-account`"
+        explanation: "Correct. It is set on kustomize-controller and helm-controller."
+      - id: b
+        text: "`--no-cross-namespace-refs`"
+        explanation: "Not correct. That flag blocks references."
+      - id: c
+        text: "`--watch-label-selector`"
+        explanation: "Not correct. That flag limits which objects are handled."
+      - id: d
+        text: "`--concurrent`"
+        explanation: "Not correct. That flag sets parallel work."
+    correct_option: a
+    explanation: "Correct. It is set on kustomize-controller and helm-controller."
+
+  - id: ats095-050-m4-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "A gap"
+    source_readings:
+      - sections/section-050/module-04/course-04-what-flux-does-not-restrict.md
+    prompt: "Which of these does Flux itself not restrict?"
+    options:
+      - id: a
+        text: "The `spec.url` a tenant puts in a `GitRepository`"
+        explanation: "Correct. Flux has no allow-list for URLs; use an admission policy."
+      - id: b
+        text: "Which namespace a Kustomization applies to when impersonating"
+        explanation: "Not correct. Impersonation and RBAC cover that."
+      - id: c
+        text: "Whether a Kustomization uses a source in another namespace"
+        explanation: "Not correct. The flag covers that."
+      - id: d
+        text: "Which ServiceAccount applies the manifests"
+        explanation: "Not correct. `serviceAccountName` and the default flag cover that."
+    correct_option: a
+    explanation: "Correct. Flux has no allow-list for URLs; use an admission policy."
+
+  - id: ats095-050-m4-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "A bad binding"
+    source_readings:
+      - sections/section-050/module-04/course-04-what-flux-does-not-restrict.md
+    prompt: "Why does binding the tenant ServiceAccount to `cluster-admin` defeat impersonation?"
+    options:
+      - id: a
+        text: "The account can then do anything, so RBAC no longer limits the repository"
+        explanation: "Correct. Impersonation is only as strong as the rights of the account."
+      - id: b
+        text: "The Kustomization stops working"
+        explanation: "Not correct. It would work, which is the problem."
+      - id: c
+        text: "The flag turns itself off"
+        explanation: "Not correct. The flag is unchanged."
+      - id: d
+        text: "The source cannot fetch"
+        explanation: "Not correct. Fetching is unrelated to the account."
+    correct_option: a
+    explanation: "Correct. Impersonation is only as strong as the rights of the account."

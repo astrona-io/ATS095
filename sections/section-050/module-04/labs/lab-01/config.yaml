@@ -1,0 +1,53 @@
+# Tenant Isolation
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-050-04"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-050-04-setup"
+      description: "Turns on --no-cross-namespace-refs in kustomize-controller and creates team-a with a Kustomization that uses a source in flux-system"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-tenant-applied"
+      description: "Confirms team-a-apps is Ready and the ConfigMap team-a-config exists in team-a"
+      type: "file"
+      source: "validation/validate-tenant-applied.sh"
+    - name: "validate-tenant-source"
+      description: "Confirms team-a-apps uses a GitRepository in team-a and the ServiceAccount team-a, and that the source is Ready"
+      type: "file"
+      source: "validation/validate-tenant-source.sh"
+    - name: "validate-isolation"
+      description: "Confirms the flag is still set and the ServiceAccount team-a cannot create namespaces or read Secrets of flux-system"
+      type: "file"
+      source: "validation/validate-isolation.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

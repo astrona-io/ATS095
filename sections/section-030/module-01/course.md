@@ -6,7 +6,7 @@ A **Helm chart** is a package of Kubernetes templates and default values that He
 
 Keep one sentence in mind: **the revision of a `HelmChart` is the chart version it resolved.** If that version is not what you expect, look at the range in the `HelmChart` and at the repository it reads.
 
-The module has two parts. **HTTP And OCI Helm Repositories** creates both types of `HelmRepository` for the same chart and compares what source-controller does with each. **HelmChart Objects And Chart Versions** resolves version ranges with a `HelmChart`, then lets a `HelmRelease` create its own `HelmChart`. A graded lab follows the second part.
+The module has four parts. **HTTP And OCI Helm Repositories** creates both types of `HelmRepository` for the same chart and compares what source-controller does with each. **HelmChart Objects And Chart Versions** resolves version ranges with a `HelmChart`, then lets a `HelmRelease` create its own `HelmChart`. A graded lab follows it. **HelmChart Status, Conditions And Events** reads why a chart does not resolve, and a second graded lab follows. **Managing Helm Sources With The Flux CLI** creates, refreshes, pauses and exports Helm sources from the terminal.
 
 ## Learning objectives
 
@@ -18,6 +18,8 @@ After this module you can:
 - Explain `reconcileStrategy` and `valuesFiles`.
 - Find the `HelmChart` that helm-controller creates for a `HelmRelease`.
 - Match the type of a `HelmRepository` to its address.
+- Read the conditions and events of a `HelmChart` to find a wrong version range or chart name.
+- Create, reconcile, suspend, resume and export Helm sources with the `flux` tool.
 
 ## Before you start
 

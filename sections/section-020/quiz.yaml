@@ -243,3 +243,693 @@ questions:
         explanation: "Not correct. Transport is set with `insecure`, not `verify`."
     correct_option: c
     explanation: "Correct. The Secret holds the public key used to check the signature."
+
+  - id: ats095-020-m1b-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Find the failure condition"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "Which condition is `True` when source-controller could not pull the artifact?"
+    options:
+      - id: a
+        text: "`ArtifactInStorage`"
+        explanation: "Not correct. `ArtifactInStorage` is not the answer here. `FetchFailed` has reasons such as `AuthenticationFailed` and `OCIArtifactPullFailed`."
+      - id: b
+        text: "`FetchFailed`"
+        explanation: "Correct. `FetchFailed` has reasons such as `AuthenticationFailed` and `OCIArtifactPullFailed`."
+      - id: c
+        text: "`SourceVerified`"
+        explanation: "Not correct. `SourceVerified` is not the answer here. `FetchFailed` has reasons such as `AuthenticationFailed` and `OCIArtifactPullFailed`."
+      - id: d
+        text: "`ArtifactOutdated`"
+        explanation: "Not correct. `ArtifactOutdated` is not the answer here. `FetchFailed` has reasons such as `AuthenticationFailed` and `OCIArtifactPullFailed`."
+    correct_option: b
+    explanation: "Correct. `FetchFailed` has reasons such as `AuthenticationFailed` and `OCIArtifactPullFailed`."
+
+  - id: ats095-020-m1b-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the full reason"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "Where do you read the full reason an `OCIRepository` is not ready?"
+    options:
+      - id: a
+        text: "In the message of the `Ready` condition and in `flux events --for OCIRepository/<name>`"
+        explanation: "Correct. The events and the condition message carry the detail."
+      - id: b
+        text: "Only in the registry logs"
+        explanation: "Not correct. Only in the registry logs is not the answer here. The events and the condition message carry the detail."
+      - id: c
+        text: "In the interval field"
+        explanation: "Not correct. In the interval field is not the answer here. The events and the condition message carry the detail."
+      - id: d
+        text: "In the Deployment spec"
+        explanation: "Not correct. In the Deployment spec is not the answer here. The events and the condition message carry the detail."
+    correct_option: a
+    explanation: "Correct. The events and the condition message carry the detail."
+
+  - id: ats095-020-m1b-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Failure keeps the old release"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "A fetch fails because the tag does not exist. What does the cluster run?"
+    options:
+      - id: a
+        text: "Nothing, the workload is deleted"
+        explanation: "Not correct. Nothing, the workload is deleted is not the answer here. A failed fetch keeps the last artifact."
+      - id: b
+        text: "The last artifact that was stored"
+        explanation: "Correct. A failed fetch keeps the last artifact."
+      - id: c
+        text: "The newest tag in the registry"
+        explanation: "Not correct. The newest tag in the registry is not the answer here. A failed fetch keeps the last artifact."
+      - id: d
+        text: "An empty folder"
+        explanation: "Not correct. An empty folder is not the answer here. A failed fetch keeps the last artifact."
+    correct_option: b
+    explanation: "Correct. A failed fetch keeps the last artifact."
+
+  - id: ats095-020-m1b-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "insecure"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "The registry speaks plain HTTP and `insecure` is missing. What happens?"
+    options:
+      - id: a
+        text: "The pull fails, because the client asks for HTTPS"
+        explanation: "Correct. Set `insecure: true` only for registries without TLS."
+      - id: b
+        text: "The pull works but is slow"
+        explanation: "Not correct. The pull works but is slow is not the answer here. Set `insecure: true` only for registries without TLS."
+      - id: c
+        text: "The tag is ignored"
+        explanation: "Not correct. The tag is ignored is not the answer here. Set `insecure: true` only for registries without TLS."
+      - id: d
+        text: "The registry is deleted"
+        explanation: "Not correct. The registry is deleted is not the answer here. Set `insecure: true` only for registries without TLS."
+    correct_option: a
+    explanation: "Correct. Set `insecure: true` only for registries without TLS."
+
+  - id: ats095-020-m1b-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Artifact metadata"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "Where do you find the Git commit a release was built from?"
+    options:
+      - id: a
+        text: "In the annotation `org.opencontainers.image.revision` in `status.artifact.metadata`"
+        explanation: "Correct. `flux push artifact` writes it from `--revision`."
+      - id: b
+        text: "In `spec.interval`"
+        explanation: "Not correct. In `spec.interval` is not the answer here. `flux push artifact` writes it from `--revision`."
+      - id: c
+        text: "In the node labels"
+        explanation: "Not correct. In the node labels is not the answer here. `flux push artifact` writes it from `--revision`."
+      - id: d
+        text: "In `status.observedIgnore`"
+        explanation: "Not correct. In `status.observedIgnore` is not the answer here. `flux push artifact` writes it from `--revision`."
+    correct_option: a
+    explanation: "Correct. `flux push artifact` writes it from `--revision`."
+
+  - id: ats095-020-m1b-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Reconcile on demand"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "Which command fetches the source now instead of waiting for the interval?"
+    options:
+      - id: a
+        text: "`flux reconcile source oci <name>`"
+        explanation: "Correct. It asks source-controller to run immediately."
+      - id: b
+        text: "`flux get sources oci`"
+        explanation: "Not correct. `flux get sources oci` is not the answer here. It asks source-controller to run immediately."
+      - id: c
+        text: "`flux suspend source oci <name>`"
+        explanation: "Not correct. `flux suspend source oci <name>` is not the answer here. It asks source-controller to run immediately."
+      - id: d
+        text: "`kubectl delete ocirepository <name>`"
+        explanation: "Not correct. `kubectl delete ocirepository <name>` is not the answer here. It asks source-controller to run immediately."
+    correct_option: a
+    explanation: "Correct. It asks source-controller to run immediately."
+
+  - id: ats095-020-m1b-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "What semverFilter does"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "What does `spec.ref.semverFilter` do?"
+    options:
+      - id: a
+        text: "Applies a regular expression to the tags before the semver range"
+        explanation: "Correct. It works only when `semver` is set."
+      - id: b
+        text: "Filters files in the artifact"
+        explanation: "Not correct. Filters files in the artifact is not the answer here. It works only when `semver` is set."
+      - id: c
+        text: "Selects a layer"
+        explanation: "Not correct. Selects a layer is not the answer here. It works only when `semver` is set."
+      - id: d
+        text: "Signs the tag"
+        explanation: "Not correct. Signs the tag is not the answer here. It works only when `semver` is set."
+    correct_option: a
+    explanation: "Correct. It works only when `semver` is set."
+
+  - id: ats095-020-m1b-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Filter syntax"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "Which value of `semverFilter` selects tags that contain `-rc`?"
+    options:
+      - id: a
+        text: "`*-rc*`"
+        explanation: "Not correct. `*-rc*` is not the answer here. The value is a regular expression, not a glob."
+      - id: b
+        text: "`.*-rc.*`"
+        explanation: "Correct. The value is a regular expression, not a glob."
+      - id: c
+        text: "`rc`"
+        explanation: "Not correct. `rc` is not the answer here. The value is a regular expression, not a glob."
+      - id: d
+        text: "`-rc`"
+        explanation: "Not correct. `-rc` is not the answer here. The value is a regular expression, not a glob."
+    correct_option: b
+    explanation: "Correct. The value is a regular expression, not a glob."
+
+  - id: ats095-020-m1b-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Layer operations"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "What does `layerSelector.operation: copy` store?"
+    options:
+      - id: a
+        text: "The layer as it is, without unpacking it"
+        explanation: "Correct. `extract` is the default and unpacks the layer."
+      - id: b
+        text: "The unpacked files"
+        explanation: "Not correct. The unpacked files is not the answer here. `extract` is the default and unpacks the layer."
+      - id: c
+        text: "Only the manifest"
+        explanation: "Not correct. Only the manifest is not the answer here. `extract` is the default and unpacks the layer."
+      - id: d
+        text: "Nothing"
+        explanation: "Not correct. Nothing is not the answer here. `extract` is the default and unpacks the layer."
+    correct_option: a
+    explanation: "Correct. `extract` is the default and unpacks the layer."
+
+  - id: ats095-020-m1b-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Ignore can prune"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "An `ignore` rule matches `service.yaml`. What happens to the Service in the cluster?"
+    options:
+      - id: a
+        text: "The Flux Kustomization prunes it, because the file is no longer in the artifact"
+        explanation: "Correct. With `prune: true`, objects missing from the artifact are deleted."
+      - id: b
+        text: "Nothing, ignore only affects Git"
+        explanation: "Not correct. Nothing, ignore only affects Git is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+      - id: c
+        text: "The Service is renamed"
+        explanation: "Not correct. The Service is renamed is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+      - id: d
+        text: "The source is suspended"
+        explanation: "Not correct. The source is suspended is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+    correct_option: a
+    explanation: "Correct. With `prune: true`, objects missing from the artifact are deleted."
+
+  - id: ats095-020-m2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Secret type"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "Which type of Secret does `flux create secret oci` create?"
+    options:
+      - id: a
+        text: "`kubernetes.io/dockerconfigjson`"
+        explanation: "Correct. It is the same Secret type that image pulls use."
+      - id: b
+        text: "`kubernetes.io/tls`"
+        explanation: "Not correct. `kubernetes.io/tls` is not the answer here. It is the same Secret type that image pulls use."
+      - id: c
+        text: "`kubernetes.io/ssh-auth`"
+        explanation: "Not correct. `kubernetes.io/ssh-auth` is not the answer here. It is the same Secret type that image pulls use."
+      - id: d
+        text: "`Opaque` with a `token` key"
+        explanation: "Not correct. `Opaque` with a `token` key is not the answer here. It is the same Secret type that image pulls use."
+    correct_option: a
+    explanation: "Correct. It is the same Secret type that image pulls use."
+
+  - id: ats095-020-m2-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Namespace of the Secret"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "In which namespace must the Secret named by `spec.secretRef` be?"
+    options:
+      - id: a
+        text: "`default`"
+        explanation: "Not correct. `default` is not the answer here. The Secret is looked up next to the source."
+      - id: b
+        text: "The namespace of the `OCIRepository`"
+        explanation: "Correct. The Secret is looked up next to the source."
+      - id: c
+        text: "`kube-system`"
+        explanation: "Not correct. `kube-system` is not the answer here. The Secret is looked up next to the source."
+      - id: d
+        text: "Any namespace"
+        explanation: "Not correct. Any namespace is not the answer here. The Secret is looked up next to the source."
+    correct_option: b
+    explanation: "Correct. The Secret is looked up next to the source."
+
+  - id: ats095-020-m2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Address match"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "What must match between `flux create secret oci --url` and the `OCIRepository`?"
+    options:
+      - id: a
+        text: "The host and port of the registry"
+        explanation: "Correct. Credentials are found by registry address."
+      - id: b
+        text: "The interval"
+        explanation: "Not correct. The interval is not the answer here. Credentials are found by registry address."
+      - id: c
+        text: "The tag"
+        explanation: "Not correct. The tag is not the answer here. Credentials are found by registry address."
+      - id: d
+        text: "The name of the Secret and the source"
+        explanation: "Not correct. The name of the Secret and the source is not the answer here. Credentials are found by registry address."
+    correct_option: a
+    explanation: "Correct. Credentials are found by registry address."
+
+  - id: ats095-020-m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Reading a 401"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "The registry answers 401 to the source. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The node has no network"
+        explanation: "Not correct. The node has no network is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: b
+        text: "The source sends no credentials or wrong ones"
+        explanation: "Correct. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: c
+        text: "The tag does not exist"
+        explanation: "Not correct. The tag does not exist is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: d
+        text: "The artifact is too large"
+        explanation: "Not correct. The artifact is too large is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+    correct_option: b
+    explanation: "Correct. 401 means the registry wants a sign-in; a missing tag is a different error."
+
+  - id: ats095-020-m2-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "FetchFailed reason"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "Which reason does `FetchFailed` carry for a wrong registry password?"
+    options:
+      - id: a
+        text: "`AuthenticationFailed`"
+        explanation: "Correct. A missing Secret gives the same kind of error."
+      - id: b
+        text: "`URLInvalid`"
+        explanation: "Not correct. `URLInvalid` is not the answer here. A missing Secret gives the same kind of error."
+      - id: c
+        text: "`VerificationError`"
+        explanation: "Not correct. `VerificationError` is not the answer here. A missing Secret gives the same kind of error."
+      - id: d
+        text: "`NewRevision`"
+        explanation: "Not correct. `NewRevision` is not the answer here. A missing Secret gives the same kind of error."
+    correct_option: a
+    explanation: "Correct. A missing Secret gives the same kind of error."
+
+  - id: ats095-020-m2-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "ServiceAccount credentials"
+    source_readings:
+      - sections/section-020/module-02/course-02-serviceaccount-and-cloud-identity.md
+    prompt: "How does `spec.serviceAccountName` give a source its credentials?"
+    options:
+      - id: a
+        text: "Through the `imagePullSecrets` of the service account"
+        explanation: "Correct. Several sources can share one account."
+      - id: b
+        text: "Through a label on the namespace"
+        explanation: "Not correct. Through a label on the namespace is not the answer here. Several sources can share one account."
+      - id: c
+        text: "Through the node role"
+        explanation: "Not correct. Through the node role is not the answer here. Several sources can share one account."
+      - id: d
+        text: "Through the interval"
+        explanation: "Not correct. Through the interval is not the answer here. Several sources can share one account."
+    correct_option: a
+    explanation: "Correct. Several sources can share one account."
+
+  - id: ats095-020-m2-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Cloud provider values"
+    source_readings:
+      - sections/section-020/module-02/course-02-serviceaccount-and-cloud-identity.md
+    prompt: "Which `spec.provider` value fits Amazon ECR?"
+    options:
+      - id: a
+        text: "`aws`"
+        explanation: "Correct. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: b
+        text: "`ecr`"
+        explanation: "Not correct. `ecr` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: c
+        text: "`generic`"
+        explanation: "Not correct. `generic` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: d
+        text: "`amazon-cloud`"
+        explanation: "Not correct. `amazon-cloud` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+    correct_option: a
+    explanation: "Correct. The values are `generic`, `aws`, `azure` and `gcp`."
+
+  - id: ats095-020-m2-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Insecure meaning"
+    source_readings:
+      - sections/section-020/module-02/course-03-tls-certificates-and-proxies.md
+    prompt: "What does `insecure: true` do on an `OCIRepository`?"
+    options:
+      - id: a
+        text: "Allows a registry that uses plain HTTP"
+        explanation: "Correct. It is about the scheme, not about trust."
+      - id: b
+        text: "Skips the check of a certificate"
+        explanation: "Not correct. Skips the check of a certificate is not the answer here. It is about the scheme, not about trust."
+      - id: c
+        text: "Disables signature verification"
+        explanation: "Not correct. Disables signature verification is not the answer here. It is about the scheme, not about trust."
+      - id: d
+        text: "Allows anonymous pulls"
+        explanation: "Not correct. Allows anonymous pulls is not the answer here. It is about the scheme, not about trust."
+    correct_option: a
+    explanation: "Correct. It is about the scheme, not about trust."
+
+  - id: ats095-020-m2-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Private CA"
+    source_readings:
+      - sections/section-020/module-02/course-03-tls-certificates-and-proxies.md
+    prompt: "Which key in the `certSecretRef` Secret holds the CA certificate?"
+    options:
+      - id: a
+        text: "`ca.crt`"
+        explanation: "Correct. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: b
+        text: "`tls.key`"
+        explanation: "Not correct. `tls.key` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: c
+        text: "`ca.pem`"
+        explanation: "Not correct. `ca.pem` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: d
+        text: "`root.crt`"
+        explanation: "Not correct. `root.crt` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+    correct_option: a
+    explanation: "Correct. `tls.crt` and `tls.key` are the client certificate pair."
+
+  - id: ats095-020-m2-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Verification result"
+    source_readings:
+      - sections/section-020/module-02/course-04-verify-signatures-with-cosign.md
+    prompt: "A release is unsigned and `spec.verify` uses cosign with a public key. What is the result?"
+    options:
+      - id: a
+        text: "`SourceVerified` is `False` with the reason `VerificationError`, and the artifact is not stored"
+        explanation: "Correct. No Kustomization can apply an unverified artifact."
+      - id: b
+        text: "The artifact is stored with a warning"
+        explanation: "Not correct. The artifact is stored with a warning is not the answer here. No Kustomization can apply an unverified artifact."
+      - id: c
+        text: "The tag is deleted"
+        explanation: "Not correct. The tag is deleted is not the answer here. No Kustomization can apply an unverified artifact."
+      - id: d
+        text: "Nothing, because verification is optional"
+        explanation: "Not correct. Nothing, because verification is optional is not the answer here. No Kustomization can apply an unverified artifact."
+    correct_option: a
+    explanation: "Correct. No Kustomization can apply an unverified artifact."
+
+  - id: ats095-020-m3-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Build command"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+    prompt: "What does `flux build artifact` do?"
+    options:
+      - id: a
+        text: "Writes the archive to a local file without contacting a registry"
+        explanation: "Correct. It is the safe step to check what a release would hold."
+      - id: b
+        text: "Pushes the archive to the registry"
+        explanation: "Not correct. Pushes the archive to the registry is not the answer here. It is the safe step to check what a release would hold."
+      - id: c
+        text: "Applies the manifests to the cluster"
+        explanation: "Not correct. Applies the manifests to the cluster is not the answer here. It is the safe step to check what a release would hold."
+      - id: d
+        text: "Signs the archive"
+        explanation: "Not correct. Signs the archive is not the answer here. It is the safe step to check what a release would hold."
+    correct_option: a
+    explanation: "Correct. It is the safe step to check what a release would hold."
+
+  - id: ats095-020-m3-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Revision format"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+    prompt: "Which format does `--revision` expect in `flux push artifact`?"
+    options:
+      - id: a
+        text: "`main@sha1:<commit>`"
+        explanation: "Correct. The branch or tag and the commit hash together."
+      - id: b
+        text: "`<commit>` only"
+        explanation: "Not correct. `<commit>` only is not the answer here. The branch or tag and the commit hash together."
+      - id: c
+        text: "`v1.2.0`"
+        explanation: "Not correct. `v1.2.0` is not the answer here. The branch or tag and the commit hash together."
+      - id: d
+        text: "`sha256:<digest>`"
+        explanation: "Not correct. `sha256:<digest>` is not the answer here. The branch or tag and the commit hash together."
+    correct_option: a
+    explanation: "Correct. The branch or tag and the commit hash together."
+
+  - id: ats095-020-m3-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "JSON output"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+    prompt: "Why use `--output json` in a pipeline?"
+    options:
+      - id: a
+        text: "It prints the repository and digest of what was pushed"
+        explanation: "Correct. The next steps, signing and pinning, need the digest."
+      - id: b
+        text: "It makes the push faster"
+        explanation: "Not correct. It makes the push faster is not the answer here. The next steps, signing and pinning, need the digest."
+      - id: c
+        text: "It skips the ignore list"
+        explanation: "Not correct. It skips the ignore list is not the answer here. The next steps, signing and pinning, need the digest."
+      - id: d
+        text: "It signs the artifact"
+        explanation: "Not correct. It signs the artifact is not the answer here. The next steps, signing and pinning, need the digest."
+    correct_option: a
+    explanation: "Correct. The next steps, signing and pinning, need the digest."
+
+  - id: ats095-020-m3-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Default ignore"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+    prompt: "Which files does `flux push artifact` leave out by default?"
+    options:
+      - id: a
+        text: "`.git/`, images and archives"
+        explanation: "Correct. `--ignore-paths` replaces that list."
+      - id: b
+        text: "All YAML files"
+        explanation: "Not correct. All YAML files is not the answer here. `--ignore-paths` replaces that list."
+      - id: c
+        text: "Files larger than 1 MB"
+        explanation: "Not correct. Files larger than 1 MB is not the answer here. `--ignore-paths` replaces that list."
+      - id: d
+        text: "Files that start with a dot only"
+        explanation: "Not correct. Files that start with a dot only is not the answer here. `--ignore-paths` replaces that list."
+    correct_option: a
+    explanation: "Correct. `--ignore-paths` replaces that list."
+
+  - id: ats095-020-m3-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pull by digest"
+    source_readings:
+      - sections/section-020/module-03/course-02-pull-diff-and-list-releases.md
+    prompt: "How do you pull exactly the content of a digest?"
+    options:
+      - id: a
+        text: "Use `oci://host/repo@sha256:<digest>` as the address"
+        explanation: "Correct. The address accepts a digest in place of the tag."
+      - id: b
+        text: "Add `--digest` to the command"
+        explanation: "Not correct. Add `--digest` to the command is not the answer here. The address accepts a digest in place of the tag."
+      - id: c
+        text: "Pull the tag and compare by hand"
+        explanation: "Not correct. Pull the tag and compare by hand is not the answer here. The address accepts a digest in place of the tag."
+      - id: d
+        text: "It is not possible"
+        explanation: "Not correct. It is not possible is not the answer here. The address accepts a digest in place of the tag."
+    correct_option: a
+    explanation: "Correct. The address accepts a digest in place of the tag."
+
+  - id: ats095-020-m3-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diff exit code"
+    source_readings:
+      - sections/section-020/module-03/course-02-pull-diff-and-list-releases.md
+    prompt: "What does a non-zero exit of `flux diff artifact` mean?"
+    options:
+      - id: a
+        text: "The release and the folder differ"
+        explanation: "Correct. A pipeline uses it to decide whether a new release is needed."
+      - id: b
+        text: "The registry is down"
+        explanation: "Not correct. The registry is down is not the answer here. A pipeline uses it to decide whether a new release is needed."
+      - id: c
+        text: "The artifact is not signed"
+        explanation: "Not correct. The artifact is not signed is not the answer here. A pipeline uses it to decide whether a new release is needed."
+      - id: d
+        text: "The tag does not exist"
+        explanation: "Not correct. The tag does not exist is not the answer here. A pipeline uses it to decide whether a new release is needed."
+    correct_option: a
+    explanation: "Correct. A pipeline uses it to decide whether a new release is needed."
+
+  - id: ats095-020-m3-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "List filter"
+    source_readings:
+      - sections/section-020/module-03/course-02-pull-diff-and-list-releases.md
+    prompt: "Which flag keeps only tags in a semver range in `flux list artifacts`?"
+    options:
+      - id: a
+        text: "`--filter-semver`"
+        explanation: "Correct. `--filter-regex` is the regular expression variant."
+      - id: b
+        text: "`--semver`"
+        explanation: "Not correct. `--semver` is not the answer here. `--filter-regex` is the regular expression variant."
+      - id: c
+        text: "`--range`"
+        explanation: "Not correct. `--range` is not the answer here. `--filter-regex` is the regular expression variant."
+      - id: d
+        text: "`--tags`"
+        explanation: "Not correct. `--tags` is not the answer here. `--filter-regex` is the regular expression variant."
+    correct_option: a
+    explanation: "Correct. `--filter-regex` is the regular expression variant."
+
+  - id: ats095-020-m3-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tag promotion"
+    source_readings:
+      - sections/section-020/module-03/course-03-promote-by-tag-or-by-digest.md
+    prompt: "What does adding a tag to a release do to the stored content?"
+    options:
+      - id: a
+        text: "Nothing is copied; the new tag points at the same digest"
+        explanation: "Correct. A tag is only a name that points at a manifest."
+      - id: b
+        text: "It uploads a second copy"
+        explanation: "Not correct. It uploads a second copy is not the answer here. A tag is only a name that points at a manifest."
+      - id: c
+        text: "It changes the digest"
+        explanation: "Not correct. It changes the digest is not the answer here. A tag is only a name that points at a manifest."
+      - id: d
+        text: "It deletes the old tag"
+        explanation: "Not correct. It deletes the old tag is not the answer here. A tag is only a name that points at a manifest."
+    correct_option: a
+    explanation: "Correct. A tag is only a name that points at a manifest."
+
+  - id: ats095-020-m3-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Digest safety"
+    source_readings:
+      - sections/section-020/module-03/course-03-promote-by-tag-or-by-digest.md
+    prompt: "Why is promotion by digest safer for production than by tag?"
+    options:
+      - id: a
+        text: "A digest cannot be moved to other content"
+        explanation: "Correct. A tag can be pushed over, and the cluster would change without a commit."
+      - id: b
+        text: "A digest is shorter"
+        explanation: "Not correct. A digest is shorter is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+      - id: c
+        text: "A tag cannot be signed"
+        explanation: "Not correct. A tag cannot be signed is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+      - id: d
+        text: "A digest needs no registry"
+        explanation: "Not correct. A digest needs no registry is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+    correct_option: a
+    explanation: "Correct. A tag can be pushed over, and the cluster would change without a commit."
+
+  - id: ats095-020-m3-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "What to sign"
+    source_readings:
+      - sections/section-020/module-03/course-04-sign-and-automate-in-a-pipeline.md
+    prompt: "What should a pipeline sign with cosign?"
+    options:
+      - id: a
+        text: "The address with the digest from `--output json`"
+        explanation: "Correct. A signature belongs to a digest, and a tag can move afterwards."
+      - id: b
+        text: "The tag"
+        explanation: "Not correct. The tag is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+      - id: c
+        text: "The Git commit message"
+        explanation: "Not correct. The Git commit message is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+      - id: d
+        text: "The `OCIRepository` object"
+        explanation: "Not correct. The `OCIRepository` object is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+    correct_option: a
+    explanation: "Correct. A signature belongs to a digest, and a tag can move afterwards."

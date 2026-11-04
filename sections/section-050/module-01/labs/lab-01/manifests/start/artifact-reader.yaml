@@ -1,0 +1,21 @@
+# A pod inside flux-system that can reach the artifact server. The Flux
+# network policies only let pods of flux-system call source-controller.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifact-reader
+  namespace: flux-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifact-reader
+  template:
+    metadata:
+      labels:
+        app: artifact-reader
+    spec:
+      containers:
+        - name: reader
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]

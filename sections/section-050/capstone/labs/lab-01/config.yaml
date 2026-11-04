@@ -1,0 +1,53 @@
+# Operate source-controller Capstone
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-capstone-050"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-capstone-050-setup"
+      description: "Sets --concurrent=1 and --no-cross-namespace-refs, points fleet at a missing branch, suspends platform and blocks the team-b Kustomization"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-source-controller"
+      description: "Confirms exactly one --concurrent flag with a value of at least 6, --storage-path=/data and a rolled-out Deployment"
+      type: "file"
+      source: "validation/validate-source-controller.sh"
+    - name: "validate-sources"
+      description: "Confirms fleet follows main and platform is resumed, both Ready, and that podinfo and platform-settings apply their revisions"
+      type: "file"
+      source: "validation/validate-sources.sh"
+    - name: "validate-tenant"
+      description: "Confirms team-b-apps is Ready through a source in team-b as the ServiceAccount team-b, the flag is on and the account is confined"
+      type: "file"
+      source: "validation/validate-tenant.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

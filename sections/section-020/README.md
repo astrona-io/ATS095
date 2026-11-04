@@ -17,7 +17,7 @@ This section packs manifests into OCI artifacts with `flux push artifact`, lists
 
 ## The learning path
 
-The module has a landing page, two parts, a graded lab right after the part it tests, and a summary. The landing page also starts the module's playground.
+Each module has a landing page, several parts, graded labs right after the parts they test, and a summary. The landing page also starts the module's playground.
 
 ### 1. Deliver Manifests As OCI Artifacts
 
@@ -25,7 +25,38 @@ The playground holds Gitea with the repository `gitops/fleet`, and an OCI regist
 
 1. Packing Manifests Into An OCI Artifact
 2. OCIRepository: Tags, Semver Ranges And Digests, followed by the lab **Follow The Newest 1.x Release From A Registry**
-3. Summary
+3. OCIRepository Status, Conditions And Troubleshooting, followed by the lab **Repair An OCIRepository That Does Not Fetch**
+4. Layers, semverFilter And Ignore Rules
+5. Summary
+
+What you will also learn in this module:
+
+- The conditions `Ready`, `FetchFailed` and `ArtifactInStorage`, the artifact metadata, and how to fix a source from its events.
+- How `semverFilter`, `layerSelector` and `ignore` shape the tags, the layer and the files a source takes.
+
+### 2. Authenticate To Registries And Verify OCI Artifacts
+
+The playground holds a registry that requires a sign-in (user `flux`, password `registry-password`).
+
+1. Registry Credentials With A Pull Secret, followed by the lab **Sign In To A Private Registry Lab**
+2. ServiceAccount And Cloud Identity
+3. TLS Certificates And Proxies
+4. Verify Signatures With cosign
+5. Summary
+
+What you will learn in this module: `flux create secret oci`, `secretRef`, `serviceAccountName` and `provider` for `aws`, `azure` and `gcp`, `certSecretRef` and `proxySecretRef`, and `spec.verify` with cosign, keyless identities and notation.
+
+### 3. Work With Flux Artifacts From The Command Line
+
+The playground holds Gitea and an unauthenticated registry with `podinfo-manifests:1.0.0` and `1.1.0`.
+
+1. Build And Push A Release With Annotations
+2. Pull, Diff And List Releases
+3. Promote By Tag Or By Digest, followed by the lab **Release And Pin An Artifact With The Flux CLI**
+4. Sign And Automate In A Pipeline
+5. Summary
+
+What you will learn in this module: `flux build`, `push`, `pull`, `diff`, `list` and `tag artifact`, annotations and digests, promotion by tag or by digest, and signing the pushed digest.
 
 ## Section capstone: Repair An OCI Delivery
 

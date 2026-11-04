@@ -1,0 +1,29 @@
+# Receivers And Source Notifications (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-playground-040-02"
+  docs:
+    guide: "docs/overview.md"
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI 2.9.6 and controllers, and fill the bucket podinfo on the S3-compatible server with the podinfo manifests."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The S3-compatible server versitygw (namespace s3, Service s3 on port 9000) and the s3-client pod."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - amazon/aws-cli:2.38.4
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - versity/versitygw:v1.9.0
+      - python:3.13-alpine

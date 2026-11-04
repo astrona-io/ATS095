@@ -1,0 +1,22 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: podinfo-git
+  namespace: flux-system
+spec:
+  interval: 10m
+  url: https://github.com/stefanprodan/podinfo
+  ref:
+    branch: main
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmChart
+metadata:
+  name: podinfo-git
+  namespace: flux-system
+spec:
+  interval: 10m
+  chart: ./chart/podinfo
+  sourceRef:
+    kind: GitRepository
+    name: podinfo-git

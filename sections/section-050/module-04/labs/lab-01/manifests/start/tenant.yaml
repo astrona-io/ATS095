@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-a
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: team-a
+  namespace: team-a
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: team-a-admin
+  namespace: team-a
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+  - kind: ServiceAccount
+    name: team-a
+    namespace: team-a
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: team-a-apps
+  namespace: team-a
+spec:
+  interval: 5m
+  path: ./tenants/team-a
+  prune: true
+  # Fault: the source lives in another namespace.
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+    namespace: flux-system

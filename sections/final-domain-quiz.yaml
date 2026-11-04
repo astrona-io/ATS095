@@ -1,4 +1,4 @@
-# Final domain knowledge check across all four sections.
+# Final domain knowledge check across all five sections.
 schema_version: 1
 kind: question_bank
 id: ats095-final
@@ -332,3 +332,1015 @@ questions:
         explanation: "Not correct. The connection never reaches the server."
     correct_option: a
     explanation: "Correct. Without a port in the URL, SSH uses 22."
+
+  - id: ats095-final-s030-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what Stalled means"
+    source_readings:
+      - sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+    prompt: "What does the condition `Stalled` with the reason `InvalidChartReference` mean?"
+    options:
+      - id: a
+        text: "The reference is invalid, and the controller stops retrying until the spec changes"
+        explanation: "Correct. A `Stalled` object is not requeued until its spec changes."
+      - id: b
+        text: "The chart was fetched but not stored"
+        explanation: "Not correct. A chart that was fetched but not stored would show `ArtifactInStorage` false, not `InvalidChartReference`."
+      - id: c
+        text: "The repository is suspended"
+        explanation: "Not correct. A suspended object shows `spec.suspend: true`. It does not become `Stalled`."
+      - id: d
+        text: "The interval is too short"
+        explanation: "Not correct. An interval has no link to `Stalled`. The reference itself is invalid."
+    correct_option: a
+    explanation: "Correct. A `Stalled` object is not requeued until its spec changes."
+
+  - id: ats095-final-s030-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Refresh the source first"
+    source_readings:
+      - sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+    prompt: "What does `flux reconcile source chart <name> --with-source` do?"
+    options:
+      - id: a
+        text: "Reconciles the source of the chart before the chart"
+        explanation: "Correct. A chart can only resolve versions that are in the index source-controller already stored."
+      - id: b
+        text: "Deletes the source"
+        explanation: "Not correct. The flag only reconciles. It never deletes a source."
+      - id: c
+        text: "Suspends the chart"
+        explanation: "Not correct. The flag does not suspend anything. `flux suspend` does that."
+      - id: d
+        text: "Creates a `HelmRelease`"
+        explanation: "Not correct. `HelmRelease` objects are created with `flux create helmrelease`, not by this flag."
+    correct_option: a
+    explanation: "Correct. A chart can only resolve versions that are in the index source-controller already stored."
+
+  - id: ats095-final-s030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "passCredentials"
+    source_readings:
+      - sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+    prompt: "What does `spec.passCredentials: true` change?"
+    options:
+      - id: a
+        text: "Credentials are sent to every host the index points at, not only to the host in `url`"
+        explanation: "Correct. By default the credentials go only to the host in `spec.url`."
+      - id: b
+        text: "The Secret becomes optional"
+        explanation: "Not correct. The setting does not change whether the Secret is required."
+      - id: c
+        text: "The repository type changes to `oci`"
+        explanation: "Not correct. The setting does not change the repository type. `spec.type` does that."
+      - id: d
+        text: "Credentials are sent over HTTP"
+        explanation: "Not correct. The setting does not change the protocol. It widens the hosts that get the credentials."
+    correct_option: a
+    explanation: "Correct. By default the credentials go only to the host in `spec.url`."
+
+  - id: ats095-final-s030-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Git source chart field"
+    source_readings:
+      - sections/section-030/module-02/course-03-charts-from-git-and-bucket-sources.md
+    prompt: "A `HelmChart` reads from a `GitRepository`. What does `spec.chart` hold?"
+    options:
+      - id: a
+        text: "A chart name from an index"
+        explanation: "Not correct. A chart name from an index is what `spec.chart` holds for a `HelmRepository` source."
+      - id: b
+        text: "The path of the chart directory in the repository"
+        explanation: "Correct. For example `./charts/podinfo`."
+      - id: c
+        text: "A Docker image name"
+        explanation: "Not correct. A Docker image name is not a chart path."
+      - id: d
+        text: "A version range"
+        explanation: "Not correct. A version range goes in `spec.version`, not `spec.chart`."
+    correct_option: b
+    explanation: "Correct. For example `./charts/podinfo`."
+
+  - id: ats095-final-s010m3-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the verify result"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "Which condition reports the result of signature verification on a `GitRepository`?"
+    options:
+      - id: a
+        text: "`SourceVerifiedCondition`"
+        explanation: "Correct. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: b
+        text: "`SignatureReady`"
+        explanation: "Not correct. `SignatureReady` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: c
+        text: "`FetchFailed`"
+        explanation: "Not correct. `FetchFailed` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+      - id: d
+        text: "`Stalled`"
+        explanation: "Not correct. `Stalled` is not the answer here. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+    correct_option: a
+    explanation: "Correct. It is `True` with the reason `Succeeded` or `False` with the reason `Failed`."
+
+  - id: ats095-final-s010m3-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Failed verification"
+    source_readings:
+      - sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+    prompt: "A commit fails verification. What happens to that revision?"
+    options:
+      - id: a
+        text: "It is stored and applied with a warning"
+        explanation: "Not correct. It is stored and applied with a warning is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+      - id: b
+        text: "It is not stored, and the `GitRepository` is not Ready"
+        explanation: "Correct. No artifact is stored, so no `Kustomization` can apply it."
+      - id: c
+        text: "It is stored but marked unsafe"
+        explanation: "Not correct. It is stored but marked unsafe is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+      - id: d
+        text: "It is applied only after one hour"
+        explanation: "Not correct. It is applied only after one hour is not the answer here. No artifact is stored, so no `Kustomization` can apply it."
+    correct_option: b
+    explanation: "Correct. No artifact is stored, so no `Kustomization` can apply it."
+
+  - id: ats095-final-s010m3-q03
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Broken include"
+    source_readings:
+      - sections/section-010/module-03/course-02-submodules-and-included-repositories.md
+    prompt: "The `GitRepository` named in `spec.include` is not ready. What does the main `GitRepository` report?"
+    options:
+      - id: a
+        text: "`IncludeUnavailable`"
+        explanation: "Correct. The main repository depends on the artifact of the included one."
+      - id: b
+        text: "`SourceVerifiedCondition` false"
+        explanation: "Not correct. `SourceVerifiedCondition` false is not the answer here. The main repository depends on the artifact of the included one."
+      - id: c
+        text: "Nothing, it ignores the include"
+        explanation: "Not correct. Nothing, it ignores the include is not the answer here. The main repository depends on the artifact of the included one."
+      - id: d
+        text: "`Stalled` with the reason `URLInvalid`"
+        explanation: "Not correct. `Stalled` with the reason `URLInvalid` is not the answer here. The main repository depends on the artifact of the included one."
+    correct_option: a
+    explanation: "Correct. The main repository depends on the artifact of the included one."
+
+  - id: ats095-final-s010m3-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Missing reference"
+    source_readings:
+      - sections/section-010/module-03/course-04-exact-git-references-with-ref-name.md
+    prompt: "`ref.name` is `refs/heads/release`, which does not exist, and `branch` is `main`. What happens?"
+    options:
+      - id: a
+        text: "The source falls back to `main`"
+        explanation: "Not correct. The source falls back to `main` is not the answer here. Remove `ref.name` to use the branch again."
+      - id: b
+        text: "The source is not ready, because `name` wins and cannot be found"
+        explanation: "Correct. Remove `ref.name` to use the branch again."
+      - id: c
+        text: "The source follows a random branch"
+        explanation: "Not correct. The source follows a random branch is not the answer here. Remove `ref.name` to use the branch again."
+      - id: d
+        text: "The source follows the newest tag"
+        explanation: "Not correct. The source follows the newest tag is not the answer here. Remove `ref.name` to use the branch again."
+    correct_option: b
+    explanation: "Correct. Remove `ref.name` to use the branch again."
+
+  - id: ats095-final-s020m1b-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the full reason"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "Where do you read the full reason an `OCIRepository` is not ready?"
+    options:
+      - id: a
+        text: "In the message of the `Ready` condition and in `flux events --for OCIRepository/<name>`"
+        explanation: "Correct. The events and the condition message carry the detail."
+      - id: b
+        text: "Only in the registry logs"
+        explanation: "Not correct. Only in the registry logs is not the answer here. The events and the condition message carry the detail."
+      - id: c
+        text: "In the interval field"
+        explanation: "Not correct. In the interval field is not the answer here. The events and the condition message carry the detail."
+      - id: d
+        text: "In the Deployment spec"
+        explanation: "Not correct. In the Deployment spec is not the answer here. The events and the condition message carry the detail."
+    correct_option: a
+    explanation: "Correct. The events and the condition message carry the detail."
+
+  - id: ats095-final-s020m1b-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "insecure"
+    source_readings:
+      - sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+    prompt: "The registry speaks plain HTTP and `insecure` is missing. What happens?"
+    options:
+      - id: a
+        text: "The pull fails, because the client asks for HTTPS"
+        explanation: "Correct. Set `insecure: true` only for registries without TLS."
+      - id: b
+        text: "The pull works but is slow"
+        explanation: "Not correct. The pull works but is slow is not the answer here. Set `insecure: true` only for registries without TLS."
+      - id: c
+        text: "The tag is ignored"
+        explanation: "Not correct. The tag is ignored is not the answer here. Set `insecure: true` only for registries without TLS."
+      - id: d
+        text: "The registry is deleted"
+        explanation: "Not correct. The registry is deleted is not the answer here. Set `insecure: true` only for registries without TLS."
+    correct_option: a
+    explanation: "Correct. Set `insecure: true` only for registries without TLS."
+
+  - id: ats095-final-s020m1b-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "What semverFilter does"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "What does `spec.ref.semverFilter` do?"
+    options:
+      - id: a
+        text: "Applies a regular expression to the tags before the semver range"
+        explanation: "Correct. It works only when `semver` is set."
+      - id: b
+        text: "Filters files in the artifact"
+        explanation: "Not correct. Filters files in the artifact is not the answer here. It works only when `semver` is set."
+      - id: c
+        text: "Selects a layer"
+        explanation: "Not correct. Selects a layer is not the answer here. It works only when `semver` is set."
+      - id: d
+        text: "Signs the tag"
+        explanation: "Not correct. Signs the tag is not the answer here. It works only when `semver` is set."
+    correct_option: a
+    explanation: "Correct. It works only when `semver` is set."
+
+  - id: ats095-final-s020m1b-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Ignore can prune"
+    source_readings:
+      - sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+    prompt: "An `ignore` rule matches `service.yaml`. What happens to the Service in the cluster?"
+    options:
+      - id: a
+        text: "The Flux Kustomization prunes it, because the file is no longer in the artifact"
+        explanation: "Correct. With `prune: true`, objects missing from the artifact are deleted."
+      - id: b
+        text: "Nothing, ignore only affects Git"
+        explanation: "Not correct. Nothing, ignore only affects Git is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+      - id: c
+        text: "The Service is renamed"
+        explanation: "Not correct. The Service is renamed is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+      - id: d
+        text: "The source is suspended"
+        explanation: "Not correct. The source is suspended is not the answer here. With `prune: true`, objects missing from the artifact are deleted."
+    correct_option: a
+    explanation: "Correct. With `prune: true`, objects missing from the artifact are deleted."
+
+  - id: ats095-final-s020m2-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Reading a 401"
+    source_readings:
+      - sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+    prompt: "The registry answers 401 to the source. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The node has no network"
+        explanation: "Not correct. The node has no network is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: b
+        text: "The source sends no credentials or wrong ones"
+        explanation: "Correct. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: c
+        text: "The tag does not exist"
+        explanation: "Not correct. The tag does not exist is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+      - id: d
+        text: "The artifact is too large"
+        explanation: "Not correct. The artifact is too large is not the answer here. 401 means the registry wants a sign-in; a missing tag is a different error."
+    correct_option: b
+    explanation: "Correct. 401 means the registry wants a sign-in; a missing tag is a different error."
+
+  - id: ats095-final-s020m2-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Cloud provider values"
+    source_readings:
+      - sections/section-020/module-02/course-02-serviceaccount-and-cloud-identity.md
+    prompt: "Which `spec.provider` value fits Amazon ECR?"
+    options:
+      - id: a
+        text: "`aws`"
+        explanation: "Correct. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: b
+        text: "`ecr`"
+        explanation: "Not correct. `ecr` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: c
+        text: "`generic`"
+        explanation: "Not correct. `generic` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+      - id: d
+        text: "`amazon-cloud`"
+        explanation: "Not correct. `amazon-cloud` is not the answer here. The values are `generic`, `aws`, `azure` and `gcp`."
+    correct_option: a
+    explanation: "Correct. The values are `generic`, `aws`, `azure` and `gcp`."
+
+  - id: ats095-final-s020m2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Private CA"
+    source_readings:
+      - sections/section-020/module-02/course-03-tls-certificates-and-proxies.md
+    prompt: "Which key in the `certSecretRef` Secret holds the CA certificate?"
+    options:
+      - id: a
+        text: "`ca.crt`"
+        explanation: "Correct. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: b
+        text: "`tls.key`"
+        explanation: "Not correct. `tls.key` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: c
+        text: "`ca.pem`"
+        explanation: "Not correct. `ca.pem` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+      - id: d
+        text: "`root.crt`"
+        explanation: "Not correct. `root.crt` is not the answer here. `tls.crt` and `tls.key` are the client certificate pair."
+    correct_option: a
+    explanation: "Correct. `tls.crt` and `tls.key` are the client certificate pair."
+
+  - id: ats095-final-s020m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Verification result"
+    source_readings:
+      - sections/section-020/module-02/course-04-verify-signatures-with-cosign.md
+    prompt: "A release is unsigned and `spec.verify` uses cosign with a public key. What is the result?"
+    options:
+      - id: a
+        text: "`SourceVerified` is `False` with the reason `VerificationError`, and the artifact is not stored"
+        explanation: "Correct. No Kustomization can apply an unverified artifact."
+      - id: b
+        text: "The artifact is stored with a warning"
+        explanation: "Not correct. The artifact is stored with a warning is not the answer here. No Kustomization can apply an unverified artifact."
+      - id: c
+        text: "The tag is deleted"
+        explanation: "Not correct. The tag is deleted is not the answer here. No Kustomization can apply an unverified artifact."
+      - id: d
+        text: "Nothing, because verification is optional"
+        explanation: "Not correct. Nothing, because verification is optional is not the answer here. No Kustomization can apply an unverified artifact."
+    correct_option: a
+    explanation: "Correct. No Kustomization can apply an unverified artifact."
+
+  - id: ats095-final-s020m3-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "JSON output"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+    prompt: "Why use `--output json` in a pipeline?"
+    options:
+      - id: a
+        text: "It prints the repository and digest of what was pushed"
+        explanation: "Correct. The next steps, signing and pinning, need the digest."
+      - id: b
+        text: "It makes the push faster"
+        explanation: "Not correct. It makes the push faster is not the answer here. The next steps, signing and pinning, need the digest."
+      - id: c
+        text: "It skips the ignore list"
+        explanation: "Not correct. It skips the ignore list is not the answer here. The next steps, signing and pinning, need the digest."
+      - id: d
+        text: "It signs the artifact"
+        explanation: "Not correct. It signs the artifact is not the answer here. The next steps, signing and pinning, need the digest."
+    correct_option: a
+    explanation: "Correct. The next steps, signing and pinning, need the digest."
+
+  - id: ats095-final-s020m3-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diff exit code"
+    source_readings:
+      - sections/section-020/module-03/course-02-pull-diff-and-list-releases.md
+    prompt: "What does a non-zero exit of `flux diff artifact` mean?"
+    options:
+      - id: a
+        text: "The release and the folder differ"
+        explanation: "Correct. A pipeline uses it to decide whether a new release is needed."
+      - id: b
+        text: "The registry is down"
+        explanation: "Not correct. The registry is down is not the answer here. A pipeline uses it to decide whether a new release is needed."
+      - id: c
+        text: "The artifact is not signed"
+        explanation: "Not correct. The artifact is not signed is not the answer here. A pipeline uses it to decide whether a new release is needed."
+      - id: d
+        text: "The tag does not exist"
+        explanation: "Not correct. The tag does not exist is not the answer here. A pipeline uses it to decide whether a new release is needed."
+    correct_option: a
+    explanation: "Correct. A pipeline uses it to decide whether a new release is needed."
+
+  - id: ats095-final-s020m3-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Digest safety"
+    source_readings:
+      - sections/section-020/module-03/course-03-promote-by-tag-or-by-digest.md
+    prompt: "Why is promotion by digest safer for production than by tag?"
+    options:
+      - id: a
+        text: "A digest cannot be moved to other content"
+        explanation: "Correct. A tag can be pushed over, and the cluster would change without a commit."
+      - id: b
+        text: "A digest is shorter"
+        explanation: "Not correct. A digest is shorter is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+      - id: c
+        text: "A tag cannot be signed"
+        explanation: "Not correct. A tag cannot be signed is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+      - id: d
+        text: "A digest needs no registry"
+        explanation: "Not correct. A digest needs no registry is not the answer here. A tag can be pushed over, and the cluster would change without a commit."
+    correct_option: a
+    explanation: "Correct. A tag can be pushed over, and the cluster would change without a commit."
+
+  - id: ats095-final-s020m3-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "What to sign"
+    source_readings:
+      - sections/section-020/module-03/course-04-sign-and-automate-in-a-pipeline.md
+    prompt: "What should a pipeline sign with cosign?"
+    options:
+      - id: a
+        text: "The address with the digest from `--output json`"
+        explanation: "Correct. A signature belongs to a digest, and a tag can move afterwards."
+      - id: b
+        text: "The tag"
+        explanation: "Not correct. The tag is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+      - id: c
+        text: "The Git commit message"
+        explanation: "Not correct. The Git commit message is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+      - id: d
+        text: "The `OCIRepository` object"
+        explanation: "Not correct. The `OCIRepository` object is not the answer here. A signature belongs to a digest, and a tag can move afterwards."
+    correct_option: a
+    explanation: "Correct. A signature belongs to a digest, and a tag can move afterwards."
+
+  - id: ats095-final-s040m1b-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Prefix effect"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "What does `spec.prefix: staging/` do?"
+    options:
+      - id: a
+        text: "Only keys that start with `staging/` are listed and part of the revision"
+        explanation: "Correct. The filter runs on the server while the objects are listed."
+      - id: b
+        text: "It hides staging from the artifact after the download"
+        explanation: "Not correct. It hides staging from the artifact after the download is not the answer here. The filter runs on the server while the objects are listed."
+      - id: c
+        text: "It renames the keys"
+        explanation: "Not correct. It renames the keys is not the answer here. The filter runs on the server while the objects are listed."
+      - id: d
+        text: "It sets the path of the Flux Kustomization"
+        explanation: "Not correct. It sets the path of the Flux Kustomization is not the answer here. The filter runs on the server while the objects are listed."
+    correct_option: a
+    explanation: "Correct. The filter runs on the server while the objects are listed."
+
+  - id: ats095-final-s040m1b-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Path after a prefix"
+    source_readings:
+      - sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+    prompt: "With `prefix: staging/`, which `path` does the Flux Kustomization use for those files?"
+    options:
+      - id: a
+        text: "`./staging`"
+        explanation: "Correct. The artifact keeps the full key, so the folder stays."
+      - id: b
+        text: "`./`"
+        explanation: "Not correct. `./` is not the answer here. The artifact keeps the full key, so the folder stays."
+      - id: c
+        text: "`./prefix`"
+        explanation: "Not correct. `./prefix` is not the answer here. The artifact keeps the full key, so the folder stays."
+      - id: d
+        text: "`./staging/staging`"
+        explanation: "Not correct. `./staging/staging` is not the answer here. The artifact keeps the full key, so the folder stays."
+    correct_option: a
+    explanation: "Correct. The artifact keeps the full key, so the folder stays."
+
+  - id: ats095-final-s040m1b-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "FetchFailed"
+    source_readings:
+      - sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+    prompt: "Where do you read why a `Bucket` cannot reach the server?"
+    options:
+      - id: a
+        text: "The message of the `FetchFailed` condition"
+        explanation: "Correct. The server's answer is in the message."
+      - id: b
+        text: "`status.artifact.size`"
+        explanation: "Not correct. `status.artifact.size` is not the answer here. The server's answer is in the message."
+      - id: c
+        text: "The Flux Kustomization events only"
+        explanation: "Not correct. The Flux Kustomization events only is not the answer here. The server's answer is in the message."
+      - id: d
+        text: "The pod log of kustomize-controller"
+        explanation: "Not correct. The pod log of kustomize-controller is not the answer here. The server's answer is in the message."
+    correct_option: a
+    explanation: "Correct. The server's answer is in the message."
+
+  - id: ats095-final-s040m1b-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Suspended source"
+    source_readings:
+      - sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+    prompt: "A `Bucket` never updates and shows no error. What do you check first?"
+    options:
+      - id: a
+        text: "Whether `spec.suspend` is true"
+        explanation: "Correct. A suspended source stops without failing."
+      - id: b
+        text: "The size of the artifact"
+        explanation: "Not correct. The size of the artifact is not the answer here. A suspended source stops without failing."
+      - id: c
+        text: "The garbage collection flags"
+        explanation: "Not correct. The garbage collection flags is not the answer here. A suspended source stops without failing."
+      - id: d
+        text: "The CPU of the node"
+        explanation: "Not correct. The CPU of the node is not the answer here. A suspended source stops without failing."
+    correct_option: a
+    explanation: "Correct. A suspended source stops without failing."
+
+  - id: ats095-final-s040m2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "What a Receiver does"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "What does a call to a Receiver do to a `Bucket` it selects?"
+    options:
+      - id: a
+        text: "Sets the reconcile request annotation, so it fetches now"
+        explanation: "Correct. It adds one request; the schedule stays."
+      - id: b
+        text: "Shortens its interval"
+        explanation: "Not correct. Shortens its interval is not the answer here. It adds one request; the schedule stays."
+      - id: c
+        text: "Deletes its artifact"
+        explanation: "Not correct. Deletes its artifact is not the answer here. It adds one request; the schedule stays."
+      - id: d
+        text: "Suspends it"
+        explanation: "Not correct. Suspends it is not the answer here. It adds one request; the schedule stays."
+    correct_option: a
+    explanation: "Correct. It adds one request; the schedule stays."
+
+  - id: ats095-final-s040m2-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Path secrecy"
+    source_readings:
+      - sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+    prompt: "For a `generic` Receiver, what protects it from strangers?"
+    options:
+      - id: a
+        text: "Only the secret path"
+        explanation: "Correct. Prefer a signed type when the sender supports it."
+      - id: b
+        text: "A signature of the body"
+        explanation: "Not correct. A signature of the body is not the answer here. Prefer a signed type when the sender supports it."
+      - id: c
+        text: "The source IP"
+        explanation: "Not correct. The source IP is not the answer here. Prefer a signed type when the sender supports it."
+      - id: d
+        text: "Nothing is needed"
+        explanation: "Not correct. Nothing is needed is not the answer here. Prefer a signed type when the sender supports it."
+    correct_option: a
+    explanation: "Correct. Prefer a signed type when the sender supports it."
+
+  - id: ats095-final-s040m2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Token rotation"
+    source_readings:
+      - sections/section-040/module-02/course-02-receiver-types-tokens-and-exposure.md
+    prompt: "What happens to the webhook path when you change the token?"
+    options:
+      - id: a
+        text: "It changes, and the old path stops working"
+        explanation: "Correct. The path is a hash of the token, the name and the namespace."
+      - id: b
+        text: "It stays the same"
+        explanation: "Not correct. It stays the same is not the answer here. The path is a hash of the token, the name and the namespace."
+      - id: c
+        text: "It gets a suffix"
+        explanation: "Not correct. It gets a suffix is not the answer here. The path is a hash of the token, the name and the namespace."
+      - id: d
+        text: "The Receiver is deleted"
+        explanation: "Not correct. The Receiver is deleted is not the answer here. The path is a hash of the token, the name and the namespace."
+    correct_option: a
+    explanation: "Correct. The path is a hash of the token, the name and the namespace."
+
+  - id: ats095-final-s040m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Alert severity"
+    source_readings:
+      - sections/section-040/module-02/course-03-notify-on-source-events-with-provider-and-alert.md
+    prompt: "Which `eventSeverity` sends the event of a new artifact?"
+    options:
+      - id: a
+        text: "`info`"
+        explanation: "Correct. `error` only sends failures."
+      - id: b
+        text: "`error`"
+        explanation: "Not correct. `error` is not the answer here. `error` only sends failures."
+      - id: c
+        text: "`warning`"
+        explanation: "Not correct. `warning` is not the answer here. `error` only sends failures."
+      - id: d
+        text: "`notice`"
+        explanation: "Not correct. `notice` is not the answer here. `error` only sends failures."
+    correct_option: a
+    explanation: "Correct. `error` only sends failures."
+
+  - id: ats095-final-s050m1-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the storage folder"
+    source_readings:
+      - sections/section-050/module-01/course-01-where-artifacts-live.md
+    prompt: "Which flag sets the folder where source-controller writes artifacts?"
+    options:
+      - id: a
+        text: "`--storage-path`"
+        explanation: "Correct. `--storage-path=/data` is the folder, backed by an `emptyDir` volume in the standard installation."
+      - id: b
+        text: "`--artifact-dir`"
+        explanation: "Not correct. There is no flag with that name; the folder is set by `--storage-path`."
+      - id: c
+        text: "`--data-root`"
+        explanation: "Not correct. There is no flag with that name; the folder is set by `--storage-path`."
+      - id: d
+        text: "`--storage-adv-addr`"
+        explanation: "Not correct. `--storage-adv-addr` sets the address written into artifact URLs, not the folder on disk."
+    correct_option: a
+    explanation: "Correct. `--storage-path=/data` is the folder, backed by an `emptyDir` volume in the standard installation."
+
+  - id: ats095-final-s050m1-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Digest meaning"
+    source_readings:
+      - sections/section-050/module-01/course-02-reading-an-artifact-by-hand.md
+    prompt: "What is `status.artifact.digest` the hash of?"
+    options:
+      - id: a
+        text: "The `tar.gz` file that the artifact server sends"
+        explanation: "Correct. It is `sha256:` plus the hash of the archive, so `sha256sum` of the downloaded bytes matches it."
+      - id: b
+        text: "The Git commit"
+        explanation: "Not correct. The commit hash is part of `revision`, not of `digest`."
+      - id: c
+        text: "The list of file names in the archive"
+        explanation: "Not correct. The digest covers the bytes of the archive, not only the file names."
+      - id: d
+        text: "The manifest of the Flux Kustomization"
+        explanation: "Not correct. A Kustomization is a consumer and does not take part in the digest."
+    correct_option: a
+    explanation: "Correct. It is `sha256:` plus the hash of the archive, so `sha256sum` of the downloaded bytes matches it."
+
+  - id: ats095-final-s050m1-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Garbage collection"
+    source_readings:
+      - sections/section-050/module-01/course-03-retention-restarts-and-the-latest-artifact.md
+    prompt: "Which artifact does garbage collection never delete?"
+    options:
+      - id: a
+        text: "The newest artifact of a source"
+        explanation: "Correct. The newest artifact is the one in `status.artifact`, and consumers need it."
+      - id: b
+        text: "The artifact of a suspended source only"
+        explanation: "Not correct. Suspension does not protect older files; only the newest one is protected."
+      - id: c
+        text: "Any artifact younger than a day"
+        explanation: "Not correct. Age is controlled by the TTL flag, which is minutes by default, not a day."
+      - id: d
+        text: "The oldest artifact"
+        explanation: "Not correct. The oldest ones are the first candidates for deletion."
+    correct_option: a
+    explanation: "Correct. The newest artifact is the one in `status.artifact`, and consumers need it."
+
+  - id: ats095-final-s050m1-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Artifact access"
+    source_readings:
+      - sections/section-050/module-01/course-04-who-reads-the-artifact.md
+    prompt: "Why should secrets stay out of Git even in a private repository?"
+    options:
+      - id: a
+        text: "The artifact has no login, so anyone who reaches the file can read the manifests"
+        explanation: "Correct. The artifact server is open to the pods that can reach it, and the artifact holds the manifests as plain files."
+      - id: b
+        text: "Git cannot store secrets"
+        explanation: "Not correct. Git stores any file; the issue is who can read the copy."
+      - id: c
+        text: "Flux refuses to apply Secret objects"
+        explanation: "Not correct. Flux applies Secrets; keeping them out of Git is a safety choice."
+      - id: d
+        text: "The digest would change"
+        explanation: "Not correct. The digest changes with any content change, secret or not."
+    correct_option: a
+    explanation: "Correct. The artifact server is open to the pods that can reach it, and the artifact holds the manifests as plain files."
+
+  - id: ats095-final-s050m2-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Work per source"
+    source_readings:
+      - sections/section-050/module-02/course-01-what-makes-source-controller-busy.md
+    prompt: "What does source-controller do for every source each interval?"
+    options:
+      - id: a
+        text: "Fetch, build an archive, store it and update the status"
+        explanation: "Correct. Fetch, archive, store and status update are the four steps; applying is done by consumers."
+      - id: b
+        text: "Apply the manifests to the cluster"
+        explanation: "Not correct. Applying is the job of kustomize-controller and helm-controller."
+      - id: c
+        text: "Send a mail to the owner"
+        explanation: "Not correct. Flux does not send mail from source-controller."
+      - id: d
+        text: "Create a new namespace"
+        explanation: "Not correct. A source never creates namespaces."
+    correct_option: a
+    explanation: "Correct. Fetch, archive, store and status update are the four steps; applying is done by consumers."
+
+  - id: ats095-final-s050m2-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Retention flags"
+    source_readings:
+      - sections/section-050/module-02/course-02-flags-for-concurrency-retention-and-caches.md
+    prompt: "Which flag limits how many artifacts of one source are kept?"
+    options:
+      - id: a
+        text: "`--artifact-retention-records`"
+        explanation: "Correct. The records flag is a count; the TTL flag is an age."
+      - id: b
+        text: "`--artifact-retention-ttl`"
+        explanation: "Not correct. The TTL flag sets how long an older artifact may stay, not how many."
+      - id: c
+        text: "`--storage-path`"
+        explanation: "Not correct. `--storage-path` is the folder."
+      - id: d
+        text: "`--watch-label-selector`"
+        explanation: "Not correct. `--watch-label-selector` limits which objects the controller handles."
+    correct_option: a
+    explanation: "Correct. The records flag is a count; the TTL flag is an age."
+
+  - id: ats095-final-s050m2-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Request versus limit"
+    source_readings:
+      - sections/section-050/module-02/course-03-resources-limits-and-restarts.md
+    prompt: "What does the memory request do?"
+    options:
+      - id: a
+        text: "The scheduler uses it to place the pod"
+        explanation: "Correct. Requests drive scheduling; the limit is what is enforced."
+      - id: b
+        text: "The kubelet kills the pod when it is exceeded"
+        explanation: "Not correct. The limit is what causes a kill."
+      - id: c
+        text: "It caps the memory the container can use"
+        explanation: "Not correct. The limit is the cap."
+      - id: d
+        text: "It is ignored for Deployments"
+        explanation: "Not correct. Requests apply to Deployments like any pod."
+    correct_option: a
+    explanation: "Correct. Requests drive scheduling; the limit is what is enforced."
+
+  - id: ats095-final-s050m2-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Making a change stick"
+    source_readings:
+      - sections/section-050/module-02/course-04-making-changes-stick-and-sharding.md
+    prompt: "Why is a `kubectl edit` of source-controller undone in a bootstrapped cluster?"
+    options:
+      - id: a
+        text: "The Flux Kustomization `flux-system` applies the manifests from Git again"
+        explanation: "Correct. The bootstrap Kustomization re-applies the committed controller manifests, which resets fields you changed by hand."
+      - id: b
+        text: "kubectl edit is not allowed for Deployments"
+        explanation: "Not correct. kubectl edit works on Deployments."
+      - id: c
+        text: "The pod restarts it"
+        explanation: "Not correct. A restart keeps the edited template."
+      - id: d
+        text: "Flux sets it back only after an upgrade"
+        explanation: "Not correct. The reset happens at the next apply of the Kustomization, not only at an upgrade."
+    correct_option: a
+    explanation: "Correct. The bootstrap Kustomization re-applies the committed controller manifests, which resets fields you changed by hand."
+
+  - id: ats095-final-s050m3-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "observedGeneration"
+    source_readings:
+      - sections/section-050/module-03/course-01-a-method-read-narrow-fix.md
+    prompt: "What does `observedGeneration` lower than `metadata.generation` mean?"
+    options:
+      - id: a
+        text: "The controller has not seen your last change, so the message is old"
+        explanation: "Correct. The status describes an older spec until the controller catches up."
+      - id: b
+        text: "The source is suspended"
+        explanation: "Not correct. Suspension is shown by `spec.suspend`."
+      - id: c
+        text: "The artifact is missing"
+        explanation: "Not correct. A missing artifact shows in `ArtifactInStorage`."
+      - id: d
+        text: "The Secret is wrong"
+        explanation: "Not correct. A wrong Secret shows in the message, not in the generation."
+    correct_option: a
+    explanation: "Correct. The status describes an older spec until the controller catches up."
+
+  - id: ats095-final-s050m3-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Suspended"
+    source_readings:
+      - sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+    prompt: "A suspended source shows `Ready: True`. What does that mean?"
+    options:
+      - id: a
+        text: "It was Ready at its last run and is now skipped"
+        explanation: "Correct. The status is the one from the last run, and nothing is fetched while it is suspended."
+      - id: b
+        text: "It is up to date"
+        explanation: "Not correct. A suspended source does not follow new commits."
+      - id: c
+        text: "It fetches every minute"
+        explanation: "Not correct. It does not fetch at all."
+      - id: d
+        text: "It is stalled"
+        explanation: "Not correct. Stalled is a different condition."
+    correct_option: a
+    explanation: "Correct. The status is the one from the last run, and nothing is fetched while it is suspended."
+
+  - id: ats095-final-s050m3-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare revisions"
+    source_readings:
+      - sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+    prompt: "A source is Ready, but the cluster did not change. What do you compare?"
+    options:
+      - id: a
+        text: "`status.artifact.revision` with the consumer's `status.lastAppliedRevision`"
+        explanation: "Correct. If they differ, the consumer has not applied the newest artifact."
+      - id: b
+        text: "The pod names"
+        explanation: "Not correct. Pod names do not tell the revision."
+      - id: c
+        text: "The node labels"
+        explanation: "Not correct. Node labels are unrelated."
+      - id: d
+        text: "The Gitea logs only"
+        explanation: "Not correct. Gitea logs show the server's side only."
+    correct_option: a
+    explanation: "Correct. If they differ, the consumer has not applied the newest artifact."
+
+  - id: ats095-final-s050m3-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Proof of a fix"
+    source_readings:
+      - sections/section-050/module-03/course-04-fixing-safely-and-proving-it.md
+    prompt: "Which result proves a fix reached the cluster?"
+    options:
+      - id: a
+        text: "The Kustomization's applied revision equals the source's artifact revision"
+        explanation: "Correct. Equal revisions show that the consumer applied what the source now serves."
+      - id: b
+        text: "The source is Ready"
+        explanation: "Not correct. Ready only proves the fetch."
+      - id: c
+        text: "The pod is Running"
+        explanation: "Not correct. A running pod can still be an old version."
+      - id: d
+        text: "The command returned no error"
+        explanation: "Not correct. A command without an error can still apply the old revision."
+    correct_option: a
+    explanation: "Correct. Equal revisions show that the consumer applied what the source now serves."
+
+  - id: ats095-final-s050m4-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "A tenant"
+    source_readings:
+      - sections/section-050/module-04/course-01-tenants-and-namespaces.md
+    prompt: "What is a tenant in Flux?"
+    options:
+      - id: a
+        text: "A namespace, a ServiceAccount and a RoleBinding limited to that namespace"
+        explanation: "Correct. It is a convention, and `flux create tenant` writes the three objects."
+      - id: b
+        text: "A Flux object of kind Tenant"
+        explanation: "Not correct. There is no object of that kind."
+      - id: c
+        text: "A Git repository"
+        explanation: "Not correct. A repository is the tenant's source, not the tenant."
+      - id: d
+        text: "A node pool"
+        explanation: "Not correct. Node pools are infrastructure."
+    correct_option: a
+    explanation: "Correct. It is a convention, and `flux create tenant` writes the three objects."
+
+  - id: ats095-final-s050m4-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Which controllers"
+    source_readings:
+      - sections/section-050/module-04/course-02-cross-namespace-references-and-the-flag.md
+    prompt: "Which controller does not have the cross-namespace flag?"
+    options:
+      - id: a
+        text: "source-controller"
+        explanation: "Correct. A source has no field that points at another namespace, so the flag has nothing to check there."
+      - id: b
+        text: "kustomize-controller"
+        explanation: "Not correct. kustomize-controller follows `sourceRef.namespace` and has the flag."
+      - id: c
+        text: "helm-controller"
+        explanation: "Not correct. helm-controller follows chart and values references and has the flag."
+      - id: d
+        text: "notification-controller"
+        explanation: "Not correct. notification-controller follows references of alerts and has the flag."
+    correct_option: a
+    explanation: "Correct. A source has no field that points at another namespace, so the flag has nothing to check there."
+
+  - id: ats095-final-s050m4-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Impersonation"
+    source_readings:
+      - sections/section-050/module-04/course-03-impersonation-with-serviceaccountname.md
+    prompt: "What does `spec.serviceAccountName` on a Kustomization do?"
+    options:
+      - id: a
+        text: "kustomize-controller applies as that ServiceAccount, so RBAC limits it"
+        explanation: "Correct. Requests go to the API server as the account, and RBAC decides."
+      - id: b
+        text: "It runs the pod of source-controller as that account"
+        explanation: "Not correct. source-controller's identity is not changed."
+      - id: c
+        text: "It gives the account access to Git"
+        explanation: "Not correct. Git access comes from the source's `secretRef`."
+      - id: d
+        text: "It creates the account"
+        explanation: "Not correct. The account must already exist."
+    correct_option: a
+    explanation: "Correct. Requests go to the API server as the account, and RBAC decides."
+
+  - id: ats095-final-s050m4-q04
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "A gap"
+    source_readings:
+      - sections/section-050/module-04/course-04-what-flux-does-not-restrict.md
+    prompt: "Which of these does Flux itself not restrict?"
+    options:
+      - id: a
+        text: "The `spec.url` a tenant puts in a `GitRepository`"
+        explanation: "Correct. Flux has no allow-list for URLs; use an admission policy."
+      - id: b
+        text: "Which namespace a Kustomization applies to when impersonating"
+        explanation: "Not correct. Impersonation and RBAC cover that."
+      - id: c
+        text: "Whether a Kustomization uses a source in another namespace"
+        explanation: "Not correct. The flag covers that."
+      - id: d
+        text: "Which ServiceAccount applies the manifests"
+        explanation: "Not correct. `serviceAccountName` and the default flag cover that."
+    correct_option: a
+    explanation: "Correct. Flux has no allow-list for URLs; use an admission policy."

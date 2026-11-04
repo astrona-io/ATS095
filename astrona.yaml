@@ -1,12 +1,14 @@
 # Course manifest for ATS095 - Source Controller & Repository Management (FluxCD).
 #
-# One entry per section under `modules:`. Each section lists, in order: its
-# README, then for each module the landing page (course.md), its parts
-# (course-0N-*.md), and right after the part a lab tests, the lab's
-# question.md reading and the `type: lab` entry. The module's summary page
-# comes last. The section capstone closes the section. Playgrounds are not
-# listed: the landing page's playground marker shows them. solution.md is
-# never listed.
+# One entry per section under `modules:` (module-010 to module-050). Each
+# section lists, in order: its README, then for each module the landing page
+# (course.md), its parts (course-0N-*.md), and right after the part a lab
+# tests, the lab's question.md reading and the `type: lab` entry. The
+# module's summary page comes last. The section capstone closes the section,
+# then the section quiz. Sections 010 to 030 hold two or three modules each
+# (010-01..03, 020-01..03, 030-01..02), 040 holds two, 050 holds four.
+# Playgrounds are not listed: the landing page's playground marker shows
+# them. solution.md is never listed.
 #
 # Every `path:` is relative to this file.
 
@@ -21,7 +23,9 @@ training:
     OCI artifacts, flux push artifact and OCIRepository tags, semver ranges
     and digests; HelmRepository and HelmChart objects for HTTP and OCI chart
     repositories; Bucket sources on S3-compatible storage; reconciliation
-    triggers; and the artifacts source-controller stores and garbage-collects.
+    triggers, Receivers and source notifications; and operating
+    source-controller itself: how it stores artifacts, tuning and sizing,
+    troubleshooting failing sources, and multi-tenant access.
     Each module pairs a layered reader with an ungraded hands-on playground
     and a graded practice lab. Each section closes with an integration
     capstone.
@@ -171,6 +175,45 @@ modules:
         path: sections/section-010/module-02/course-05-summary.md
 
       - type: reading
+        title: "Verify Commits, Include Repositories And Fetch Less"
+        path: sections/section-010/module-03/course.md
+      - type: reading
+        title: "Verify Commit And Tag Signatures"
+        path: sections/section-010/module-03/course-01-verify-commit-and-tag-signatures.md
+      - type: reading
+        title: "Submodules And Included Repositories"
+        path: sections/section-010/module-03/course-02-submodules-and-included-repositories.md
+      - type: reading
+        title: "Sparse Checkout And Smaller Artifacts"
+        path: sections/section-010/module-03/course-03-sparse-checkout-and-smaller-artifacts.md
+      - type: reading
+        title: "Exact Git References With ref.name"
+        path: sections/section-010/module-03/course-04-exact-git-references-with-ref-name.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Fetch The Right Directories From The Right Reference Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: git-sources
+        task_kind: troubleshooting
+        tags: [gitrepository, sparse-checkout, ref-name, precedence, conditions, flux-get]
+        learning_goals:
+          - Find why a GitRepository with a sparse checkout and a ref.name does not deliver the application
+          - Remove ref.name and add apps to the sparse checkout without recreating the source
+          - Prove the fix with a Ready source on main and a podinfo that runs from the same revision
+        resources:
+          - name: "GitRepository API: reference, sparse checkout and include"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-03/course-05-summary.md
+
+      - type: reading
         title: Question
         path: sections/section-010/capstone/labs/lab-01/question.md
       - type: lab
@@ -240,8 +283,112 @@ modules:
           - name: "OCI artifacts cheatsheet"
             url: https://fluxcd.io/flux/cheatsheets/oci-artifacts/
       - type: reading
+        title: "OCIRepository Status, Conditions And Troubleshooting"
+        path: sections/section-020/module-01/course-03-ocirepository-status-conditions-and-troubleshooting.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Repair An OCIRepository That Does Not Fetch Lab"
+        path: sections/section-020/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: oci-sources
+        task_kind: troubleshooting
+        tags: [ocirepository, status-conditions, fetchfailed, events, insecure-registry, flux-get]
+        learning_goals:
+          - Read the conditions and events of an OCIRepository to find why it cannot fetch
+          - Fix a wrong repository name, a missing insecure field and a tag that does not exist, one at a time
+          - Prove the fix with a Ready source on 1.1.0 and a podinfo that runs the 3 replicas of that release
+        resources:
+          - name: "OCIRepository API: status"
+            url: https://fluxcd.io/flux/components/source/ocirepositories/
+          - name: "flux events"
+            url: https://fluxcd.io/flux/cmd/flux_events/
+      - type: reading
+        title: "Layers, semverFilter And Ignore Rules"
+        path: sections/section-020/module-01/course-04-layers-semverfilter-and-ignore-rules.md
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-03-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Authenticate To Registries And Verify OCI Artifacts"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "Registry Credentials With A Pull Secret"
+        path: sections/section-020/module-02/course-01-registry-credentials-with-a-pull-secret.md
+      - type: reading
+        title: "ServiceAccount And Cloud Identity"
+        path: sections/section-020/module-02/course-02-serviceaccount-and-cloud-identity.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Sign In To A Private Registry Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: authentication
+        task_kind: troubleshooting
+        tags: [ocirepository, secretref, dockerconfigjson, flux-create-secret-oci, authentication, insecure-registry]
+        learning_goals:
+          - Read the events of an OCIRepository to find a missing secretRef and a wrong password
+          - Create a dockerconfigjson Secret with flux create secret oci and connect it to the source
+          - Prove the fix with a Ready source on 1.1.0 while the registry keeps requiring a sign-in
+        resources:
+          - name: "OCIRepository API: authentication"
+            url: https://fluxcd.io/flux/components/source/ocirepositories/
+          - name: "flux create secret oci"
+            url: https://fluxcd.io/flux/cmd/flux_create_secret_oci/
+      - type: reading
+        title: "TLS Certificates And Proxies"
+        path: sections/section-020/module-02/course-03-tls-certificates-and-proxies.md
+      - type: reading
+        title: "Verify Signatures With cosign"
+        path: sections/section-020/module-02/course-04-verify-signatures-with-cosign.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Work With Flux Artifacts From The Command Line"
+        path: sections/section-020/module-03/course.md
+      - type: reading
+        title: "Build And Push A Release With Annotations"
+        path: sections/section-020/module-03/course-01-build-and-push-a-release-with-annotations.md
+      - type: reading
+        title: "Pull, Diff And List Releases"
+        path: sections/section-020/module-03/course-02-pull-diff-and-list-releases.md
+      - type: reading
+        title: "Promote By Tag Or By Digest"
+        path: sections/section-020/module-03/course-03-promote-by-tag-or-by-digest.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Release And Pin An Artifact With The Flux CLI"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: artifacts
+        task_kind: implementation
+        tags: [flux-push-artifact, oci-annotations, digest, ocirepository, promotion, insecure-registry]
+        learning_goals:
+          - Push a release from the head of main with the Git URL as source and main@sha1:<commit> as revision
+          - Read the digest of the release from the registry
+          - Pin the OCIRepository to the digest, remove the tag, and prove the Kustomization applies it
+        resources:
+          - name: "flux push artifact"
+            url: https://fluxcd.io/flux/cmd/flux_push_artifact/
+          - name: "OCIRepository API: reference"
+            url: https://fluxcd.io/flux/components/source/ocirepositories/
+      - type: reading
+        title: "Sign And Automate In A Pipeline"
+        path: sections/section-020/module-03/course-04-sign-and-automate-in-a-pipeline.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -311,8 +458,73 @@ modules:
           - name: "HelmChart API"
             url: https://fluxcd.io/flux/components/source/helmcharts/
       - type: reading
+        title: "HelmChart Status, Conditions And Events"
+        path: sections/section-030/module-01/course-03-helmchart-status-conditions-and-events.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Find Why A HelmChart Is Not Ready Lab"
+        path: sections/section-030/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: helm-sources
+        task_kind: troubleshooting
+        tags: [helmchart, helmrepository, flux-get, flux-events, semver]
+        learning_goals:
+          - Read the conditions and events of a HelmChart
+          - Fix a misspelled chart name and a version range with no match
+          - Prove the fix with a Ready HelmChart on a 6.x version
+        resources:
+          - name: "HelmChart API"
+            url: https://fluxcd.io/flux/components/source/helmcharts/
+          - name: "HelmRepository API"
+            url: https://fluxcd.io/flux/components/source/helmrepositories/
+      - type: reading
+        title: "Managing Helm Sources With The Flux CLI"
+        path: sections/section-030/module-01/course-04-managing-helm-sources-with-the-flux-cli.md
+      - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-03-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Private Helm Repositories, Chart Sources And Chart Verification"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Credentials And TLS For HTTP Helm Repositories"
+        path: sections/section-030/module-02/course-01-credentials-and-tls-for-http-helm-repositories.md
+      - type: reading
+        title: "Credentials For OCI Helm Repositories"
+        path: sections/section-030/module-02/course-02-credentials-for-oci-helm-repositories.md
+      - type: reading
+        title: "Charts From Git And Bucket Sources"
+        path: sections/section-030/module-02/course-03-charts-from-git-and-bucket-sources.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Fix A HelmChart That Builds From Git Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: helm-sources
+        task_kind: troubleshooting
+        tags: [helmchart, gitrepository, git-ref, flux-get, flux-events]
+        learning_goals:
+          - Fix a GitRepository that follows a branch that does not exist
+          - Fix the chart path of a HelmChart that reads from Git
+          - Rebuild the chart on every commit with reconcileStrategy Revision
+        resources:
+          - name: "HelmChart API"
+            url: https://fluxcd.io/flux/components/source/helmcharts/
+          - name: "GitRepository API"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+      - type: reading
+        title: "Verify Chart Signatures And Choose A Chart Source"
+        path: sections/section-030/module-02/course-04-verify-chart-signatures-and-choose-a-chart-source.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -384,8 +596,73 @@ modules:
           - name: "flux reconcile source bucket"
             url: https://fluxcd.io/flux/cmd/flux_reconcile_source_bucket/
       - type: reading
+        title: "Providers, Prefix And Ignore Rules"
+        path: sections/section-040/module-01/course-03-providers-prefix-and-ignore-rules.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-02/question.md
+      - type: lab
+        title: "Scope A Bucket With A Prefix And Ignore Rules Lab"
+        path: sections/section-040/module-01/labs/lab-02
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: bucket-sources
+        task_kind: troubleshooting
+        tags: [bucket, prefix, ignore, sourceignore, kustomization, multi-environment]
+        learning_goals:
+          - Find why a Kustomization built from a bucket fails because of a draft file
+          - Limit a Bucket to one environment with spec.prefix
+          - Leave a folder out of the artifact with spec.ignore and get the sync Ready
+        resources:
+          - name: "Bucket API: prefix and ignore"
+            url: https://fluxcd.io/flux/components/source/buckets/
+          - name: "gitignore patterns"
+            url: https://git-scm.com/docs/gitignore
+      - type: reading
+        title: "Bucket Status And Troubleshooting"
+        path: sections/section-040/module-01/course-04-bucket-status-and-troubleshooting.md
+      - type: reading
         title: Summary
-        path: sections/section-040/module-01/course-03-summary.md
+        path: sections/section-040/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Receivers And Source Notifications"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "Receivers: A Webhook That Reconciles A Source"
+        path: sections/section-040/module-02/course-01-receivers-a-webhook-that-reconciles-a-source.md
+      - type: reading
+        title: "Receiver Types, Tokens And Exposure"
+        path: sections/section-040/module-02/course-02-receiver-types-tokens-and-exposure.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Trigger A Bucket From A Webhook Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: receivers
+        task_kind: build
+        tags: [receiver, webhook, generic, token, bucket, reconcile-trigger]
+        learning_goals:
+          - Create a generic Receiver with a token Secret that selects a Bucket
+          - Read the webhookPath and call it with a POST
+          - Prove the upload was applied while the interval stays 30 minutes
+        resources:
+          - name: "Receiver API"
+            url: https://fluxcd.io/flux/components/notification/receivers/
+          - name: "flux create receiver"
+            url: https://fluxcd.io/flux/cmd/flux_create_receiver/
+      - type: reading
+        title: "Notify On Source Events With Provider And Alert"
+        path: sections/section-040/module-02/course-03-notify-on-source-events-with-provider-and-alert.md
+      - type: reading
+        title: "Troubleshooting Receivers And Alerts"
+        path: sections/section-040/module-02/course-04-troubleshooting-receivers-and-alerts.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-02/course-05-summary.md
 
       - type: reading
         title: Question
@@ -411,6 +688,200 @@ modules:
       - type: quiz
         title: "Knowledge Check: Bucket Sources, Triggers And Artifacts"
         path: sections/section-040/quiz.yaml
+        pass_score: 70
+
+  - id: module-050
+    title: "Operate source-controller"
+    description: >
+      Read and verify the artifacts source-controller stores, tune and size
+      it, troubleshoot failing sources with a fixed method, and keep tenants'
+      sources apart in a shared cluster.
+
+    content:
+      - type: reading
+        title: "Section Overview"
+        path: sections/section-050/README.md
+
+      - type: reading
+        title: "How source-controller Stores And Serves Artifacts"
+        path: sections/section-050/module-01/course.md
+      - type: reading
+        title: "Where Artifacts Live"
+        path: sections/section-050/module-01/course-01-where-artifacts-live.md
+      - type: reading
+        title: "Reading An Artifact By Hand"
+        path: sections/section-050/module-01/course-02-reading-an-artifact-by-hand.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Prove What source-controller Stored Lab"
+        path: sections/section-050/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: artifacts
+        task_kind: troubleshooting
+        tags: [artifact, digest, source-controller, tar, network-policy]
+        learning_goals:
+          - Download an artifact from inside flux-system and read its files
+          - Match the sha256 of the archive to status.artifact.digest
+          - Scale the reader and prove the artifact is still served
+        resources:
+          - name: "Source controller"
+            url: https://fluxcd.io/flux/components/source/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+      - type: reading
+        title: "Retention, Restarts And The Latest Artifact"
+        path: sections/section-050/module-01/course-03-retention-restarts-and-the-latest-artifact.md
+      - type: reading
+        title: "Who Reads The Artifact"
+        path: sections/section-050/module-01/course-04-who-reads-the-artifact.md
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Tune And Size source-controller"
+        path: sections/section-050/module-02/course.md
+      - type: reading
+        title: "What Makes source-controller Busy"
+        path: sections/section-050/module-02/course-01-what-makes-source-controller-busy.md
+      - type: reading
+        title: "Flags For Concurrency, Retention And Caches"
+        path: sections/section-050/module-02/course-02-flags-for-concurrency-retention-and-caches.md
+      - type: reading
+        title: "Resources, Limits And Restarts"
+        path: sections/section-050/module-02/course-03-resources-limits-and-restarts.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Tune source-controller Lab"
+        path: sections/section-050/module-02/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 20m
+        topic: source-controller
+        task_kind: build
+        tags: [source-controller, concurrent, retention, resources, rollout]
+        learning_goals:
+          - Set the concurrency and retention flags once each
+          - Set memory and CPU requests and limits
+          - Prove the rollout finished and the sources are Ready
+        resources:
+          - name: "Source controller"
+            url: https://fluxcd.io/flux/components/source/
+          - name: "Flux installation: customize"
+            url: https://fluxcd.io/flux/installation/configuration/
+      - type: reading
+        title: "Making Changes Stick And Sharding"
+        path: sections/section-050/module-02/course-04-making-changes-stick-and-sharding.md
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Troubleshoot Failing Sources"
+        path: sections/section-050/module-03/course.md
+      - type: reading
+        title: "A Method: Read, Narrow, Fix"
+        path: sections/section-050/module-03/course-01-a-method-read-narrow-fix.md
+      - type: reading
+        title: "What The Messages Mean"
+        path: sections/section-050/module-03/course-02-what-the-messages-mean.md
+      - type: reading
+        title: "Suspended, Stalled And Silent Sources"
+        path: sections/section-050/module-03/course-03-suspended-stalled-and-silent-sources.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Fix Failing Sources Lab"
+        path: sections/section-050/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: troubleshooting
+        task_kind: troubleshooting
+        tags: [troubleshooting, suspend, git-ref, conditions, events]
+        learning_goals:
+          - Find each fault with overview, condition, events and log
+          - Fix a wrong reference and a suspended source in place
+          - Prove the Kustomizations applied the new revision
+        resources:
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+          - name: "GitRepository API"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+      - type: reading
+        title: "Fixing Safely And Proving It"
+        path: sections/section-050/module-03/course-04-fixing-safely-and-proving-it.md
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-03/course-05-summary.md
+
+      - type: reading
+        title: "Control Access To Sources In A Multi-Tenant Cluster"
+        path: sections/section-050/module-04/course.md
+      - type: reading
+        title: "Tenants And Namespaces"
+        path: sections/section-050/module-04/course-01-tenants-and-namespaces.md
+      - type: reading
+        title: "Cross-Namespace References And The Flag"
+        path: sections/section-050/module-04/course-02-cross-namespace-references-and-the-flag.md
+      - type: reading
+        title: "Impersonation With serviceAccountName"
+        path: sections/section-050/module-04/course-03-impersonation-with-serviceaccountname.md
+      - type: reading
+        title: Question
+        path: sections/section-050/module-04/labs/lab-01/question.md
+      - type: lab
+        title: "Tenant Isolation Lab"
+        path: sections/section-050/module-04/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 25m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [tenant, rbac, impersonation, cross-namespace, serviceaccount]
+        learning_goals:
+          - Apply a tenant with its own source and Kustomization
+          - Use serviceAccountName so RBAC limits the apply
+          - Prove the tenant cannot act outside its namespace
+        resources:
+          - name: "Multi-tenancy"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+          - name: "flux create tenant"
+            url: https://fluxcd.io/flux/cmd/flux_create_tenant/
+      - type: reading
+        title: "What Flux Does Not Restrict"
+        path: sections/section-050/module-04/course-04-what-flux-does-not-restrict.md
+      - type: reading
+        title: Summary
+        path: sections/section-050/module-04/course-05-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-050/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Operate source-controller Capstone"
+        path: sections/section-050/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: source-controller
+        task_kind: troubleshooting
+        tags: [source-controller, concurrent, suspend, git-ref, cross-namespace, flux-events]
+        learning_goals:
+          - Find why sources fail across the controller, the fleet and a tenant
+          - Fix concurrency, a missing branch, a suspended source and a blocked reference in place
+          - Prove all sources and the tenant Kustomization are Ready
+        resources:
+          - name: "Source controller"
+            url: https://fluxcd.io/flux/components/source/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+
+      - type: quiz
+        title: "Knowledge Check: Operate source-controller"
+        path: sections/section-050/quiz.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

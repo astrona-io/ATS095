@@ -1,0 +1,50 @@
+# Fix A HelmChart That Builds From Git
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-030-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-030-02-setup"
+      description: "Applies a GitRepository on a branch that does not exist and a HelmChart with a wrong chart path"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-git-ready"
+      description: "Confirms the GitRepository podinfo-git is Ready on the branch master"
+      type: "file"
+      source: "validation/validate-git-ready.sh"
+    - name: "validate-chart-ready"
+      description: "Confirms the HelmChart podinfo-git is Ready and built from charts/podinfo"
+      type: "file"
+      source: "validation/validate-chart-ready.sh"
+    - name: "validate-rebuild-strategy"
+      description: "Confirms reconcileStrategy is Revision and both objects were fixed in place"
+      type: "file"
+      source: "validation/validate-rebuild-strategy.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages: []

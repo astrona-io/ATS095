@@ -1,0 +1,57 @@
+# Fetch The Right Directories From The Right Reference
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-095-lab-010-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-services-and-flux"
+      description: "Installs the Flux CLI 2.9.6 and controllers, Gitea, the CoreDNS rewrite, and seeds gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-095-lab-010-03-setup"
+      description: "Creates fleet-auth and a GitRepository with a sparse checkout of clusters and a ref.name that does not exist"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until the lab services and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-source-ready"
+      description: "Confirms fleet is Ready on branch main and spec.ref.name is gone"
+      type: "file"
+      source: "validation/validate-source-ready.sh"
+    - name: "validate-sparse-checkout"
+      description: "Confirms the sparse checkout of fleet includes apps and the artifact was built with it"
+      type: "file"
+      source: "validation/validate-sparse-checkout.sh"
+    - name: "validate-sync"
+      description: "Confirms the Flux Kustomization podinfo applies the revision of fleet and podinfo runs 2 ready replicas"
+      type: "file"
+      source: "validation/validate-sync.sh"
+    - name: "validate-objects-kept"
+      description: "Confirms fleet was fixed in place with the same url and Secret"
+      type: "file"
+      source: "validation/validate-objects-kept.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

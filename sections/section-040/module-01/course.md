@@ -6,7 +6,7 @@ A **bucket** is a container for files, called objects, on an object store. S3 is
 
 Keep one sentence in mind: **a source fetches at its interval, and a reconcile request makes it fetch now.** Everything about timing in Flux follows from that.
 
-The module has two parts. **Bucket Sources On S3-Compatible Storage** connects a `Bucket` to the playground's bucket and applies its manifests with a Flux `Kustomization`. **Reconciliation Triggers, Artifacts And Garbage Collection** uploads a change, makes Flux take it without waiting, and reads the artifact source-controller stores. A graded lab follows the second part.
+The module has four parts. **Bucket Sources On S3-Compatible Storage** connects a `Bucket` to the playground's bucket and applies its manifests with a Flux `Kustomization`. **Reconciliation Triggers, Artifacts And Garbage Collection** uploads a change, makes Flux take it without waiting, and reads the artifact source-controller stores. **Providers, Prefix And Ignore Rules** shapes what a source lists and what it leaves out, followed by a second graded lab. **Bucket Status And Troubleshooting** reads the conditions and fixes typical faults. A graded lab follows the second part.
 
 ## Learning objectives
 
@@ -18,6 +18,8 @@ After this module you can:
 - Start a reconciliation with `flux reconcile` or the `reconcile.fluxcd.io/requestedAt` annotation, without changing the interval.
 - Read the `status.artifact` of a source and say what each field is for.
 - Explain how many artifacts source-controller keeps, and for how long.
+- Pick the provider that fits the object store, and limit a source with `prefix` and `ignore`.
+- Read the conditions of a `Bucket` and fix a wrong key, name, endpoint or `insecure` setting.
 
 ## Before you start
 

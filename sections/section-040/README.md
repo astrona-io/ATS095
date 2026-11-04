@@ -11,10 +11,13 @@ Some teams do not keep their manifests in Git or a registry at all: a build job 
 - The three ways a reconciliation starts: the interval, `flux reconcile`, and the annotation `reconcile.fluxcd.io/requestedAt`.
 - What the `status.artifact` of a source holds: `revision`, `digest`, `url`, `size` and `lastUpdateTime`.
 - How source-controller keeps and garbage-collects older artifacts.
+- Limiting a `Bucket` with `prefix` and `ignore`, the cloud providers, and reading its conditions to fix a failing source.
+- Receivers: the types `generic`, `generic-hmac`, `github` and `gitlab`, the token and `status.webhookPath`, and exposing the webhook.
+- Sending source events to a webhook with a `Provider` and an `Alert`.
 
 ## The learning path
 
-The module has a landing page, two parts, a graded lab right after the part it tests, and a summary. The landing page also starts the module's playground.
+Each module has a landing page, several parts, graded labs right after the parts they test, and a summary. The landing page also starts the module's playground.
 
 ### 1. Sync From A Bucket And Control When Flux Fetches
 
@@ -22,7 +25,19 @@ The playground holds an S3-compatible server in the namespace `s3`, with the buc
 
 1. Bucket Sources On S3-Compatible Storage
 2. Reconciliation Triggers, Artifacts And Garbage Collection, followed by the lab **Deliver From A Bucket And Trigger A Reconcile**
-3. Summary
+3. Providers, Prefix And Ignore Rules, followed by the lab **Scope A Bucket With A Prefix And Ignore Rules**
+4. Bucket Status And Troubleshooting
+5. Summary
+
+### 2. Receivers And Source Notifications
+
+The playground adds a small HTTP `sink` that prints every POST, next to the S3-compatible server.
+
+1. Receivers: A Webhook That Reconciles A Source
+2. Receiver Types, Tokens And Exposure, followed by the lab **Trigger A Bucket From A Webhook**
+3. Notify On Source Events With Provider And Alert
+4. Troubleshooting Receivers And Alerts
+5. Summary
 
 ## Section capstone: Repair A Bucket Source
 
