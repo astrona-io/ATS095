@@ -372,7 +372,7 @@ modules:
         difficulty: intermediate
         estimated_duration: 20m
         topic: artifacts
-        task_kind: implementation
+        task_kind: build
         tags: [flux-push-artifact, oci-annotations, digest, ocirepository, promotion, insecure-registry]
         learning_goals:
           - Push a release from the head of main with the Git URL as source and main@sha1:<commit> as revision
